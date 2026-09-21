@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thuận Phát — Trình Dựng Trang Trực Quan (Visual Page Builder)</title>
+  <!-- Google Fonts: Plus Jakarta Sans (Ultra-Premium Enterprise Typography) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/builder.css">
+</head>
+<body class="builder-app">
+
+  <!-- ============================================================
+       TOPBAR HEADER (MATCHING SCREENSHOT)
+  ============================================================ -->
+  <header class="builder-topbar">
+    
+    <!-- Left Section: Brand & App Switcher -->
+    <div class="topbar-brand-section">
+      <a href="admin.html" class="brand-logo-s" title="Quay lại Admin CMS">S</a>
+      <a href="admin.html" class="btn-app-grid" title="Danh sách ứng dụng">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7"></rect>
+          <rect x="14" y="3" width="7" height="7"></rect>
+          <rect x="14" y="14" width="7" height="7"></rect>
+          <rect x="3" y="14" width="7" height="7"></rect>
+        </svg>
+      </a>
+
+      <!-- Page Selector: Choose which page of the entire website to build -->
+      <div class="builder-page-selector-wrap" style="display: flex; align-items: center; gap: 8px; margin-left: 8px; background: #f8fafc; padding: 4px 10px; border-radius: 6px; border: 1px solid #cbd5e1;">
+        <span style="font-size: 12px; font-weight: 700; color: #475569;">📄 Trang đang sửa:</span>
+        <select id="builderCurrentPageSelect" style="border: none; background: transparent; font-size: 13px; font-weight: 700; color: #ea580c; outline: none; cursor: pointer;" onchange="PageBuilder.switchPage(this.value)">
+          <option value="home" selected>Trang chủ (/)</option>
+          <option value="may-scan">Máy scan chuyên dụng (/may-scan/)</option>
+          <option value="ha-tang-cntt">Hạ tầng CNTT (/ha-tang-cntt/)</option>
+          <option value="giai-phap-chuyen-doi-so">Giải pháp CĐS (/giai-phap-chuyen-doi-so/)</option>
+          <option value="so-hoa-tai-lieu">Số hoá hồ sơ tài liệu (/so-hoa-tai-lieu-hanh-chinh-cong/)</option>
+          <option value="dti">Bộ công cụ Khảo sát DTI (/danh-gia-muc-do-chuyen-doi-so/)</option>
+          <option value="gioi-thieu">Giới thiệu Thuận Phát (/gioi-thieu)</option>
+          <option value="lien-he">Liên hệ & Báo giá (/lien-he)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Center Section: Responsive Device Switcher -->
+    <div class="topbar-device-switcher">
+      <!-- Desktop (Active default) -->
+      <button class="device-btn active" data-device="desktop" title="Màn hình lớn (Desktop)">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+          <line x1="8" y1="21" x2="16" y2="21"></line>
+          <line x1="12" y1="17" x2="12" y2="21"></line>
+        </svg>
+      </button>
+
+      <!-- Laptop / Tablet Landscape -->
+      <button class="device-btn" data-device="laptop" title="Laptop / Màn hình vừa">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="4" width="18" height="12" rx="2" ry="2"></rect>
+          <line x1="2" y1="20" x2="22" y2="20"></line>
+        </svg>
+      </button>
+
+      <!-- Tablet Portrait -->
+      <button class="device-btn" data-device="tablet" title="Máy tính bảng (Tablet)">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
+          <line x1="12" y1="18" x2="12" y2="18.01"></line>
+        </svg>
+      </button>
+
+      <!-- Smartphone Mobile -->
+      <button class="device-btn" data-device="mobile" title="Điện thoại (Mobile)">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+          <line x1="12" y1="18" x2="12" y2="18.01"></line>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Right Section: Actions, AI & Save -->
+    <div class="topbar-actions-section">
+      <!-- Grid outline toggle -->
+      <button class="tool-icon-btn" title="Bật/Tắt đường viền lưới">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="2 2">
+          <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+        </svg>
+      </button>
+
+      <!-- Undo -->
+      <button class="tool-icon-btn" id="btnUndo" disabled title="Hoàn tác (Ctrl+Z)">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 7v6h6"></path>
+          <path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"></path>
+        </svg>
+      </button>
+
+      <!-- Redo -->
+      <button class="tool-icon-btn" id="btnRedo" disabled title="Làm lại (Ctrl+Y)">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 7v6h-6"></path>
+          <path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3l3 2.7"></path>
+        </svg>
+      </button>
+
+      <!-- History -->
+      <button class="tool-icon-btn" title="Lịch sử phiên bản">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="9"></circle>
+          <polyline points="12 7 12 12 15 15"></polyline>
+        </svg>
+      </button>
+
+      <!-- Export Template -->
+      <button class="tool-icon-btn" title="Tải xuống mẫu HTML">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+      </button>
+
+      <!-- Import Template -->
+      <button class="tool-icon-btn" title="Nhập mẫu thiết kế">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="17 8 12 3 7 8"></polyline>
+          <line x1="12" y1="3" x2="12" y2="15"></line>
+        </svg>
+      </button>
+
+      <!-- AI Sparkle Assistant -->
+      <button class="tool-icon-btn" id="btnAiAssist" style="color: #6366f1;" title="Trợ lý AI viết lại và tối ưu">
+        <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+        </svg>
+      </button>
+
+      <!-- Preview Button -->
+      <button class="btn-preview-mode" id="btnPreviewMode">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+          <polyline points="15 3 21 3 21 9"></polyline>
+          <line x1="10" y1="14" x2="21" y2="3"></line>
+        </svg>
+        <span>Xem trước</span>
+      </button>
+
+      <!-- Save Button -->
+      <button class="btn-save-page" id="btnSavePage">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+          <polyline points="17 21 17 13 7 13 7 21"></polyline>
+          <polyline points="7 3 7 8 15 8"></polyline>
+        </svg>
+        <span>Lưu</span>
+      </button>
+    </div>
+
+  </header>
+
+  <!-- ============================================================
+       BUILDER WORKSPACE
+  ============================================================ -->
+  <div class="builder-workspace">
+    
+    <!-- ============================================================
+         LEFT SIDEBAR (BUILDER CONTROLS)
+    ============================================================ -->
+    <aside class="builder-sidebar">
+      
+      <!-- Subheader: Cài đặt & Wand -->
+      <div class="sidebar-subheader">
+        <div class="sidebar-subheader-left">
+          <span>⋮⋮</span>
+          <span>Cài đặt</span>
+        </div>
+        <button style="color: #64748b;" title="Dọn sạch định dạng">🪄</button>
+      </div>
+
+      <!-- 3 Tabs Navigation -->
+      <div class="sidebar-tabs-nav">
+        <button class="sidebar-tab-btn active" data-tab="add">+ Thêm</button>
+        <button class="sidebar-tab-btn" data-tab="layers">Nội dung</button>
+        <button class="sidebar-tab-btn" data-tab="inspector">⚙ Chỉnh sửa</button>
+      </div>
+
+      <!-- Search Box -->
+      <div class="sidebar-search-wrap">
+        <input type="text" id="sidebarSearchInput" class="sidebar-search-input" placeholder="Tìm kiếm">
+        <span class="sidebar-search-icon">🔍</span>
+      </div>
+
+      <!-- TAB 1: + THÊM (LƯỚI WIREFRAMES & PHẦN TỬ) -->
+      <div class="sidebar-content-pane active" id="paneTab_add">
+        
+        <!-- Accordion Lưới -->
+        <div class="builder-accordion-group expanded">
+          <div class="accordion-header">
+            <span>Lưới</span>
+            <span class="accordion-chevron">▾</span>
+          </div>
+
+          <!-- Wireframe Cards matching exact screenshot -->
+          <div class="layout-grid-cards">
+            
+            <!-- 1 Cột -->
+            <div class="wireframe-card" data-layout="1-col">
+              <svg class="wireframe-icon-svg" viewBox="0 0 60 40">
+                <rect x="3" y="3" width="54" height="34" rx="2" fill="none" stroke="#334155" stroke-width="2.5"></rect>
+              </svg>
+              <span class="wireframe-label">1 Cột</span>
+            </div>
+
+            <!-- 2 Cột -->
+            <div class="wireframe-card" data-layout="2-col">
+              <svg class="wireframe-icon-svg" viewBox="0 0 60 40">
+                <rect x="3" y="3" width="24" height="34" rx="2" fill="none" stroke="#334155" stroke-width="2.5"></rect>
+                <rect x="33" y="3" width="24" height="34" rx="2" fill="none" stroke="#334155" stroke-width="2.5"></rect>
+              </svg>
+              <span class="wireframe-label">2 Cột</span>
+            </div>
+
+            <!-- 3 Cột -->
+            <div class="wireframe-card" data-layout="3-col">
+              <svg class="wireframe-icon-svg" viewBox="0 0 60 40">
+                <rect x="3" y="3" width="14" height="34" rx="2" fill="none" stroke="#334155" stroke-width="2.5"></rect>
+                <rect x="23" y="3" width="14" height="34" rx="2" fill="none" stroke="#334155" stroke-width="2.5"></rect>
+                <rect x="43" y="3" width="14" height="34" rx="2" fill="none" stroke="#334155" stroke-width="2.5"></rect>
+              </svg>
+              <span class="wireframe-label">3 Cột</span>
+            </div>
+
+            <!-- 4 Cột -->
+            <div class="wireframe-card" data-layout="4-col">
+              <svg class="wireframe-icon-svg" viewBox="0 0 60 40">
+                <rect x="2" y="3" width="10" height="34" rx="1.5" fill="none" stroke="#334155" stroke-width="2.5"></rect>
+                <rect x="17" y="3" width="10" height="34" rx="1.5" fill="none" stroke="#334155" stroke-width="2.5"></rect>
+                <rect x="32" y="3" width="10" height="34" rx="1.5" fill="none" stroke="#334155" stroke-width="2.5"></rect>
+                <rect x="47" y="3" width="10" height="34" rx="1.5" fill="none" stroke="#334155" stroke-width="2.5"></rect>
+              </svg>
+              <span class="wireframe-label">4 Cột</span>
+            </div>
+
+            <!-- 2-8 Cột -->
+            <div class="wireframe-card" data-layout="2-8-col">
+              <svg class="wireframe-icon-svg" viewBox="0 0 60 40">
+                <rect x="3" y="3" width="14" height="34" rx="2" fill="none" stroke="#334155" stroke-width="2.5"></rect>
+                <rect x="23" y="3" width="34" height="34" rx="2" fill="none" stroke="#334155" stroke-width="2.5"></rect>
+              </svg>
+              <span class="wireframe-label">2-8 Cột</span>
+            </div>
+
+            <!-- 8-2 Cột -->
+            <div class="wireframe-card" data-layout="8-2-col">
+              <svg class="wireframe-icon-svg" viewBox="0 0 60 40">
+                <rect x="3" y="3" width="34" height="34" rx="2" fill="none" stroke="#334155" stroke-width="2.5"></rect>
+                <rect x="43" y="3" width="14" height="34" rx="2" fill="none" stroke="#334155" stroke-width="2.5"></rect>
+              </svg>
+              <span class="wireframe-label">8-2 Cột</span>
+            </div>
+
+            <!-- 3-7 Cột -->
+            <div class="wireframe-card" data-layout="3-7-col">
+              <svg class="wireframe-icon-svg" viewBox="0 0 60 40">
+                <rect x="3" y="3" width="18" height="34" rx="2" fill="none" stroke="#334155" stroke-width="2.5"></rect>
+                <rect x="27" y="3" width="30" height="34" rx="2" fill="none" stroke="#334155" stroke-width="2.5"></rect>
+              </svg>
+              <span class="wireframe-label">3-7 Cột</span>
+            </div>
+
+            <!-- 7-3 Cột -->
+            <div class="wireframe-card" data-layout="7-3-col">
+              <svg class="wireframe-icon-svg" viewBox="0 0 60 40">
+                <rect x="3" y="3" width="30" height="34" rx="2" fill="none" stroke="#334155" stroke-width="2.5"></rect>
+                <rect x="39" y="3" width="18" height="34" rx="2" fill="none" stroke="#334155" stroke-width="2.5"></rect>
+              </svg>
+              <span class="wireframe-label">7-3 Cột</span>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Accordion Phần Tử Cơ Bản -->
+        <div class="builder-accordion-group expanded" style="margin-top: 18px;">
+          <div class="accordion-header">
+            <span>Phần tử cơ bản</span>
+            <span class="accordion-chevron">▾</span>
+          </div>
+
+          <div class="elements-grid">
+            <div class="element-item-card" data-element="heading">
+              <span class="element-item-icon">🔤</span>
+              <span class="element-item-title">Tiêu đề (H1-H3)</span>
+            </div>
+
+            <div class="element-item-card" data-element="text">
+              <span class="element-item-icon">📝</span>
+              <span class="element-item-title">Đoạn văn bản</span>
+            </div>
+
+            <div class="element-item-card" data-element="button">
+              <span class="element-item-icon">🔘</span>
+              <span class="element-item-title">Nút bấm (Button)</span>
+            </div>
+
+            <div class="element-item-card" data-element="image">
+              <span class="element-item-icon">🖼️</span>
+              <span class="element-item-title">Hình ảnh</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- TAB 2: NỘI DUNG (CÂY CẤU TRÚC LAYERS) -->
+      <div class="sidebar-content-pane" id="paneTab_layers">
+        <p style="font-size: 12px; color: #64748b; margin-bottom: 12px;">Bấm vào từng khối để chọn và điều chỉnh vị trí trên trang:</p>
+        <div id="builderLayersList">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+
+      <!-- TAB 3: CHỈNH SỬA (INSPECTOR) -->
+      <div class="sidebar-content-pane" id="paneTab_inspector">
+        <p style="font-size: 12px; color: #64748b; margin-bottom: 12px;">Đang chỉnh sửa phần tử được chọn:</p>
+        
+        <div class="inspector-form-group">
+          <label class="inspector-label">Tên phần tử</label>
+          <input type="text" id="inspectorElementTitle" class="inspector-input" readonly>
+        </div>
+
+        <div class="inspector-form-group">
+          <label class="inspector-label">Màu chữ</label>
+          <input type="color" id="inspectorTextColor" class="inspector-input" style="height: 36px; padding: 2px;" onchange="PageBuilder.updateInspectorProperty('color', this.value)">
+        </div>
+
+        <div class="inspector-form-group">
+          <label class="inspector-label">Màu nền</label>
+          <input type="color" id="inspectorBgColor" class="inspector-input" style="height: 36px; padding: 2px;" onchange="PageBuilder.updateInspectorProperty('backgroundColor', this.value)">
+        </div>
+
+        <div class="inspector-form-group">
+          <label class="inspector-label">Khoảng cách đệm (Padding)</label>
+          <select id="inspectorPadding" class="inspector-select" onchange="PageBuilder.updateInspectorProperty('padding', this.value)">
+            <option value="16px">Nhỏ (16px)</option>
+            <option value="32px">Vừa (32px)</option>
+            <option value="60px">Lớn (60px)</option>
+            <option value="80px 48px">Rất lớn (80px)</option>
+          </select>
+        </div>
+
+        <div style="margin-top: 20px;">
+          <button class="btn-save-page" style="width: 100%; justify-content: center; background-color: #6366f1;" onclick="PageBuilder.triggerAiSectionImprovement()">
+            <span>✨</span>
+            <span>AI Trau Chuốt Đoạn Này</span>
+          </button>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- ============================================================
+         CENTER CANVAS VIEWPORT
+    ============================================================ -->
+    <main class="builder-canvas-container">
+      
+      <!-- Canvas Resizable Wrapper -->
+      <div class="builder-canvas-viewport view-desktop" id="builderCanvasViewport">
+        
+        <!-- Onboarding Helper Banner (Dễ hiểu hơn cho người dùng) -->
+        <div class="builder-guide-banner" style="background: linear-gradient(90deg, #eff6ff 0%, #f0fdf4 100%); border-bottom: 1px solid #cbd5e1; padding: 10px 18px; display: flex; align-items: center; justify-content: space-between; font-size: 12.5px; color: #1e293b;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="font-size: 16px;">💡</span>
+            <span><strong>Cách chỉnh sửa toàn bộ website:</strong> (1) Chọn trang bạn muốn sửa ở menu phía trên ➔ (2) Nhấp đúp chuột vào bất kỳ đoạn chữ nào để sửa trực tiếp hoặc bấm các ô lưới 1-4 Cột bên trái để thêm khối mới ➔ (3) Bấm nút xanh <strong>"Lưu"</strong> (Ctrl+S) để xuất bản ngay ra website thật!</span>
+          </div>
+          <button style="font-size: 13px; color: #64748b; padding: 2px 6px; cursor: pointer;" onclick="this.parentElement.style.display='none'">✕</button>
+        </div>
+
+        <!-- Editable Content Area -->
+        <div id="builderCanvasContent">
+          
+          <!-- CYBER AI HERO SECTION (EXACT HERO BANNER FROM SCREENSHOT) -->
+          <section class="cyber-hero-section builder-section-block is-selected" data-name="Hero Section Số Hóa AI">
+            
+            <!-- Quick Action Toolbar -->
+            <div class="floating-element-toolbar">
+              <button class="floating-tool-btn" onclick="PageBuilder.duplicateSection(this)">📋 Nhân bản</button>
+              <button class="floating-tool-btn" onclick="PageBuilder.deleteSection(this)">🗑️ Xóa</button>
+              <button class="floating-tool-btn" onclick="PageBuilder.moveSection(this, -1)">⬆️</button>
+              <button class="floating-tool-btn" onclick="PageBuilder.moveSection(this, 1)">⬇️</button>
+            </div>
+
+            <!-- Glowing AI Brain Circuit Graphic on the Right -->
+            <div class="cyber-hero-bg-network"></div>
+
+            <!-- Left Text Content matching screenshot -->
+            <div class="cyber-hero-content">
+              
+              <!-- Bounding box around selected text -->
+              <div class="builder-highlight-box">
+                <span class="cyber-brand-label" contenteditable="true">THUẬN PHÁT</span>
+                
+                <h1 class="cyber-hero-title" contenteditable="true">
+                  GIẢI PHÁP SỐ HÓA<br>
+                  HÀNG ĐẦU VIỆT NAM
+                </h1>
+
+                <p class="cyber-hero-desc" contenteditable="true">
+                  Cung cấp công cụ cho các doanh nghiệp tăng tốc chuyển đổi số và tự động hóa thông minh bằng cách sử dụng công nghệ AI và Computer Vision tiên phong của chúng tôi.
+                </p>
+
+                <div>
+                  <a href="#contact" class="cyber-cta-btn" contenteditable="true">
+                    <span>KHÁM PHÁ NGAY</span>
+                    <span>⟶</span>
+                  </a>
+                </div>
+              </div>
+
+              <!-- Slider Counter Navigation -->
+              <div class="cyber-slider-counter">
+                <span>02</span>
+                <div class="cyber-slider-bar"></div>
+                <span>02</span>
+                <div class="cyber-slider-arrows">
+                  <span>←</span>
+                  <span>→</span>
+                </div>
+              </div>
+
+            </div>
+
+          </section>
+
+          <!-- ROW 2: 3 CỘT TÍNH NĂNG ĐỘT PHÁ -->
+          <div class="builder-row builder-section-block" data-name="Khối 3 Cột Tính Năng">
+            <div class="floating-element-toolbar">
+              <button class="floating-tool-btn" onclick="PageBuilder.duplicateSection(this)">📋 Nhân bản</button>
+              <button class="floating-tool-btn" onclick="PageBuilder.deleteSection(this)">🗑️ Xóa</button>
+              <button class="floating-tool-btn" onclick="PageBuilder.moveSection(this, -1)">⬆️</button>
+              <button class="floating-tool-btn" onclick="PageBuilder.moveSection(this, 1)">⬇️</button>
+            </div>
+
+            <div class="col-4 builder-column-box">
+              <div style="font-size: 26px; margin-bottom: 8px;">🖨️</div>
+              <h3 style="font-size: 17px; font-weight: 700; color: #1e293b; margin-bottom: 6px;" contenteditable="true">Máy Scan Ricoh Chính Hãng</h3>
+              <p style="font-size: 13px; color: #64748b; line-height: 1.6;" contenteditable="true">Tốc độ quét siêu tốc 70ppm/140ipm, cảm biến chống dính giấy thông minh bảo vệ hồ sơ tuyệt đối.</p>
+            </div>
+
+            <div class="col-4 builder-column-box">
+              <div style="font-size: 26px; margin-bottom: 8px;">🧠</div>
+              <h3 style="font-size: 17px; font-weight: 700; color: #1e293b; margin-bottom: 6px;" contenteditable="true">AI OCR Bóc Tách Dữ Liệu</h3>
+              <p style="font-size: 13px; color: #64748b; line-height: 1.6;" contenteditable="true">Nhận diện tiếng Việt và các biểu mẫu hành chính phức tạp với độ chuẩn xác lên đến 99,8%.</p>
+            </div>
+
+            <div class="col-4 builder-column-box">
+              <div style="font-size: 26px; margin-bottom: 8px;">📊</div>
+              <h3 style="font-size: 17px; font-weight: 700; color: #1e293b; margin-bottom: 6px;" contenteditable="true">Chuẩn Đánh Giá DTI</h3>
+              <p style="font-size: 13px; color: #64748b; line-height: 1.6;" contenteditable="true">Bộ giải pháp đạt chuẩn Quyết định 1726/QĐ-BTTTT và Thông tư 02/2019/TT-BNV.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="builderToast" class="builder-toast">
+    <span>⚡</span>
+    <span>Thông báo</span>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/data-store.js"></script>
+  <script src="js/builder.js"></script>
+</body>
+</html>

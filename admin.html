@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thuận Phát — Hệ Thống Quản Trị CMS & Trợ Lý AI</title>
+  <!-- Google Fonts: Plus Jakarta Sans (Ultra-Premium Enterprise Typography) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+  <!-- ============================================================
+       SIDEBAR NAVIGATION (KHỚP CHÍNH XÁC GIAO DIỆN HÌNH ẢNH USER)
+  ============================================================ -->
+  <aside class="admin-sidebar">
+    
+    <!-- Brand Title matching screenshot -->
+    <div class="sidebar-brand">
+      <div class="brand-title-screenshot">
+        <span>Thuận Phát</span>
+      </div>
+    </div>
+
+    <!-- Nav Items: 9 Modules -->
+    <nav class="sidebar-nav">
+      
+      <!-- 1. Bảng điều khiển -->
+      <button class="nav-item-btn active" data-tab="dashboard">
+        <svg class="nav-item-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        <span>Bảng điều khiển</span>
+      </button>
+
+      <!-- 2. Bài viết (Accordion dropdown) -->
+      <div class="nav-parent-wrap" id="menuWrapPosts">
+        <button class="nav-item-btn" data-tab="posts">
+          <svg class="nav-item-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="7" y1="8" x2="17" y2="8"></line>
+            <line x1="7" y1="12" x2="17" y2="12"></line>
+            <line x1="7" y1="16" x2="13" y2="16"></line>
+          </svg>
+          <span>Bài viết</span>
+          <svg class="nav-item-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="nav-submenu">
+          <a href="javascript:void(0)" class="nav-sub-item active" data-parent="posts" data-sub="posts-all">Tất cả bài viết</a>
+          <a href="javascript:void(0)" class="nav-sub-item" data-parent="posts" data-sub="posts-new">Viết bài mới</a>
+          <a href="javascript:void(0)" class="nav-sub-item" data-parent="posts" data-sub="posts-ai">✨ Trợ lý AI viết bài</a>
+        </div>
+      </div>
+
+      <!-- 3. Trang (Accordion dropdown) -->
+      <div class="nav-parent-wrap" id="menuWrapPages">
+        <button class="nav-item-btn" data-tab="pages">
+          <svg class="nav-item-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+            <polyline points="13 2 13 9 20 9"></polyline>
+          </svg>
+          <span>Trang</span>
+          <svg class="nav-item-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="nav-submenu">
+          <a href="javascript:void(0)" class="nav-sub-item active" data-parent="pages" data-sub="pages-all">Tất cả trang</a>
+          <a href="javascript:void(0)" class="nav-sub-item" data-parent="pages" data-sub="page-home">Trang chủ (/)</a>
+          <a href="javascript:void(0)" class="nav-sub-item" data-parent="pages" data-sub="page-scan">Máy scan (/may-scan/)</a>
+          <a href="javascript:void(0)" class="nav-sub-item" data-parent="pages" data-sub="page-infra">Hạ tầng (/ha-tang-cntt/)</a>
+          <a href="javascript:void(0)" class="nav-sub-item" data-parent="pages" data-sub="page-digital">Giải pháp CĐS (/giai-phap-chuyen-doi-so/)</a>
+        </div>
+      </div>
+
+      <!-- 4. Liên hệ -->
+      <button class="nav-item-btn" data-tab="leads">
+        <svg class="nav-item-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>
+        <span>Liên hệ</span>
+      </button>
+
+      <!-- 5. Sản phẩm (Accordion dropdown) -->
+      <div class="nav-parent-wrap" id="menuWrapProducts">
+        <button class="nav-item-btn" data-tab="products">
+          <svg class="nav-item-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+          </svg>
+          <span>Sản phẩm</span>
+          <svg class="nav-item-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="nav-submenu">
+          <a href="javascript:void(0)" class="nav-sub-item active" data-parent="products" data-sub="products-all">Tất cả sản phẩm</a>
+          <a href="javascript:void(0)" class="nav-sub-item" data-parent="products" data-sub="products-new">Thêm mới sản phẩm</a>
+          <a href="javascript:void(0)" class="nav-sub-item" data-parent="products" data-sub="products-scan">Máy scan Ricoh/Fujitsu</a>
+          <a href="javascript:void(0)" class="nav-sub-item" data-parent="products" data-sub="products-server">Máy chủ HPE Server</a>
+        </div>
+      </div>
+
+      <!-- 6. Tiện ích (Accordion dropdown) -->
+      <div class="nav-parent-wrap" id="menuWrapUtilities">
+        <button class="nav-item-btn" data-tab="utilities">
+          <svg class="nav-item-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <span>Tiện ích</span>
+          <svg class="nav-item-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="nav-submenu">
+          <a href="javascript:void(0)" class="nav-sub-item active" data-parent="utilities" data-sub="util-ai">✨ Trợ lý AI Content & SEO</a>
+          <a href="javascript:void(0)" class="nav-sub-item" data-parent="utilities" data-sub="util-sitemap">Cấu trúc Sitemap & 301</a>
+          <a href="javascript:void(0)" class="nav-sub-item" data-parent="utilities" data-sub="util-dti">Bộ công cụ Khảo sát DTI</a>
+        </div>
+      </div>
+
+      <!-- 7. Media -->
+      <button class="nav-item-btn" data-tab="media">
+        <svg class="nav-item-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <circle cx="8.5" cy="8.5" r="1.5"></circle>
+          <polyline points="21 15 16 10 5 21"></polyline>
+        </svg>
+        <span>Media</span>
+      </button>
+
+      <!-- 8. Giao diện -->
+      <button class="nav-item-btn" data-tab="theme">
+        <svg class="nav-item-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="3" y1="9" x2="21" y2="9"></line>
+          <line x1="9" y1="21" x2="9" y2="9"></line>
+        </svg>
+        <span>Giao diện</span>
+      </button>
+
+      <!-- 9. Cài đặt -->
+      <button class="nav-item-btn" data-tab="settings">
+        <svg class="nav-item-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+        <span>Cài đặt</span>
+      </button>
+
+      <!-- 10. Người dùng & Database (Admin Tổng & Admin Phụ) -->
+      <div class="nav-parent-wrap" id="menuWrapUsers">
+        <button class="nav-item-btn" data-tab="users">
+          <svg class="nav-item-icon" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+          <span>Tài khoản &amp; Database</span>
+          <svg class="nav-item-chevron" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="nav-submenu">
+          <a href="javascript:void(0)" class="nav-sub-item active" data-parent="users" data-sub="users-all">👥 Danh sách Quản trị</a>
+          <a href="javascript:void(0)" class="nav-sub-item" data-parent="users" data-sub="users-new">➕ Thêm Quản trị viên</a>
+          <a href="javascript:void(0)" class="nav-sub-item" data-parent="users" data-sub="db-center">💾 Trung tâm Database &amp; Sao lưu</a>
+          <a href="javascript:void(0)" class="nav-sub-item" data-parent="users" data-sub="audit-logs">📜 Nhật ký hoạt động</a>
+        </div>
+      </div>
+
+    </nav>
+
+    <!-- Footer View Public Site -->
+    <div class="sidebar-footer">
+      <a href="index.html" class="btn-view-site" target="_blank" title="Xem website bên ngoài">
+        <span>🌐</span>
+        <span>Xem Website Chính</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- ============================================================
+       MAIN CONTENT CONTAINER
+  ============================================================ -->
+  <main class="admin-main">
+    
+    <!-- Topbar Header (Matching Screenshot) -->
+    <header class="admin-topbar">
+      <div class="topbar-left">
+        <button id="btnToggleSidebar" class="btn-sidebar-toggle" onclick="toggleSidebarCollapse()" title="Thu gọn / Mở rộng menu">☰</button>
+        <h1 class="page-heading" id="adminTopbarTitle">Cài đặt</h1>
+      </div>
+      <div class="topbar-right">
+        <!-- Visual Page Builder Action Button -->
+        <a href="builder.html" target="_blank" class="btn-primary-action" style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); color: #ffffff;" title="Mở trình dựng trang trực quan kéo thả">
+          <span>🎨</span>
+          <span>Mở Page Builder</span>
+        </a>
+        <!-- AI Assistant Action Button -->
+        <button class="btn-ai-trigger" onclick="openAiAssistant('general')">
+          <span>✨</span>
+          <span>Trợ Lý AI Content</span>
+        </button>
+        <!-- Create Post Action -->
+        <button class="btn-primary-action" onclick="openPostEditor(null)">
+          <span>➕</span>
+          <span>Viết bài mới</span>
+        </button>
+        <!-- Bug icon -->
+        <button class="topbar-icon-btn" title="Báo cáo sự cố">🪲</button>
+        <!-- Fullscreen icon -->
+        <button class="topbar-icon-btn" onclick="toggleFullScreen()" title="Chế độ toàn màn hình">⛶</button>
+        <!-- User Profile Matching Screenshot: Long Nguyen ⌵ -->
+        <div class="user-profile-wrapper">
+          <div id="adminUserProfileBtn" class="admin-user-profile" onclick="toggleUserDropdown(event)" style="display: flex; align-items: center; gap: 8px; cursor: pointer; padding: 4px 8px; border-radius: 6px; user-select: none;">
+            <div id="topbarUserAvatar" class="user-avatar" style="width: 32px; height: 32px; border-radius: 50%; background: #cbd5e1; color: #334155; font-weight: 700; font-size: 13px; display: flex; align-items: center; justify-content: center;">
+              LN
+            </div>
+            <div style="display: flex; align-items: center; gap: 4px;">
+              <span id="topbarUserName" style="font-size: 13.5px; font-weight: 600; color: #334155;">Long Nguyen</span>
+              <span style="font-size: 11px; color: #64748b;">⌵</span>
+            </div>
+          </div>
+
+          <!-- User Profile Dropdown Popup -->
+          <div id="userProfileDropdown" class="user-profile-dropdown">
+            <div class="dropdown-header">
+              <div class="dropdown-user-avatar" id="dropdownUserAvatar">LN</div>
+              <div class="dropdown-user-info">
+                <div class="dropdown-name" id="dropdownUserName">Long Nguyen</div>
+                <div class="dropdown-role" id="dropdownUserRole">Quản trị viên cấp cao</div>
+                <div class="dropdown-email" id="dropdownUserEmail">longnguyen@thuanphat8.vn</div>
+              </div>
+            </div>
+            <div class="dropdown-divider"></div>
+            <a href="javascript:void(0)" class="dropdown-item" onclick="openSettingDetail('doc')">
+              <span>⚙️</span> Cài đặt tài khoản
+            </a>
+            <a href="builder.html" class="dropdown-item" target="_blank">
+              <span>🎨</span> Mở Page Builder
+            </a>
+            <a href="index.html" class="dropdown-item" target="_blank">
+              <span>🌐</span> Xem website chính
+            </a>
+            <div class="dropdown-divider"></div>
+            <button type="button" class="dropdown-item dropdown-item-danger" onclick="handleAdminLogout()">
+              <span>🚪</span> Đăng xuất quản trị
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Breadcrumb Bar (Matching Screenshot: Trang chủ / Cài đặt) -->
+    <div class="admin-breadcrumb-bar">
+      <div class="admin-breadcrumb">
+        <a href="javascript:void(0)" onclick="switchAdminTab('dashboard')">Trang chủ</a> / <span class="breadcrumb-active" id="adminBreadcrumbCurrent">Cài đặt</span>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         PANE 1: BẢNG ĐIỀU KHIỂN (DASHBOARD)
+    ============================================================ -->
+    <div id="pane-dashboard" class="admin-tab-pane active">
+      
+      <!-- Metrics Grid -->
+      <div class="stats-cards-grid">
+        <div class="dashboard-stat-card">
+          <div class="stat-card-header">
+            <span class="stat-card-title">Tổng Bài Viết Content</span>
+            <div class="stat-card-icon" style="background: #edf5fe; color: #1860aa;">📄</div>
+          </div>
+          <div class="stat-card-value" id="dashTotalPosts">4</div>
+          <div class="stat-card-sub"><span class="stat-trend-up">↑ 100%</span> chuẩn cấu trúc Pillar/Cluster</div>
+        </div>
+
+        <div class="dashboard-stat-card">
+          <div class="stat-card-header">
+            <span class="stat-card-title">Yêu Cầu Tư Vấn Mới (Leads)</span>
+            <div class="stat-card-icon" style="background: #fdeeee; color: #c52924;">📞</div>
+          </div>
+          <div class="stat-card-value" id="dashTotalLeads">3</div>
+          <div class="stat-card-sub"><span class="stat-trend-up">Mới</span> gửi từ website trong ngày</div>
+        </div>
+
+        <div class="dashboard-stat-card">
+          <div class="stat-card-header">
+            <span class="stat-card-title">Thiết Bị &amp; Sản Phẩm</span>
+            <div class="stat-card-icon" style="background: #eaf8ef; color: #1b8046;">🖥️</div>
+          </div>
+          <div class="stat-card-value" id="dashTotalProducts">5</div>
+          <div class="stat-card-sub"><span class="stat-trend-up">Chính hãng</span> Ricoh, HPE &amp; Giải pháp</div>
+        </div>
+
+        <div class="dashboard-stat-card">
+          <div class="stat-card-header">
+            <span class="stat-card-title">Lượt Xem Website</span>
+            <div class="stat-card-icon" style="background: #fdf5e6; color: #b87b12;">👁️</div>
+          </div>
+          <div class="stat-card-value" id="dashTotalViews">4.520</div>
+          <div class="stat-card-sub"><span class="stat-trend-up">↑ 18%</span> so với tuần trước</div>
+        </div>
+      </div>
+
+      <!-- Chart & Recent Layout -->
+      <div class="dashboard-grid-2col">
+        
+        <!-- Left: Analytics Chart -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <h2 class="panel-title">Lượt Truy Cập &amp; Tương Tác Trong Tuần</h2>
+            <span style="font-size: 12px; color: #888;">Thời gian thực</span>
+          </div>
+          <canvas id="adminAnalyticsCanvas" width="560" height="230"></canvas>
+        </div>
+
+        <!-- Right: Recent Inquiries -->
+        <div class="panel-card">
+          <div class="panel-header">
+            <h2 class="panel-title">Khách Hàng Mới Gửi Yêu Cầu</h2>
+            <button class="table-btn table-btn-edit" onclick="switchAdminTab('leads')">Xem tất cả</button>
+          </div>
+          <table class="admin-table" style="font-size: 12.5px;">
+            <thead>
+              <tr>
+                <th>Mã</th>
+                <th>Khách hàng</th>
+                <th>SĐT</th>
+                <th>Cơ quan / DN</th>
+                <th>Trạng thái</th>
+                <th>Ngày gửi</th>
+              </tr>
+            </thead>
+            <tbody id="dashRecentLeadsBody">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ============================================================
+         PANE 2: BÀI VIẾT (POSTS & CONTENT CMS)
+    ============================================================ -->
+    <div id="pane-posts" class="admin-tab-pane">
+      
+      <div class="table-toolbar">
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <div class="search-input-wrap">
+            <span class="admin-search-icon">🔍</span>
+            <input type="text" id="postSearchInput" class="admin-search-input" placeholder="Tìm kiếm bài viết, từ khóa SEO...">
+          </div>
+          <select id="postCategoryFilter" class="filter-select">
+            <option value="all">Tất cả danh mục</option>
+            <option value="may-scan">Máy scan</option>
+            <option value="ha-tang-cntt">Hạ tầng CNTT</option>
+            <option value="giai-phap-chuyen-doi-so">Giải pháp CĐS</option>
+            <option value="phan-phoi-thiet-bi">Phân phối thiết bị</option>
+          </select>
+        </div>
+
+        <div style="display: flex; gap: 10px;">
+          <button class="btn-ai-trigger" onclick="openAiAssistant('general')">
+            <span>✨</span>
+            <span>Trợ lý AI viết bài</span>
+          </button>
+          <button class="btn-primary-action" onclick="openPostEditor(null)">
+            <span>➕</span>
+            <span>Tạo bài viết mới</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Tiêu đề &amp; Đường dẫn Slug</th>
+              <th>Danh mục</th>
+              <th>Pillar / Cluster</th>
+              <th>Trạng thái</th>
+              <th>Lượt xem</th>
+              <th>Ngày đăng</th>
+              <th>Hành động</th>
+            </tr>
+          </thead>
+          <tbody id="postsTableBody">
+            <!-- Rendered via JS -->
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- ============================================================
+         PANE 3: TRANG (PAGES SITEMAP)
+    ============================================================ -->
+    <div id="pane-pages" class="admin-tab-pane">
+      <div class="table-toolbar">
+        <div>
+          <h2 style="font-size: 16px; font-weight: 700; color: #1a1918;">Danh Sách Tất Cả Trang Trên Website</h2>
+          <p style="font-size: 13px; color: #777;">Quản lý các trang đích, trang chuyên mục theo cấu trúc Sitemap tối đa 3 cấp.</p>
+        </div>
+      </div>
+
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Tên trang</th>
+              <th>Đường dẫn tĩnh (Slug)</th>
+              <th>Loại trang</th>
+              <th>Trạng thái</th>
+              <th>Cập nhật gần nhất</th>
+              <th>Xem trước</th>
+            </tr>
+          </thead>
+          <tbody id="pagesTableBody">
+            <!-- Rendered via JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         PANE 4: LIÊN HỆ (LEADS CRM)
+    ============================================================ -->
+    <div id="pane-leads" class="admin-tab-pane">
+      
+      <div class="table-toolbar">
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <select id="leadsFilterStatus" class="filter-select">
+            <option value="all">Tất cả trạng thái</option>
+            <option value="new">Mới tiếp nhận</option>
+            <option value="contacted">Đang tư vấn</option>
+            <option value="survey_done">Đã khảo sát</option>
+            <option value="completed">Thành công</option>
+          </select>
+        </div>
+
+        <button class="btn-primary-action" style="background-color: #1a1918;" onclick="exportLeadsToCsv()">
+          <span>📥</span>
+          <span>Xuất tệp CSV danh bạ</span>
+        </button>
+      </div>
+
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Mã hồ sơ</th>
+              <th>Khách hàng</th>
+              <th>Số điện thoại</th>
+              <th>Email</th>
+              <th>Cơ quan / Doanh nghiệp</th>
+              <th>Khối lượng hồ sơ</th>
+              <th>Trạng thái xử lý</th>
+              <th>Ngày gửi</th>
+            </tr>
+          </thead>
+          <tbody id="leadsTableBody">
+            <!-- Rendered via JS -->
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- ============================================================
+         PANE 5: SẢN PHẨM (PRODUCTS)
+    ============================================================ -->
+    <div id="pane-products" class="admin-tab-pane">
+      <div class="table-toolbar">
+        <div>
+          <h2 style="font-size: 16px; font-weight: 700; color: #1a1918;">Danh Sách Sản Phẩm &amp; Thiết Bị Phân Phối</h2>
+          <p style="font-size: 13px; color: #777;">Máy scan tài liệu Ricoh/Fujitsu chính hãng và hệ thống máy chủ HPE.</p>
+        </div>
+        <button class="btn-primary-action" onclick="openProductEditor(null)">
+          <span>➕</span>
+          <span>Thêm sản phẩm mới</span>
+        </button>
+      </div>
+
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Hình ảnh</th>
+              <th>Tên sản phẩm &amp; Mã</th>
+              <th>Phân loại</th>
+              <th>Thông số / Tốc độ</th>
+              <th>Đơn giá</th>
+              <th>Tình trạng kho</th>
+              <th>Hành động</th>
+            </tr>
+          </thead>
+          <tbody id="productsTableBody">
+            <!-- Rendered via JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         PANE 6: TIỆN ÍCH (UTILITIES, SITEMAP & 301)
+    ============================================================ -->
+    <div id="pane-utilities" class="admin-tab-pane">
+      
+      <!-- Utility Action Cards -->
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-bottom: 24px;">
+        <div class="panel-card" style="cursor: pointer; border-left: 4px solid #6366f1;" onclick="openAiAssistant('clean')">
+          <div style="font-size: 24px; margin-bottom: 8px;">✨</div>
+          <strong style="font-size: 15px; color: #1e293b; display: block; margin-bottom: 4px;">Trợ Lý AI Content</strong>
+          <p style="font-size: 12.5px; color: #64748b;">Làm sạch HTML rác, định dạng đẹp, sinh thẻ SEO Title &amp; Description chuẩn Google.</p>
+        </div>
+
+        <div class="panel-card" style="cursor: pointer; border-left: 4px solid #1b8046;" onclick="window.open('index.html#quiz', '_blank')">
+          <div style="font-size: 24px; margin-bottom: 8px;">📊</div>
+          <strong style="font-size: 15px; color: #1e293b; display: block; margin-bottom: 4px;">Bộ Khảo Sát Chỉ Số DTI</strong>
+          <p style="font-size: 12.5px; color: #64748b;">Công cụ trắc nghiệm trực tuyến theo QĐ 1726/QĐ-BTTTT với biểu đồ Radar Chart.</p>
+        </div>
+
+        <div class="panel-card" style="cursor: pointer; border-left: 4px solid #c59b27;">
+          <div style="font-size: 24px; margin-bottom: 8px;">🗺️</div>
+          <strong style="font-size: 15px; color: #1e293b; display: block; margin-bottom: 4px;">Sitemap &amp; 301 Redirects</strong>
+          <p style="font-size: 12.5px; color: #64748b;">Cấu trúc 3 cấp thư mục chuẩn SEO và danh sách điều hướng 301 giữ traffic cũ.</p>
+        </div>
+      </div>
+
+      <!-- Sitemap Pillars Viewer -->
+      <div class="panel-card">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">Sơ Đồ Cây Sitemap &amp; Điều Hướng 301 Theo Kế Hoạch SEO Chị Quyên</h2>
+            <p style="font-size: 13px; color: #777;">Tối đa 3 cấp độ sâu thư mục: Trang chủ (/) &rarr; Danh mục chính &rarr; Bài viết Pillar / Cluster.</p>
+          </div>
+        </div>
+
+        <div id="sitemapPillarsViewer">
+          <!-- Rendered via JS -->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================================
+         PANE 7: MEDIA (THƯ VIỆN HÌNH ẢNH)
+    ============================================================ -->
+    <div id="pane-media" class="admin-tab-pane">
+      <div class="table-toolbar">
+        <div>
+          <h2 style="font-size: 16px; font-weight: 700; color: #1a1918;">Thư Viện Hình Ảnh &amp; Media</h2>
+          <p style="font-size: 13px; color: #777;">Quản lý kho ảnh bài viết, banner máy scan và chứng nhận đối tác.</p>
+        </div>
+        <button class="btn-primary-action" onclick="handleAddMediaPrompt()">
+          <span>➕</span>
+          <span>Thêm hình ảnh mới</span>
+        </button>
+      </div>
+
+      <div id="mediaLibraryGrid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+
+    <!-- ============================================================
+         PANE 8: GIAO DIỆN (THEME & HERO CUSTOMIZER)
+    ============================================================ -->
+    <div id="pane-theme" class="admin-tab-pane">
+      <div class="panel-card" style="max-width: 860px; margin-bottom: 24px;">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">Tùy Biến Giao Diện Trang Chủ &amp; Banner Hero</h2>
+            <p style="font-size: 13px; color: #777;">Thay đổi trực tiếp nội dung hiển thị trên trang chủ mà không cần can thiệp mã nguồn.</p>
+          </div>
+          <button class="btn-primary-action" onclick="saveThemeSettingsForm()">💾 Lưu thay đổi</button>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 18px;">
+          
+          <div class="admin-form-group">
+            <label class="admin-label">Tiêu đề chính Hero (H1)</label>
+            <textarea id="settingHeroTitle" class="admin-textarea" rows="3"></textarea>
+          </div>
+
+          <div class="admin-form-group">
+            <label class="admin-label">Đoạn mô tả Hero</label>
+            <textarea id="settingHeroDesc" class="admin-textarea" rows="3"></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="admin-form-group">
+              <label class="admin-label">Huy hiệu đối tác chính hãng (Pill Badge)</label>
+              <input type="text" id="settingPartnerBadge" class="admin-input">
+            </div>
+
+            <div class="admin-form-group">
+              <label class="admin-label">Số Hotline Header</label>
+              <input type="text" id="settingHotline" class="admin-input">
+            </div>
+          </div>
+
+          <div class="admin-form-group">
+            <label class="admin-label">Email tiếp nhận liên hệ</label>
+            <input type="email" id="settingEmail" class="admin-input">
+          </div>
+
+          <h3 style="font-size: 14.5px; font-weight: 700; margin-top: 10px; border-top: 1px dashed #e6e4df; padding-top: 16px;">
+            Các Chỉ Số Thống Kê Trên Stats Bar
+          </h3>
+
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+            <div class="admin-form-group">
+              <label class="admin-label">Khách hàng</label>
+              <input type="text" id="settingStatClients" class="admin-input">
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-label">Kinh nghiệm</label>
+              <input type="text" id="settingStatExp" class="admin-input">
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-label">Hài lòng</label>
+              <input type="text" id="settingStatSat" class="admin-input">
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-label">Hỗ trợ</label>
+              <input type="text" id="settingStatSupport" class="admin-input">
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 10px;">
+            <button type="button" class="table-btn table-btn-edit" onclick="if(confirm('Khôi phục cấu hình về mặc định ban đầu?')) { DataStore.resetAll(); loadThemeSettings(); showToast('Đã khôi phục mặc định!'); }">
+              🔄 Khôi phục mặc định
+            </button>
+            <button type="button" class="btn-primary-action" onclick="saveThemeSettingsForm()">
+              💾 Lưu cấu hình giao diện
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         PANE 9: CÀI ĐẶT (SETTINGS EXACT MATCH FOR SCREENSHOTS 1 & 2)
+    ============================================================ -->
+    <div id="pane-settings" class="admin-tab-pane">
+      
+      <!-- Card 1: Cài đặt -->
+      <div class="settings-panel-card">
+        <div class="settings-panel-header">
+          <h2 class="settings-panel-title">Cài đặt</h2>
+        </div>
+        <div class="settings-grid-4col">
+          <div class="settings-item-box" onclick="openSettingDetail('doc')">
+            <span class="settings-item-title">Đọc</span>
+            <p class="settings-item-desc">Cấu hình số lượng nội dung hiển thị, SEO công cụ tìm kiếm</p>
+          </div>
+
+          <div class="settings-item-box" onclick="openSettingDetail('duong-dan')">
+            <span class="settings-item-title">Đường dẫn</span>
+            <p class="settings-item-desc">Cấu hình định dạng cho đường dẫn của website</p>
+          </div>
+
+          <div class="settings-item-box" onclick="openSettingDetail('bai-viet')">
+            <span class="settings-item-title">Bài viết</span>
+            <p class="settings-item-desc">Xem và cập nhật Bài viết</p>
+          </div>
+
+          <div class="settings-item-box" onclick="openSettingDetail('bieu-mau')">
+            <span class="settings-item-title">Biểu mẫu</span>
+            <p class="settings-item-desc">Xem và cập nhật Biểu mẫu</p>
+          </div>
+
+          <div class="settings-item-box" onclick="openSettingDetail('nhung')">
+            <span class="settings-item-title">Nhúng</span>
+            <p class="settings-item-desc">Cấu hình thêm mã nhúng vào website</p>
+          </div>
+
+          <div class="settings-item-box" onclick="openSettingDetail('tien-te')">
+            <span class="settings-item-title">Tiền tệ</span>
+            <p class="settings-item-desc">Cấu hình định dạng tiền tệ</p>
+          </div>
+
+          <div class="settings-item-box" onclick="openSettingDetail('muc-luc')">
+            <span class="settings-item-title">Mục lục</span>
+            <p class="settings-item-desc">Cấu hình hiển thị mục lục</p>
+          </div>
+
+          <div class="settings-item-box" onclick="openSettingDetail('cta')">
+            <span class="settings-item-title">Nút kêu gọi hành động (CTA)</span>
+            <p class="settings-item-desc">Cấu hình nút kêu gọi hành động</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Ngôn ngữ -->
+      <div class="settings-panel-card">
+        <div class="settings-panel-header">
+          <h2 class="settings-panel-title">Ngôn ngữ</h2>
+        </div>
+        <div class="settings-grid-4col">
+          <div class="settings-item-box" onclick="openSettingDetail('ngon-ngu')">
+            <span class="settings-item-title">Ngôn ngữ</span>
+            <p class="settings-item-desc">Cấu hình ngôn ngữ, múi giờ cho hệ thống</p>
+          </div>
+
+          <div class="settings-item-box" onclick="openSettingDetail('dich-thuat')">
+            <span class="settings-item-title">Dịch thuật</span>
+            <p class="settings-item-desc">Dịch nội dung cho website</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3: Sản phẩm -->
+      <div class="settings-panel-card">
+        <div class="settings-panel-header">
+          <h2 class="settings-panel-title">Sản phẩm</h2>
+        </div>
+        <div class="settings-grid-4col">
+          <div class="settings-item-box" onclick="openSettingDetail('san-pham-hien-thi')">
+            <span class="settings-item-title">Nội dung hiển thị</span>
+            <p class="settings-item-desc">Xem và cập nhật Nội dung hiển thị</p>
+          </div>
+
+          <div class="settings-item-box" onclick="openSettingDetail('san-pham-nang-cao')">
+            <span class="settings-item-title">Cài đặt nâng cao</span>
+            <p class="settings-item-desc">Xem và cập nhật Cài đặt nâng cao</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4: Địa điểm -->
+      <div class="settings-panel-card">
+        <div class="settings-panel-header">
+          <h2 class="settings-panel-title">Địa điểm</h2>
+        </div>
+        <div class="settings-grid-4col">
+          <div class="settings-item-box" onclick="openSettingDetail('dia-diem-nhap')">
+            <span class="settings-item-title">Nhập Hàng Loạt</span>
+            <p class="settings-item-desc">Xem và cập nhật Nhập Hàng Loạt</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================================================
+         PANE 10: QUẢN TRỊ TÀI KHOẢN & DATABASE (ADMIN TỔNG & PHỤ)
+    ============================================================ -->
+    <div id="pane-users" class="admin-tab-pane">
+      
+      <!-- Subtab Switcher Header -->
+      <div class="users-tab-nav" style="display: flex; gap: 8px; border-bottom: 2px solid #e2e8f0; margin-bottom: 20px; padding-bottom: 10px;">
+        <button type="button" class="users-subtab-btn active" onclick="switchUsersSubTab('users-list', this)">
+          <span>👥</span> Quản Trị Viên &amp; Phân Quyền
+        </button>
+        <button type="button" class="users-subtab-btn" onclick="switchUsersSubTab('db-center', this)">
+          <span>💾</span> Cơ Sở Dữ Liệu &amp; Sao Lưu
+        </button>
+        <button type="button" class="users-subtab-btn" onclick="switchUsersSubTab('audit-logs', this)">
+          <span>📜</span> Nhật Ký Hoạt Động (Audit Trail)
+        </button>
+      </div>
+
+      <!-- VIEW 1: USERS LIST (ADMIN TỔNG & ADMIN PHỤ) -->
+      <div id="usersSubViewList" class="users-subview-panel">
+        
+        <!-- Summary Stats Cards -->
+        <div class="stats-cards-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 20px;">
+          <div class="dashboard-stat-card" style="border-left: 4px solid #f59e0b;">
+            <div class="stat-card-header">
+              <span class="stat-card-title">👑 Admin Tổng (Super Admin)</span>
+              <span class="stat-card-icon">👑</span>
+            </div>
+            <div class="stat-card-value" id="statSuperAdminCount">1</div>
+            <div class="stat-card-change" style="color: #b45309;">Toàn quyền tối cao hệ thống &amp; Database</div>
+          </div>
+
+          <div class="dashboard-stat-card" style="border-left: 4px solid #3b82f6;">
+            <div class="stat-card-header">
+              <span class="stat-card-title">🛡️ Admin Phụ (Sub Admin)</span>
+              <span class="stat-card-icon">🛡️</span>
+            </div>
+            <div class="stat-card-value" id="statSubAdminCount">2</div>
+            <div class="stat-card-change" style="color: #1d4ed8;">Biên tập viên, Quản trị nội dung &amp; SEO</div>
+          </div>
+
+          <div class="dashboard-stat-card" style="border-left: 4px solid #10b981;">
+            <div class="stat-card-header">
+              <span class="stat-card-title">🔒 Bảo Mật Phân Quyền</span>
+              <span class="stat-card-icon">✅</span>
+            </div>
+            <div class="stat-card-value" style="font-size: 20px; color: #10b981;">RBAC Active</div>
+            <div class="stat-card-change">Kiểm tra phiên &amp; quyền hạn tức thì</div>
+          </div>
+        </div>
+
+        <!-- Table Toolbar -->
+        <div class="panel-card-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+          <div>
+            <h2 style="font-size: 16px; font-weight: 800; color: #1e293b;">Danh Sách Quản Trị Viên Hệ Thống</h2>
+            <p style="font-size: 12.5px; color: #64748b; margin-top: 2px;">Phân chia rõ ràng vai trò <strong>Admin Tổng</strong> (toàn quyền) và <strong>Admin Phụ</strong> (giới hạn theo phòng ban).</p>
+          </div>
+          <div>
+            <button type="button" class="btn-primary-action" id="btnAddNewAdmin" onclick="openAdminUserModal(null)">
+              <span>➕</span>
+              <span>Thêm Quản trị viên mới</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Users Table Card -->
+        <div class="panel-card" style="padding: 0; overflow: hidden;">
+          <div class="admin-table-container" style="max-height: none;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th style="width: 220px;">Quản trị viên</th>
+                  <th>Tài khoản &amp; Email</th>
+                  <th>Phòng ban</th>
+                  <th>Vai trò</th>
+                  <th>Phân quyền chi tiết</th>
+                  <th>Ngày tạo</th>
+                  <th style="width: 140px; text-align: right;">Thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="adminUsersTableBody">
+                <!-- Rendered dynamically via renderAdminUsersTable() -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- VIEW 2: DATABASE CENTER & BACKUP/RESTORE -->
+      <div id="usersSubViewDatabase" class="users-subview-panel" style="display: none;">
+        
+        <!-- Database Overview Banner -->
+        <div class="panel-card" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: #ffffff; margin-bottom: 20px; padding: 22px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+            <div>
+              <div style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background: rgba(59, 130, 246, 0.2); border: 1px solid rgba(59, 130, 246, 0.4); border-radius: 999px; font-size: 11px; font-weight: 700; color: #60a5fa; margin-bottom: 8px;">
+                <span>💾</span> UNIFIED DATABASE ENGINE V1.0
+              </div>
+              <h2 style="font-size: 20px; font-weight: 800; color: #ffffff; margin-bottom: 4px;">Trung Tâm Điều Hành &amp; Lưu Trữ Dữ Liệu Toàn Bộ Website</h2>
+              <p style="font-size: 13px; color: #94a3b8; max-width: 680px; line-height: 1.5;">
+                Quản lý đồng bộ 8 bảng dữ liệu cốt lõi (Tài khoản, Bài viết, Giải pháp số, Thiết bị, Khách hàng CRM, Trang Builder, Cài đặt, Nhật ký). Hỗ trợ sao lưu 1-click thành tệp JSON an toàn.
+              </p>
+            </div>
+            <div style="display: flex; gap: 10px;">
+              <button type="button" class="btn-primary-action" onclick="exportDatabaseBackup()" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                <span>📥</span> Sao lưu Database (Export JSON)
+              </button>
+              <button type="button" class="btn-primary-action" id="btnImportDbAction" onclick="triggerDatabaseRestoreFile()" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);">
+                <span>📤</span> Phục hồi Database (Import JSON)
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 8 Database Tables Grid -->
+        <h3 style="font-size: 15px; font-weight: 800; color: #1e293b; margin-bottom: 12px;">Các Bảng Dữ Liệu Trong Hệ Thống</h3>
+        <div class="db-tables-grid" id="dbTablesGrid">
+          <!-- Rendered dynamically via renderDatabaseStats() -->
+        </div>
+
+        <!-- Danger Zone for Super Admin -->
+        <div class="panel-card" style="margin-top: 24px; border: 1px solid #fee2e2; background: #fffaf0;" id="superAdminDangerZone">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+            <div>
+              <strong style="color: #b45309; font-size: 14px; display: flex; align-items: center; gap: 6px;">
+                <span>⚠️</span> Khu vực Quản trị tối cao (Dành riêng cho Admin Tổng)
+              </strong>
+              <p style="font-size: 12.5px; color: #78716c; margin-top: 4px;">
+                Khôi phục toàn bộ hệ thống về dữ liệu chuẩn ban đầu của Thuận Phát (DTI, máy scan Ricoh, sitemap). Mọi chỉnh sửa tạm thời sẽ được làm mới.
+              </p>
+            </div>
+            <div>
+              <button type="button" class="table-btn table-btn-delete" id="btnResetFactoryAction" onclick="handleDatabaseFactoryReset()" style="padding: 9px 16px; font-weight: 700;">
+                ⚡ Khôi phục dữ liệu mặc định (Factory Reset)
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- VIEW 3: AUDIT TRAIL LOGS -->
+      <div id="usersSubViewAuditLogs" class="users-subview-panel" style="display: none;">
+        <div class="panel-card-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+          <div>
+            <h2 style="font-size: 16px; font-weight: 800; color: #1e293b;">Nhật Ký Hoạt Động Của Quản Trị Viên (Audit Trail)</h2>
+            <p style="font-size: 12.5px; color: #64748b; margin-top: 2px;">Ghi vết thời gian thực mọi hành vi đăng nhập, thêm/sửa/xóa bài viết, tài khoản và thao tác cơ sở dữ liệu.</p>
+          </div>
+          <div>
+            <button type="button" class="table-btn table-btn-edit" onclick="renderAuditLogs()">
+              <span>🔄</span> Làm mới nhật ký
+            </button>
+          </div>
+        </div>
+
+        <div class="panel-card" style="padding: 0; overflow: hidden;">
+          <div class="admin-table-container" style="max-height: 480px;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th style="width: 170px;">Thời gian</th>
+                  <th style="width: 200px;">Người thực hiện</th>
+                  <th style="width: 130px;">Hành vi</th>
+                  <th>Chi tiết thao tác</th>
+                </tr>
+              </thead>
+              <tbody id="auditLogsTableBody">
+                <!-- Rendered dynamically via renderAuditLogs() -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Hidden Input for Database Restore -->
+    <input type="file" id="dbRestoreFileInput" accept=".json" style="display: none;" onchange="handleDatabaseRestoreFile(event)">
+
+    <!-- ============================================================
+         MODAL: THÊM / SỬA QUẢN TRỊ VIÊN (ADMIN TỔNG & ADMIN PHỤ)
+    ============================================================ -->
+    <div class="editor-modal-backdrop" id="adminUserModal">
+      <div class="editor-modal-window" style="max-width: 640px; height: auto; max-height: 92vh;">
+        
+        <div class="editor-modal-header" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: #ffffff;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 20px;" id="adminUserModalIcon">👤</span>
+            <div>
+              <h2 style="font-size: 17px; font-weight: 800; color: #ffffff;" id="adminUserModalTitle">Thêm Quản Trị Viên Mới</h2>
+              <span style="font-size: 12px; color: #94a3b8;">Phân quyền tài khoản quản trị hệ thống Thuận Phát CMS</span>
+            </div>
+          </div>
+          <button onclick="closeAdminUserModal()" style="font-size: 20px; color: #ffffff;">✕</button>
+        </div>
+
+        <div class="editor-modal-body">
+          <input type="hidden" id="editUserId">
+
+          <div class="form-row">
+            <div class="admin-form-group">
+              <label class="admin-label">Họ và tên hiển thị *</label>
+              <input type="text" id="userDisplayNameInput" class="admin-input" placeholder="Ví dụ: Nguyễn Văn An" required>
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-label">Phòng ban / Chức danh</label>
+              <input type="text" id="userDepartmentInput" class="admin-input" placeholder="Ví dụ: Phòng Marketing &amp; SEO">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="admin-form-group">
+              <label class="admin-label">Tên đăng nhập (Username) *</label>
+              <input type="text" id="userUsernameInput" class="admin-input" placeholder="Ví dụ: vanan hoặc an.nguyen" required>
+            </div>
+            <div class="admin-form-group">
+              <label class="admin-label">Mật khẩu *</label>
+              <input type="password" id="userPasswordInput" class="admin-input" placeholder="Nhập mật khẩu (tối thiểu 3 ký tự)" required>
+            </div>
+          </div>
+
+          <div class="admin-form-group">
+            <label class="admin-label">Email nội bộ</label>
+            <input type="email" id="userEmailInput" class="admin-input" placeholder="Ví dụ: vanan@thuanphat8.vn">
+          </div>
+
+          <!-- Role Selection: Super Admin vs Sub Admin -->
+          <div class="admin-form-group" style="margin-top: 14px; padding: 14px; background: #f8fafc; border: 1.5px solid #e2e8f0; border-radius: 10px;">
+            <label class="admin-label" style="font-weight: 800; color: #0f172a; margin-bottom: 8px;">
+              Chọn Cấp Độ Quản Trị (Vai Trò) *
+            </label>
+            
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; padding: 8px; border-radius: 8px; background: #ffffff; border: 1px solid #e2e8f0;">
+                <input type="radio" name="adminRoleRadio" value="super_admin" id="roleRadioSuper" onchange="togglePermissionCheckboxes()">
+                <div>
+                  <strong style="color: #b45309; font-size: 13.5px;">👑 Admin Tổng (Super Admin)</strong>
+                  <p style="font-size: 12px; color: #64748b; margin: 2px 0 0;">Toàn quyền cao nhất: quản lý tài khoản admin khác, cấu hình API key, sao lưu &amp; phục hồi database toàn bộ.</p>
+                </div>
+              </label>
+
+              <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; padding: 8px; border-radius: 8px; background: #ffffff; border: 1px solid #e2e8f0;">
+                <input type="radio" name="adminRoleRadio" value="sub_admin" id="roleRadioSub" checked onchange="togglePermissionCheckboxes()">
+                <div>
+                  <strong style="color: #1d4ed8; font-size: 13.5px;">🛡️ Admin Phụ (Sub Admin / Biên Tập Viên)</strong>
+                  <p style="font-size: 12px; color: #64748b; margin: 2px 0 0;">Phân quyền theo chức năng được tick chọn bên dưới (không can thiệp tài khoản khác hoặc cài đặt cốt lõi).</p>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Detailed Permission Checkboxes (Visible for Sub Admin) -->
+          <div id="subAdminPermissionsBox" style="margin-top: 14px;">
+            <label class="admin-label" style="font-weight: 700; color: #334155;">
+              Chi tiết các quyền được phép thao tác:
+            </label>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px;">
+              <label class="perm-check-label">
+                <input type="checkbox" class="user-perm-check" value="posts" checked>
+                <span>✍️ Quản lý Bài viết &amp; Tin tức</span>
+              </label>
+              <label class="perm-check-label">
+                <input type="checkbox" class="user-perm-check" value="products" checked>
+                <span>🖨️ Quản lý Sản phẩm (Máy scan)</span>
+              </label>
+              <label class="perm-check-label">
+                <input type="checkbox" class="user-perm-check" value="leads" checked>
+                <span>📞 Quản lý Khách hàng &amp; CRM</span>
+              </label>
+              <label class="perm-check-label">
+                <input type="checkbox" class="user-perm-check" value="pages">
+                <span>📄 Quản lý &amp; Sửa Trang</span>
+              </label>
+              <label class="perm-check-label">
+                <input type="checkbox" class="user-perm-check" value="builder">
+                <span>🎨 Sử dụng Page Builder</span>
+              </label>
+              <label class="perm-check-label">
+                <input type="checkbox" class="user-perm-check" value="media">
+                <span>🖼️ Thư viện Media &amp; Tệp tin</span>
+              </label>
+              <label class="perm-check-label">
+                <input type="checkbox" class="user-perm-check" value="utilities">
+                <span>✨ Tiện ích AI &amp; Sitemap</span>
+              </label>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="editor-modal-footer">
+          <button type="button" class="table-btn table-btn-edit" onclick="closeAdminUserModal()">Hủy bỏ</button>
+          <button type="button" class="btn-primary-action" onclick="saveAdminUserFromModal()">💾 Lưu tài khoản</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Admin Footer (Matching Screenshot) -->
+    <footer class="admin-footer">
+      <div>CMS Version 0.1.8</div>
+      <div>2026 © Sudo. Design &amp; Develop by Sudo</div>
+    </footer>
+  </main>
+
+  <!-- ============================================================
+       MODAL: CHI TIẾT CÀI ĐẶT (SETTINGS DETAIL MODAL)
+  ============================================================ -->
+  <div class="editor-modal-backdrop" id="settingsDetailModal">
+    <div class="editor-modal-window" style="max-width: 620px;">
+      <div class="editor-modal-header">
+        <h2 style="font-size: 17px; font-weight: 800;" id="settingsDetailTitle">Cấu Hình Cài Đặt</h2>
+        <button onclick="closeSettingDetail()" style="font-size: 20px; color: #888;">✕</button>
+      </div>
+      <div class="editor-modal-body" id="settingsDetailBody">
+        <!-- Rendered dynamically via openSettingDetail() in admin.js -->
+      </div>
+      <div class="editor-modal-footer">
+        <button type="button" class="table-btn table-btn-edit" onclick="closeSettingDetail()">Đóng</button>
+        <button type="button" class="btn-primary-action" onclick="saveSettingDetail()">💾 Lưu cấu hình</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MODAL: TRỢ LÝ AI VIẾT BÀI & TỐI ƯU HÓA CONTENT (AI ASSISTANT)
+  ============================================================ -->
+  <div class="editor-modal-backdrop" id="aiAssistantModal">
+    <div class="editor-modal-window" style="max-width: 780px;">
+      
+      <div class="editor-modal-header" style="background: linear-gradient(135deg, #1e293b 0%, #312e81 100%); color: #ffffff;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 22px;">✨</span>
+          <div>
+            <h2 style="font-size: 17px; font-weight: 800; color: #ffffff;">Trợ Lý AI Thuận Phát — Nâng Cấp Bài Đăng Đẹp &amp; Sạch Sẽ</h2>
+            <span style="font-size: 12px; color: #c7d2fe;">Hỗ trợ bạn Content trau chuốt bài viết, chuẩn hóa thẻ HTML và tự động hóa SEO</span>
+          </div>
+        </div>
+        <button onclick="closeAiAssistant()" style="font-size: 20px; color: #ffffff;">✕</button>
+      </div>
+
+      <div class="editor-modal-body">
+        
+        <!-- 3 Quick Action Cards -->
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 18px;">
+          
+          <button type="button" class="panel-card" style="text-align: left; padding: 14px; border: 1.5px solid #e0e7ff; background: #faf5ff; cursor: pointer;" onclick="triggerAiAction('clean_format')">
+            <div style="font-size: 20px; margin-bottom: 6px;">🧹</div>
+            <strong style="font-size: 13.5px; color: #4338ca; display: block; margin-bottom: 4px;">Làm Sạch &amp; Đẹp HTML</strong>
+            <p style="font-size: 11.5px; color: #64748b; line-height: 1.4;">Xóa rác, bọc chuẩn thẻ H2/H3, chia đoạn văn, tạo bullet points và hộp ghi chú bắt mắt.</p>
+          </button>
+
+          <button type="button" class="panel-card" style="text-align: left; padding: 14px; border: 1.5px solid #e0e7ff; background: #eff6ff; cursor: pointer;" onclick="triggerAiAction('seo_meta')">
+            <div style="font-size: 20px; margin-bottom: 6px;">🎯</div>
+            <strong style="font-size: 13.5px; color: #1d4ed8; display: block; margin-bottom: 4px;">Tối Ưu SEO On-Page</strong>
+            <p style="font-size: 11.5px; color: #64748b; line-height: 1.4;">Tự động tạo Tiêu đề SEO 50-60 ký tự, Meta Description 150-160 ký tự thu hút nhấp chuột.</p>
+          </button>
+
+          <button type="button" class="panel-card" style="text-align: left; padding: 14px; border: 1.5px solid #e0e7ff; background: #fefce8; cursor: pointer;" onclick="triggerAiAction('outline')">
+            <div style="font-size: 20px; margin-bottom: 6px;">📝</div>
+            <strong style="font-size: 13.5px; color: #854d0e; display: block; margin-bottom: 4px;">Lập Dàn Ý Theo Sitemap</strong>
+            <p style="font-size: 11.5px; color: #64748b; line-height: 1.4;">Dựng khung bài viết theo chiến lược Pillar / Cluster của phòng SEO chị Quyên.</p>
+          </button>
+
+        </div>
+
+        <!-- Custom Prompt Input -->
+        <div class="admin-form-group">
+          <label class="admin-label">Yêu cầu trợ lý AI thực hiện riêng</label>
+          <input type="text" id="aiCustomPromptInput" class="admin-input" placeholder="Ví dụ: Thêm ví dụ thực tế về số hoá hồ sơ lưu trữ cho UBND...">
+        </div>
+
+        <!-- Result Content Area -->
+        <div class="admin-form-group">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label class="admin-label" style="margin-bottom: 0;">Kết quả xử lý từ Trợ Lý AI</label>
+            <span style="font-size: 11.5px; color: #1b8046; font-weight: 600;">✨ Sẵn sàng áp dụng vào bài viết</span>
+          </div>
+          <div id="aiResultContent" style="min-height: 160px; max-height: 280px; overflow-y: auto; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 6px; padding: 14px; font-family: inherit; font-size: 13px; line-height: 1.6; white-space: pre-wrap; color: #1e293b;">Nhấn một trong 3 nút phía trên để Trợ lý AI tự động phân tích và làm sạch bài viết của bạn.</div>
+        </div>
+
+      </div>
+
+      <div class="editor-modal-footer">
+        <button type="button" class="table-btn table-btn-edit" onclick="closeAiAssistant()">Đóng</button>
+        <button type="button" class="btn-primary-action" id="btnApplyAiResult" style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); display: none;" onclick="applyAiResultToEditor()">
+          <span>✅</span>
+          <span>Áp Dụng Vào Trình Soạn Thảo</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MODAL: POST EDITOR (FOR BẠN CONTENT)
+  ============================================================ -->
+  <div class="editor-modal-backdrop" id="postEditorModal">
+    <div class="editor-modal-window">
+      
+      <div class="editor-modal-header">
+        <h2 style="font-size: 17px; font-weight: 800;" id="postEditorModalTitle">Tạo Bài Viết Mới Cho Bạn Content</h2>
+        <div style="display: flex; gap: 10px; align-items: center;">
+          <button type="button" class="btn-ai-trigger" style="padding: 6px 12px; font-size: 12px;" onclick="openAiAssistant('general')">
+            <span>✨ Trợ lý AI</span>
+          </button>
+          <button onclick="closePostEditor()" style="font-size: 20px; color: #888;">✕</button>
+        </div>
+      </div>
+
+      <div class="editor-modal-body">
+        
+        <!-- Post Title -->
+        <div class="admin-form-group">
+          <label class="admin-label">Tiêu đề bài viết <span style="color:red;">*</span></label>
+          <input type="text" id="postTitleInput" class="admin-input" placeholder="Nhập tiêu đề bài viết chuẩn SEO...">
+        </div>
+
+        <!-- URL Slug & Category Row -->
+        <div class="form-row">
+          <div class="admin-form-group">
+            <label class="admin-label">Đường dẫn tĩnh (Slug URL)</label>
+            <div class="slug-display-wrap">
+              <span class="slug-prefix">thuanphat8.vn/</span>
+              <input type="text" id="postSlugInput" class="slug-input" placeholder="duong-dan-bai-viet">
+            </div>
+          </div>
+
+          <div class="admin-form-group">
+            <label class="admin-label">Danh mục sitemap</label>
+            <select id="postCategorySelect" class="admin-select">
+              <option value="giai-phap-chuyen-doi-so">Giải pháp chuyển đổi số</option>
+              <option value="may-scan">Máy scan</option>
+              <option value="ha-tang-cntt">Hạ tầng CNTT</option>
+              <option value="phan-phoi-thiet-bi">Phân phối thiết bị</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Pillar & Status Row -->
+        <div class="form-row">
+          <div class="admin-form-group">
+            <label class="admin-label">Cấu trúc SEO Pillar / Cluster</label>
+            <select id="postPillarSelect" class="admin-select">
+              <option value="Pillar P6">Pillar P6 — Giải pháp CĐS toàn diện</option>
+              <option value="Pillar P7">Pillar P7 — Số hoá tài liệu hành chính công</option>
+              <option value="Cluster C12">Cluster C12 — 3 cấp độ &amp; 6 nội dung CĐS</option>
+              <option value="Cluster C13">Cluster C13 — Bộ chỉ số DTI (QĐ 1726)</option>
+              <option value="Cluster C14">Cluster C14 — CĐS doanh nghiệp sản xuất</option>
+              <option value="Cluster C15">Cluster C15 — Giải pháp số hoá hồ sơ tài liệu</option>
+              <option value="Cluster C16">Cluster C16 — CĐS cho doanh nghiệp SME</option>
+              <option value="Cluster C17">Cluster C17 — Dịch vụ số hoá thư viện lưu trữ</option>
+              <option value="Pillar P1">Pillar P1 — Cẩm nang chọn mua máy scan</option>
+              <option value="Pillar P4">Pillar P4 — Giải pháp hạ tầng CNTT trọn gói</option>
+            </select>
+          </div>
+
+          <div class="admin-form-group">
+            <label class="admin-label">Trạng thái xuất bản</label>
+            <select id="postStatusSelect" class="admin-select">
+              <option value="published">Xuất bản ngay (Hiển thị ngoài site)</option>
+              <option value="draft">Bản nháp (Lưu trữ nội bộ)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Excerpt -->
+        <div class="admin-form-group">
+          <label class="admin-label">Tóm tắt ngắn (Excerpt)</label>
+          <textarea id="postExcerptInput" class="admin-textarea" rows="2" placeholder="Đoạn mô tả ngắn tóm tắt bài viết..."></textarea>
+        </div>
+
+        <!-- Thumbnail -->
+        <div class="admin-form-group">
+          <label class="admin-label">Link Ảnh đại diện (Cover Thumbnail)</label>
+          <input type="text" id="postThumbnailInput" class="admin-input" placeholder="https://... ảnh bìa bài viết">
+        </div>
+
+        <!-- Content Area with WYSIWYG Toolbar -->
+        <div class="admin-form-group">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label class="admin-label" style="margin-bottom: 0;">Nội dung bài viết chi tiết</label>
+            <div style="display: flex; gap: 8px;">
+              <button type="button" class="btn-ai-trigger" style="padding: 4px 10px; font-size: 11.5px;" onclick="triggerAiAction('clean_format')">
+                🧹 AI Làm sạch HTML
+              </button>
+            </div>
+          </div>
+          <div class="wysiwyg-toolbar">
+            <button type="button" class="toolbar-btn" onclick="insertFormatting('h2')">H2</button>
+            <button type="button" class="toolbar-btn" onclick="insertFormatting('h3')">H3</button>
+            <button type="button" class="toolbar-btn" onclick="insertFormatting('b')"><strong>B</strong></button>
+            <button type="button" class="toolbar-btn" onclick="insertFormatting('i')"><em>I</em></button>
+            <button type="button" class="toolbar-btn" onclick="insertFormatting('ul')">• Danh sách</button>
+            <button type="button" class="toolbar-btn" onclick="insertFormatting('quote')">“ Trích dẫn</button>
+            <button type="button" class="toolbar-btn" onclick="insertFormatting('img')">🖼️ Chèn ảnh</button>
+          </div>
+          <textarea id="postContentInput" class="admin-textarea content-textarea" rows="8"></textarea>
+        </div>
+
+        <!-- SEO On-Page Card -->
+        <div class="seo-preview-card">
+          <div class="seo-preview-header">
+            <strong style="font-size: 13.5px; color: #1a1918;">🎯 Tối Ưu SEO On-Page &amp; Xem Trước Google Snippet</strong>
+            <button type="button" class="btn-ai-trigger" style="padding: 4px 10px; font-size: 11.5px;" onclick="triggerAiAction('seo_meta')">
+              ✨ AI Sinh Thẻ SEO
+            </button>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px;">
+            <div>
+              <label class="admin-label">Tiêu đề SEO (Title Tag)</label>
+              <input type="text" id="postSeoTitleInput" class="admin-input" placeholder="Tiêu đề hiển thị trên thanh tìm kiếm...">
+              <div id="seoTitleCount" class="char-counter good">0/60 ký tự</div>
+            </div>
+
+            <div>
+              <label class="admin-label">Thẻ mô tả SEO (Meta Description)</label>
+              <textarea id="postSeoDescInput" class="admin-textarea" rows="2" placeholder="Đoạn văn ngắn xuất hiện dưới tiêu đề tìm kiếm..."></textarea>
+              <div id="seoDescCount" class="char-counter good">0/160 ký tự</div>
+            </div>
+
+            <div>
+              <label class="admin-label">Từ khóa chính (Focus Keyword)</label>
+              <input type="text" id="postFocusKeywordInput" class="admin-input" placeholder="Ví dụ: máy scan ricoh, số hoá tài liệu...">
+            </div>
+          </div>
+
+          <!-- Live Google Snippet Box -->
+          <div class="google-serp-box">
+            <div class="serp-url-row">
+              <span class="serp-favicon"></span>
+              <span id="serpUrlPreview">https://thuanphat8.vn/duong-dan-bai-viet</span>
+            </div>
+            <div class="serp-title" id="serpTitlePreview">Tiêu đề bài viết SEO xem trước</div>
+            <div class="serp-desc" id="serpDescPreview">Đoạn mô tả ngắn hiển thị thu hút người dùng nhấp chuột từ công cụ tìm kiếm Google...</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="editor-modal-footer">
+        <button type="button" class="table-btn table-btn-edit" onclick="closePostEditor()">Hủy bỏ</button>
+        <button type="button" class="btn-primary-action" onclick="savePostFromEditor()">💾 Lưu bài viết</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MODAL: PRODUCT EDITOR (QUẢN LÝ SẢN PHẨM)
+  ============================================================ -->
+  <div class="editor-modal-backdrop" id="productEditorModal">
+    <div class="editor-modal-window" style="max-width: 600px; height: auto; max-height: 85vh;">
+      
+      <div class="editor-modal-header">
+        <h2 style="font-size: 17px; font-weight: 800;">Chỉnh Sửa / Thêm Mới Thiết Bị</h2>
+        <button onclick="closeProductEditor()" style="font-size: 20px; color: #888;">✕</button>
+      </div>
+
+      <div class="editor-modal-body">
+        <div class="form-row">
+          <div class="admin-form-group">
+            <label class="admin-label">Tên thiết bị / sản phẩm <span style="color:red;">*</span></label>
+            <input type="text" id="prodNameInput" class="admin-input" placeholder="Ví dụ: Máy Scan Ricoh fi-8170...">
+          </div>
+
+          <div class="admin-form-group">
+            <label class="admin-label">Mã sản phẩm (SKU)</label>
+            <input type="text" id="prodSkuInput" class="admin-input" placeholder="FI-8170">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="admin-form-group">
+            <label class="admin-label">Phân loại dòng máy</label>
+            <input type="text" id="prodTypeInput" class="admin-input" placeholder="Máy scan tài liệu 2 mặt ADF">
+          </div>
+
+          <div class="admin-form-group">
+            <label class="admin-label">Tốc độ quét</label>
+            <input type="text" id="prodSpeedInput" class="admin-input" placeholder="70 ppm / 140 ipm">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="admin-form-group">
+            <label class="admin-label">Đơn giá niêm yết</label>
+            <input type="text" id="prodPriceInput" class="admin-input" placeholder="24.500.000 đ">
+          </div>
+
+          <div class="admin-form-group">
+            <label class="admin-label">Số lượng tồn kho</label>
+            <input type="number" id="prodStockInput" class="admin-input" value="10">
+          </div>
+        </div>
+      </div>
+
+      <div class="editor-modal-footer">
+        <button type="button" class="table-btn table-btn-edit" onclick="closeProductEditor()">Hủy bỏ</button>
+        <button type="button" class="btn-primary-action" onclick="saveProductFromEditor()">💾 Lưu sản phẩm</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="adminToastNotification" class="admin-toast">Thông báo</div>
+
+  <!-- Scripts -->
+  <script src="js/data-store.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

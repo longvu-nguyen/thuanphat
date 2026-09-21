@@ -1,0 +1,757 @@
+/* ============================================================
+   THUANPHAT8.VN - VISUAL DRAG-AND-DROP PAGE BUILDER STYLESHEET
+   Matching Exact Screen Specifications: thuanphat8.vn/admin/builder/4
+   Responsive Switcher, Grid Wireframes, WYSIWYG Canvas & Cyber AI Hero
+============================================================ */
+
+:root {
+  --builder-primary: #f97316; /* Orange brand accent */
+  --builder-primary-hover: #ea580c;
+  --builder-blue-save: #4f46e5; /* Blue save button */
+  --builder-blue-save-hover: #4338ca;
+  --builder-active-outline: #3b82f6; /* Blue selection outline */
+  
+  --builder-bg-topbar: #ffffff;
+  --builder-bg-sidebar: #f8fafc;
+  --builder-bg-canvas-wrapper: #1e2430; /* Dark contrast canvas backdrop */
+  --builder-border: #e2e8f0;
+  
+  --builder-text: #1e293b;
+  --builder-text-muted: #64748b;
+  
+  --builder-sidebar-width: 290px;
+  --builder-topbar-height: 52px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body.builder-app {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background-color: var(--builder-bg-canvas-wrapper);
+  color: var(--builder-text);
+  overflow: hidden;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+  background: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================================
+   1. TOPBAR HEADER
+============================================================ */
+.builder-topbar {
+  height: var(--builder-topbar-height);
+  background-color: var(--builder-bg-topbar);
+  border-bottom: 1px solid var(--builder-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 50;
+  flex-shrink: 0;
+}
+
+/* Left Brand */
+.topbar-brand-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-logo-s {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: 900;
+  font-size: 19px;
+  text-decoration: none;
+  box-shadow: 0 2px 5px rgba(249, 115, 22, 0.3);
+}
+
+.btn-app-grid {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  color: #64748b;
+  transition: all 0.15s;
+}
+
+.btn-app-grid:hover {
+  background-color: #f1f5f9;
+  color: #1e293b;
+}
+
+/* Center Responsive Switcher */
+.topbar-device-switcher {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background-color: #f1f5f9;
+  padding: 3px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.device-btn {
+  width: 34px;
+  height: 28px;
+  border-radius: 5px;
+  color: #64748b;
+  font-size: 14px;
+  transition: all 0.15s;
+}
+
+.device-btn:hover {
+  color: #1e293b;
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+.device-btn.active {
+  background-color: #ffffff;
+  color: var(--builder-primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Right Tool Actions */
+.topbar-actions-section {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tool-icon-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  color: #64748b;
+  font-size: 15px;
+  transition: all 0.15s;
+}
+
+.tool-icon-btn:hover {
+  background-color: #f1f5f9;
+  color: #1e293b;
+}
+
+.tool-icon-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.btn-preview-mode {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+  background-color: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s;
+  margin-left: 6px;
+}
+
+.btn-preview-mode:hover {
+  background-color: #e2e8f0;
+  color: #1e293b;
+}
+
+.btn-save-page {
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  background-color: var(--builder-blue-save);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s;
+  box-shadow: 0 1px 3px rgba(79, 70, 229, 0.3);
+}
+
+.btn-save-page:hover {
+  background-color: var(--builder-blue-save-hover);
+  box-shadow: 0 2px 6px rgba(79, 70, 229, 0.4);
+}
+
+/* ============================================================
+   2. BUILDER WORKSPACE BODY LAYOUT
+============================================================ */
+.builder-workspace {
+  display: flex;
+  flex-grow: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ============================================================
+   3. LEFT SIDEBAR (BUILDER CONTROLS)
+============================================================ */
+.builder-sidebar {
+  width: var(--builder-sidebar-width);
+  background-color: var(--builder-bg-sidebar);
+  border-right: 1px solid var(--builder-border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  height: 100%;
+  overflow: hidden;
+  z-index: 20;
+}
+
+/* Sidebar Subheader (Cài đặt & Wand) */
+.sidebar-subheader {
+  height: 36px;
+  border-bottom: 1px solid var(--builder-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  background-color: #f1f5f9;
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.sidebar-subheader-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* 3 Main Tabs */
+.sidebar-tabs-nav {
+  display: flex;
+  border-bottom: 1px solid var(--builder-border);
+  background-color: #ffffff;
+}
+
+.sidebar-tab-btn {
+  flex: 1;
+  padding: 10px 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748b;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-tab-btn:hover {
+  color: #1e293b;
+}
+
+.sidebar-tab-btn.active {
+  color: var(--builder-primary);
+  border-bottom-color: var(--builder-primary);
+  background-color: #fffaf0;
+}
+
+/* Search Box */
+.sidebar-search-wrap {
+  padding: 10px 12px;
+  background-color: #ffffff;
+  border-bottom: 1px solid var(--builder-border);
+  position: relative;
+}
+
+.sidebar-search-input {
+  width: 100%;
+  padding: 7px 28px 7px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 12.5px;
+  outline: none;
+  background-color: #f8fafc;
+}
+
+.sidebar-search-input:focus {
+  border-color: var(--builder-primary);
+  background-color: #ffffff;
+}
+
+.sidebar-search-icon {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+/* Sidebar Scrollable Panes */
+.sidebar-content-pane {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 12px;
+  display: none;
+}
+
+.sidebar-content-pane.active {
+  display: block;
+}
+
+/* Accordion Section */
+.builder-accordion-group {
+  margin-bottom: 14px;
+}
+
+.accordion-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 4px 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #334155;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+}
+
+.accordion-chevron {
+  font-size: 10px;
+  color: #94a3b8;
+  transition: transform 0.2s;
+}
+
+.builder-accordion-group.expanded .accordion-chevron {
+  transform: rotate(180deg);
+}
+
+/* Grid Layout Wireframe Cards (Matching Exact Screenshot Wireframes) */
+.layout-grid-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.wireframe-card {
+  background-color: #ffffff;
+  border: 1px solid var(--builder-border);
+  border-radius: 6px;
+  padding: 12px 8px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.wireframe-card:hover {
+  border-color: var(--builder-primary);
+  box-shadow: 0 3px 8px rgba(249, 115, 22, 0.12);
+  transform: translateY(-1px);
+}
+
+.wireframe-icon-svg {
+  width: 60px;
+  height: 42px;
+  margin-bottom: 6px;
+}
+
+.wireframe-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #475569;
+}
+
+/* Elements List (Tab Thêm) */
+.elements-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.element-item-card {
+  background-color: #ffffff;
+  border: 1px solid var(--builder-border);
+  border-radius: 6px;
+  padding: 10px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: grab;
+  transition: all 0.15s;
+}
+
+.element-item-card:hover {
+  border-color: var(--builder-primary);
+  background-color: #fffaf0;
+}
+
+.element-item-icon {
+  font-size: 18px;
+}
+
+.element-item-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: #475569;
+}
+
+/* Inspector Form (Tab Chỉnh sửa) */
+.inspector-form-group {
+  margin-bottom: 14px;
+}
+
+.inspector-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.inspector-input, .inspector-select, .inspector-textarea {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #1e293b;
+  background-color: #ffffff;
+}
+
+.inspector-input:focus, .inspector-select:focus, .inspector-textarea:focus {
+  outline: none;
+  border-color: var(--builder-primary);
+}
+
+/* ============================================================
+   4. CENTER CANVAS VIEWPORT
+============================================================ */
+.builder-canvas-container {
+  flex-grow: 1;
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 24px;
+  background-color: #181d28;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 20px 20px;
+  position: relative;
+}
+
+/* Viewport Resizer */
+.builder-canvas-viewport {
+  width: 100%;
+  max-width: 100%;
+  background-color: #ffffff;
+  border-radius: 4px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  min-height: 800px;
+}
+
+/* Device Widths */
+.builder-canvas-viewport.view-desktop {
+  max-width: 100%;
+}
+
+.builder-canvas-viewport.view-laptop {
+  max-width: 1200px;
+}
+
+.builder-canvas-viewport.view-tablet {
+  max-width: 768px;
+}
+
+.builder-canvas-viewport.view-mobile {
+  max-width: 375px;
+}
+
+/* ============================================================
+   5. LIVE VISUAL CONTENT & CYBER HERO BANNER (MATCHING SCREENSHOT)
+============================================================ */
+.builder-section-block {
+  position: relative;
+  transition: outline 0.15s ease;
+}
+
+.builder-section-block:hover {
+  outline: 1px dashed #60a5fa;
+}
+
+.builder-section-block.is-selected {
+  outline: 2px solid var(--builder-active-outline) !important;
+}
+
+/* Cyber AI Hero Banner from Screenshot */
+.cyber-hero-section {
+  position: relative;
+  background-color: #030a1c;
+  background-image: 
+    radial-gradient(circle at 80% 50%, rgba(14, 165, 233, 0.25) 0%, transparent 60%),
+    radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+    linear-gradient(180deg, #030b1e 0%, #06122e 100%);
+  color: #ffffff;
+  padding: 80px 48px;
+  overflow: hidden;
+  min-height: 520px;
+  display: flex;
+  align-items: center;
+}
+
+/* Glowing Circuit & AI Brain graphic on the right */
+.cyber-hero-bg-network {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 55%;
+  background: url('https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=1200&auto=format&fit=crop&q=80') center center / cover no-repeat;
+  opacity: 0.65;
+  mix-blend-mode: lighten;
+  pointer-events: none;
+  mask-image: linear-gradient(to right, transparent, black 35%);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 35%);
+  animation: cyberPulse 4s ease-in-out infinite alternate;
+}
+
+@keyframes cyberPulse {
+  0% { opacity: 0.55; filter: drop-shadow(0 0 15px rgba(56, 189, 248, 0.4)); }
+  100% { opacity: 0.8; filter: drop-shadow(0 0 35px rgba(56, 189, 248, 0.8)); }
+}
+
+.cyber-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 640px;
+}
+
+/* Bounding box around selected text matching screenshot */
+.builder-highlight-box {
+  border: 1.5px dashed rgba(59, 130, 246, 0.85);
+  padding: 16px;
+  border-radius: 6px;
+  position: relative;
+  background: rgba(59, 130, 246, 0.04);
+  backdrop-filter: blur(4px);
+}
+
+.cyber-brand-label {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: #38bdf8;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: block;
+  outline: none;
+  text-shadow: 0 0 12px rgba(56, 189, 248, 0.5);
+}
+
+.cyber-hero-title {
+  font-size: 42px;
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  outline: none;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.8);
+}
+
+.cyber-hero-desc {
+  font-size: 15px;
+  line-height: 1.68;
+  color: #cbd5e1;
+  margin-bottom: 32px;
+  max-width: 540px;
+  outline: none;
+}
+
+.cyber-cta-btn {
+  background-color: #ffffff;
+  color: #dc2626; /* Red bold text from screenshot */
+  font-weight: 800;
+  font-size: 14.5px;
+  letter-spacing: 0.05em;
+  padding: 13px 26px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-transform: uppercase;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 24px rgba(220, 38, 38, 0.25);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  outline: none;
+}
+
+.cyber-cta-btn:hover {
+  background-color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(220, 38, 38, 0.4);
+}
+  outline: none;
+}
+
+.cyber-cta-btn:hover {
+  background-color: #f8fafc;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(220, 38, 38, 0.25);
+}
+
+.cyber-slider-counter {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 40px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #94a3b8;
+}
+
+.cyber-slider-bar {
+  width: 120px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.2);
+  position: relative;
+}
+
+.cyber-slider-bar::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  background-color: #38bdf8;
+}
+
+.cyber-slider-arrows {
+  display: flex;
+  gap: 10px;
+  font-size: 16px;
+  color: #e2e8f0;
+  cursor: pointer;
+}
+
+/* ============================================================
+   6. GRID COLUMNS ON CANVAS
+============================================================ */
+.builder-row {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 40px 24px;
+  gap: 20px;
+  border-bottom: 1px solid #f1f5f9;
+  position: relative;
+}
+
+.builder-row:hover {
+  outline: 1px dashed #93c5fd;
+}
+
+.col-12 { width: 100%; }
+.col-6  { width: calc(50% - 10px); }
+.col-4  { width: calc(33.333% - 13.333px); }
+.col-3  { width: calc(25% - 15px); }
+.col-2  { width: calc(16.666% - 16.666px); }
+.col-10 { width: calc(83.333% - 3.333px); }
+.col-3-7 { width: calc(30% - 14px); }
+.col-7-3 { width: calc(70% - 6px); }
+
+.builder-column-box {
+  min-height: 80px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 6px;
+  padding: 16px;
+  background-color: #ffffff;
+  position: relative;
+  transition: all 0.15s ease;
+}
+
+.builder-column-box:hover {
+  border-color: #60a5fa;
+  background-color: #f8fafc;
+}
+
+/* Floating Action Toolbar on Selected Element */
+.floating-element-toolbar {
+  position: absolute;
+  top: -34px;
+  right: 0;
+  background-color: #1e293b;
+  border-radius: 4px;
+  padding: 2px 4px;
+  display: none;
+  align-items: center;
+  gap: 4px;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.builder-section-block.is-selected .floating-element-toolbar {
+  display: flex;
+}
+
+.floating-tool-btn {
+  color: #ffffff;
+  padding: 3px 6px;
+  font-size: 11px;
+  border-radius: 3px;
+  transition: background 0.15s;
+}
+
+.floating-tool-btn:hover {
+  background-color: #334155;
+}
+
+/* Toast Message */
+.builder-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background-color: #0f172a;
+  color: #ffffff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 13.5px;
+  font-weight: 600;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 999;
+}
+
+.builder-toast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
