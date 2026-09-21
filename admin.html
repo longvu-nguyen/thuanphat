@@ -487,10 +487,15 @@
           <h2 style="font-size: 16px; font-weight: 700; color: #1a1918;">Danh Sách Sản Phẩm &amp; Thiết Bị Phân Phối</h2>
           <p style="font-size: 13px; color: #777;">Máy scan tài liệu Ricoh/Fujitsu chính hãng và hệ thống máy chủ HPE.</p>
         </div>
-        <button class="btn-primary-action" onclick="openProductEditor(null)">
+        <div style="display: flex; gap: 8px;">
+          <button class="table-btn table-btn-edit" onclick="exportProductsJSON()" style="padding: 8px 14px; font-weight: 600; cursor: pointer;">
+            <span>📥 Xuất file products.json</span>
+          </button>
+          <button class="btn-primary-action" onclick="openProductEditor(null)">
           <span>➕</span>
           <span>Thêm sản phẩm mới</span>
         </button>
+        </div>
       </div>
 
       <div class="admin-table-wrap">

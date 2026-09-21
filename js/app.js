@@ -506,7 +506,6 @@ function handleInitialRoute() {
     switchScreen("screen-home", false);
   }
 }
-}
 
 // ============================================================
 // 5. DTI ASSESSMENT BUILDER & LOGIC
@@ -926,6 +925,11 @@ document.addEventListener("DOMContentLoaded", () => {
   renderDynamicSolutions();
   renderDynamicArticles();
   renderDynamicProducts();
+  if (typeof DataStore !== "undefined" && DataStore.syncProductsFromRemote) {
+    DataStore.syncProductsFromRemote().then(() => {
+      renderDynamicProducts();
+    });
+  }
 
   // Build Quiz and setup sample answers
   buildDtiAccordion();

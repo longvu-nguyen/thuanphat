@@ -1801,3 +1801,13 @@ if (document.readyState === "loading") {
 
 
 
+
+function exportProductsJSON() {
+  const prods = DataStore.getProducts();
+  const blob = new Blob([JSON.stringify(prods, null, 2)], { type: "application/json" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "products.json";
+  a.click();
+  showToast("Đã tải file products.json! Lưu vào thư mục data/products.json và push git để cập nhật toàn web.");
+}

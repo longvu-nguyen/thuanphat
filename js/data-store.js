@@ -1847,6 +1847,23 @@ const DataStore = {
     }
   },
 
+  
+  async syncProductsFromRemote() {
+    try {
+      const res = await fetch('./data/products.json?v=' + Date.now());
+      if (res.ok) {
+        const prods = await res.json();
+        if (Array.isArray(prods) && prods.length > 0) {
+          this.saveProducts(prods);
+          return prods;
+        }
+      }
+    } catch (e) {
+      // fallback to local or default
+    }
+    return this.getProducts();
+  },
+
   saveProducts(prods) {
     localStorage.setItem(STORAGE_KEYS.PRODUCTS, JSON.stringify(prods));
   },
