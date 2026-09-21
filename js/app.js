@@ -850,12 +850,51 @@ function handleFormSubmit(formEl, successBoxId, inputsAreaId) {
   const inputsArea = document.getElementById(inputsAreaId);
   const successBox = document.getElementById(successBoxId);
 
+  // 1. Send Instant Email Notification via FormSubmit.co
+  const targetEmail = "contact@thuanphat8.vn";
+  const emailPayload = {
+    _subject: `[Thuận Phát] Khách hàng yêu cầu tư vấn: ${fullname ? fullname.value : 'Khách hàng'} - SĐT: ${phone ? phone.value : ''}`,
+    _template: "table",
+    "Họ và tên": fullname ? fullname.value.trim() : "",
+    "Số điện thoại": phone ? phone.value.trim() : "",
+    "Email": email ? email.value.trim() : "Chưa nhập",
+    "Cơ quan / Đơn vị": org ? org.value.trim() : "Chưa nhập",
+    "Khối lượng / Yêu cầu": docVol ? docVol.value : (notes ? notes.value.trim() : "Yêu cầu báo giá / tư vấn giải pháp"),
+    "Thời gian gửi": new Date().toLocaleString("vi-VN"),
+    "Mã hồ sơ": savedLead ? savedLead.refCode : "TP-" + Math.floor(100000 + Math.random() * 900000)
+  };
+
+  try {
+    fetch(`https://formsubmit.co/ajax/${targetEmail}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      body: JSON.stringify(emailPayload)
+    }).catch(err => console.log("Email dispatch:", err));
+  } catch (e) {}
+
+  // 2. Show Success Box with instant Zalo & Call buttons
   if (inputsArea) inputsArea.style.display = "none";
   if (successBox) {
     successBox.classList.add("visible");
     const codeSpan = successBox.querySelector(".consult-ref-code");
     if (codeSpan) {
       codeSpan.textContent = savedLead ? savedLead.refCode : "TP-" + Math.floor(100000 + Math.random() * 900000);
+    }
+
+    // Append direct support buttons if not present
+    if (!successBox.querySelector(".success-direct-actions")) {
+      const actionsDiv = document.createElement("div");
+      actionsDiv.className = "success-direct-actions";
+      actionsDiv.style.cssText = "margin-top: 18px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;";
+      actionsDiv.innerHTML = `
+        <a href="https://zalo.me/0903233085" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; background: #0068ff; color: #fff; border-radius: 8px; font-weight: 600; font-size: 13px; text-decoration: none;">
+          <span>💬 Nhắn Zalo ngay (090 323 3085)</span>
+        </a>
+        <a href="tel:0903233085" style="display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; background: #1b8046; color: #fff; border-radius: 8px; font-weight: 600; font-size: 13px; text-decoration: none;">
+          <span>📞 Gọi hotline trực tiếp</span>
+        </a>
+      `;
+      successBox.appendChild(actionsDiv);
     }
   }
 }
