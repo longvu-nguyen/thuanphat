@@ -60,6 +60,7 @@
       <!-- Desktop Navigation Links (All 6 Primary Sections) -->
       <nav class="main-nav" id="mainNav">
         <a href="#trang-chu" class="nav-link active-pill" id="nav-home" onclick="switchScreen('screen-home'); return false;">Trang chủ</a>
+        <a href="#san-pham" class="nav-link" id="nav-products" onclick="switchScreen('screen-home'); setTimeout(() => { const el = document.getElementById('san-pham-section'); if (el) el.scrollIntoView({behavior: 'smooth'}); }, 100); return false;">Sản phẩm</a>
         <a href="#may-scan" class="nav-link" id="nav-scan" onclick="switchScreen('screen-may-scan'); return false;">Máy scan</a>
         <a href="#ha-tang-cntt" class="nav-link" id="nav-infra" onclick="switchScreen('screen-ha-tang'); return false;">Hạ tầng CNTT</a>
         <a href="#giai-phap-chuyen-doi-so" class="nav-link" id="nav-cds" onclick="switchScreen('screen1'); return false;">Giải pháp chuyển đổi số</a>

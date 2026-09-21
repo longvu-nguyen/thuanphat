@@ -357,7 +357,7 @@ function closeArticleModal() {
 // ============================================================
 // 4. ROUTER / SCREEN SWITCHER (ALL 7 SITEMAP SCREENS)
 // ============================================================
-function switchScreen(screenId) {
+function switchScreen(screenId, updateHash = true) {
   const validScreens = [
     "screen-home",
     "screen-may-scan",
@@ -373,6 +373,21 @@ function switchScreen(screenId) {
   }
 
   AppState.currentScreen = screenId;
+  if (updateHash) {
+    const screenToHash = {
+      "screen-home": "#trang-chu",
+      "screen-may-scan": "#may-scan",
+      "screen-ha-tang": "#ha-tang-cntt",
+      "screen1": "#giai-phap-chuyen-doi-so",
+      "screen2": "#so-hoa-tai-lieu",
+      "screen3": "#danh-gia-dti",
+      "screen-gioi-thieu": "#gioi-thieu",
+      "screen-lien-he": "#lien-he"
+    };
+    if (screenToHash[screenId]) {
+      history.replaceState(null, null, screenToHash[screenId]);
+    }
+  }
 
   // Toggle active screen visibility
   validScreens.forEach(id => {
@@ -466,24 +481,31 @@ function switchScreen(screenId) {
 }
 
 function handleInitialRoute() {
-  const hash = window.location.hash;
+  const hash = (window.location.hash || "").toLowerCase();
   if (hash === "#may-scan" || hash.includes("may-scan")) {
-    switchScreen("screen-may-scan");
+    switchScreen("screen-may-scan", false);
   } else if (hash === "#ha-tang-cntt" || hash.includes("ha-tang")) {
-    switchScreen("screen-ha-tang");
+    switchScreen("screen-ha-tang", false);
   } else if (hash === "#so-hoa-tai-lieu" || hash.includes("so-hoa")) {
-    switchScreen("screen2");
+    switchScreen("screen2", false);
   } else if (hash === "#danh-gia-dti" || hash.includes("dti") || hash.includes("danh-gia")) {
-    switchScreen("screen3");
+    switchScreen("screen3", false);
   } else if (hash === "#giai-phap-chuyen-doi-so" || hash.includes("chuyen-doi-so")) {
-    switchScreen("screen1");
+    switchScreen("screen1", false);
   } else if (hash === "#gioi-thieu" || hash.includes("gioi-thieu")) {
-    switchScreen("screen-gioi-thieu");
+    switchScreen("screen-gioi-thieu", false);
   } else if (hash === "#lien-he" || hash.includes("lien-he")) {
-    switchScreen("screen-lien-he");
+    switchScreen("screen-lien-he", false);
+  } else if (hash === "#san-pham" || hash.includes("san-pham")) {
+    switchScreen("screen-home", false);
+    setTimeout(() => {
+      const el = document.getElementById("san-pham-section");
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+    }, 150);
   } else {
-    switchScreen("screen-home");
+    switchScreen("screen-home", false);
   }
+}
 }
 
 // ============================================================
@@ -1042,3 +1064,5 @@ function openConsultForProduct(productName) {
     noteField.value = "Tôi quan tâm đến: " + productName;
   }
 }
+
+window.addEventListener("hashchange", handleInitialRoute);
