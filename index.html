@@ -212,148 +212,46 @@
       </div>
     </section>
 
-    <!-- Top Scanners Products Grid -->
-    <section class="related-solutions-section">
-      <div class="section-header">
+    <!-- Dynamic Products Catalog Section -->
+    <section class="related-solutions-section" id="san-pham-section">
+      <div class="section-header" style="flex-wrap: wrap; gap: 16px; align-items: flex-end;">
         <div>
-          <div class="section-pretitle">Sản Phẩm Nổi Bật</div>
-          <h2 class="section-title">Máy Scan Ricoh Bán Chạy Nhất</h2>
-          <p class="section-subtitle">Được tin dùng tại các cơ quan nhà nước, ngân hàng và doanh nghiệp hàng đầu.</p>
+          <div class="section-pretitle">Danh Mục Thiết Bị Chính Hãng</div>
+          <h2 class="section-title">Máy Scan Ricoh, Máy In & Photocopy Kyocera</h2>
+          <p class="section-subtitle">Phân phối chính hãng 100% với đầy đủ chứng nhận CO/CQ, bảo hành tận nơi từ Thuận Phát.</p>
         </div>
-        <div>
-          <button class="table-btn table-btn-edit" onclick="switchScreen('screen-may-scan');">Xem tất cả máy scan →</button>
+        <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+          <div style="position: relative;">
+            <input type="text" id="productSearchInput" placeholder="Tìm theo tên máy, mã model..." 
+                   style="padding: 9px 14px 9px 36px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13.5px; width: 250px; outline: none;"
+                   oninput="handleProductSearch(this.value)">
+            <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 14px;">🔍</span>
+          </div>
         </div>
       </div>
 
-      <div class="products-4col-grid">
-        
-        <!-- Product 1 -->
-        <div class="product-item-card">
-          <div class="product-card-img">
-            <span class="badge-tag badge-popular" style="position: absolute; top: 10px; left: 10px;">Bán chạy</span>
-            <div style="font-size: 38px;">📠</div>
-          </div>
-          <h4 style="font-size: 16px; font-weight: 700; margin-bottom: 4px;">Ricoh fi-8170</h4>
-          <span style="font-size: 12px; color: var(--primary-gold); font-weight: 600; margin-bottom: 8px;">A4 ADF · 70 ppm / 140 ipm</span>
-          <p style="font-size: 12.5px; color: #666; margin-bottom: 14px;">Khay nạp 100 tờ, công suất 10.000 tờ/ngày, cảm biến Clear Image Capture.</p>
-          <button class="btn-primary-gold" style="padding: 8px 12px; font-size: 12.5px; justify-content: center; margin-top: auto;" onclick="openModal('quickConsultModal')">
-            Nhận báo giá
-          </button>
-        </div>
+      <!-- Filter tabs -->
+      <div class="product-tabs" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+        <button class="filter-tab-btn active" onclick="filterProducts('all', this)">Tất cả sản phẩm (96)</button>
+        <button class="filter-tab-btn" onclick="filterProducts('may-scan', this)">Máy scan Ricoh (34)</button>
+        <button class="filter-tab-btn" onclick="filterProducts('may-in-kyocera', this)">Máy in Kyocera (9)</button>
+        <button class="filter-tab-btn" onclick="filterProducts('may-photocopy-ricoh', this)">Máy photocopy Ricoh (53)</button>
+      </div>
 
-        <!-- Product 2 -->
-        <div class="product-item-card">
-          <div class="product-card-img">
-            <span class="badge-tag badge-new" style="position: absolute; top: 10px; left: 10px;">ADF + Flatbed</span>
-            <div style="font-size: 38px;">🖨️</div>
-          </div>
-          <h4 style="font-size: 16px; font-weight: 700; margin-bottom: 4px;">Ricoh fi-8290</h4>
-          <span style="font-size: 12px; color: var(--primary-gold); font-weight: 600; margin-bottom: 8px;">A4 ADF + Kính phẳng · 90 ppm</span>
-          <p style="font-size: 12.5px; color: #666; margin-bottom: 14px;">Tích hợp mặt kính phẳng quét hộ chiếu, hồ sơ đóng quyển, công suất 13.000 tờ/ngày.</p>
-          <button class="btn-primary-gold" style="padding: 8px 12px; font-size: 12.5px; justify-content: center; margin-top: auto;" onclick="openModal('quickConsultModal')">
-            Nhận báo giá
-          </button>
-        </div>
+      <!-- Dynamic Grid Container -->
+      <div class="products-4col-grid" id="dynamicProductsGrid">
+        <!-- Rendered via JS -->
+      </div>
 
-        <!-- Product 3 -->
-        <div class="product-item-card">
-          <div class="product-card-img">
-            <span class="badge-tag badge-popular" style="position: absolute; top: 10px; left: 10px;">Khổ A3</span>
-            <div style="font-size: 38px;">📑</div>
-          </div>
-          <h4 style="font-size: 16px; font-weight: 700; margin-bottom: 4px;">Ricoh fi-7600</h4>
-          <span style="font-size: 12px; color: var(--primary-gold); font-weight: 600; margin-bottom: 8px;">A3 Công nghiệp · 100 ppm</span>
-          <p style="font-size: 12.5px; color: #666; margin-bottom: 14px;">Khay nạp 300 tờ, công suất 44.000 tờ/ngày, quét tài liệu khổ lớn và bản vẽ kỹ thuật.</p>
-          <button class="btn-primary-gold" style="padding: 8px 12px; font-size: 12.5px; justify-content: center; margin-top: auto;" onclick="openModal('quickConsultModal')">
-            Nhận báo giá
-          </button>
-        </div>
-
-        <!-- Product 4 -->
-        <div class="product-item-card">
-          <div class="product-card-img">
-            <span class="badge-tag badge-free" style="position: absolute; top: 10px; left: 10px;">ScanSnap</span>
-            <div style="font-size: 38px;">📱</div>
-          </div>
-          <h4 style="font-size: 16px; font-weight: 700; margin-bottom: 4px;">ScanSnap iX1600</h4>
-          <span style="font-size: 12px; color: var(--primary-gold); font-weight: 600; margin-bottom: 8px;">Cảm ứng thông minh · 40 ppm</span>
-          <p style="font-size: 12.5px; color: #666; margin-bottom: 14px;">Màn hình cảm ứng LCD 4.3 inch, kết nối WiFi, quét trực tiếp lên Cloud không cần PC.</p>
-          <button class="btn-primary-gold" style="padding: 8px 12px; font-size: 12.5px; justify-content: center; margin-top: auto;" onclick="openModal('quickConsultModal')">
-            Nhận báo giá
-          </button>
-        </div>
-
+      <!-- Pagination / Load more -->
+      <div style="text-align: center; margin-top: 28px;" id="loadMoreProductsContainer">
+        <button class="btn-secondary-dark" style="padding: 10px 24px; font-weight: 600; cursor: pointer;" onclick="loadMoreProducts()">
+          Xem thêm sản phẩm khác ↓
+        </button>
       </div>
     </section>
-
-    <!-- Testimonials Section -->
-    <section class="categories-section" style="background-color: #fbfbf9;">
-      <div class="section-header">
-        <div>
-          <div class="section-pretitle">Uy Tín Được Khẳng Định</div>
-          <h2 class="section-title">Khách Hàng Nói Gì Về Thuận Phát Technology</h2>
-          <p class="section-subtitle">Sự hài lòng của khách hàng là thước đo thành công lớn nhất trong hơn 12 năm qua.</p>
-        </div>
-      </div>
-
-      <div class="testimonials-grid">
-        <div class="testimonial-card">
-          <div class="testimonial-stars">★★★★★</div>
-          <p class="testimonial-text">"Dự án số hóa hồ sơ địa chính của huyện chúng tôi được Thuận Phát triển khai rất chuyên nghiệp, hoàn thành trước tiến độ 15 ngày. Máy scan Ricoh fi-8170 hoạt động rất ổn định, không bị kẹt giấy dù tài liệu cũ."</p>
-          <div class="testimonial-author">
-            <div class="author-avatar">ĐN</div>
-            <div>
-              <strong style="font-size: 13.5px; color: #1a1918; display: block;">Ông Đặng Nam</strong>
-              <span style="font-size: 12px; color: #777;">Phó Chánh Văn Phòng HĐND &amp; UBND Huyện</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="testimonial-card">
-          <div class="testimonial-stars">★★★★★</div>
-          <p class="testimonial-text">"Hệ thống máy chủ HP và giải pháp lưu trữ tập trung do Thuận Phát thiết kế giúp bệnh viện chúng tôi vận hành bệnh án điện tử an toàn, tốc độ tra cứu hồ sơ bệnh nhân nhanh gấp 5 lần so với trước."</p>
-          <div class="testimonial-author">
-            <div class="author-avatar">TH</div>
-            <div>
-              <strong style="font-size: 13.5px; color: #1a1918; display: block;">Bác sĩ Trần Hùng</strong>
-              <span style="font-size: 12px; color: #777;">Trưởng Phòng CNTT Bệnh Viện Đa Khoa</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="testimonial-card">
-          <div class="testimonial-stars">★★★★★</div>
-          <p class="testimonial-text">"Là công ty vận tải và kho bãi lớn, giải pháp số hóa chứng từ vận đơn của Thuận Phát giúp chúng tôi cắt giảm được 80% chi phí in ấn và nhân sự đối soát hồ sơ hải quan mỗi ngày."</p>
-          <div class="testimonial-author">
-            <div class="author-avatar">LP</div>
-            <div>
-              <strong style="font-size: 13.5px; color: #1a1918; display: block;">Bà Lê Phương</strong>
-              <span style="font-size: 12px; color: #777;">Giám Đốc Vận Hành Logistics Corp</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Dark CTA Section -->
-    <section class="dark-cta-section">
-      <div class="dark-cta-container">
-        <div class="dark-cta-text">
-          <h2>Bắt đầu nâng tầm chuyển đổi số cho tổ chức của bạn</h2>
-          <p>Liên hệ ngay với Thuận Phát để nhận báo giá máy scan Ricoh, khảo sát hạ tầng CNTT và tư vấn lộ trình số hóa miễn phí.</p>
-        </div>
-        <div>
-          <button class="btn-primary-gold" onclick="openModal('quickConsultModal')">
-            <span>Đăng ký tư vấn lộ trình</span>
-            <span>→</span>
-          </button>
-        </div>
-      </div>
-    </section>
-
-  </div>
-
-  <!-- ============================================================
+    
+    <!-- ============================================================
        SCREEN: MÁY SCAN RICOH CHUYÊN DỤNG (/may-scan/)
   ============================================================ -->
   <div id="screen-may-scan" class="screen-container">

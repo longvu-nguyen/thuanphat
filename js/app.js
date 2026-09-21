@@ -903,6 +903,7 @@ document.addEventListener("DOMContentLoaded", () => {
   applySiteSettings();
   renderDynamicSolutions();
   renderDynamicArticles();
+  renderDynamicProducts();
 
   // Build Quiz and setup sample answers
   buildDtiAccordion();
@@ -951,3 +952,93 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
+// ============================================================
+// DYNAMIC PRODUCTS RENDERING (ALL 96 CRAWLED PRODUCTS)
+// ============================================================
+let currentProductCategory = 'all';
+let currentProductSearch = '';
+let currentProductsLimit = 12;
+
+function renderDynamicProducts() {
+  if (typeof DataStore === "undefined") return;
+  const container = document.getElementById("dynamicProductsGrid");
+  if (!container) return;
+
+  let prods = DataStore.getProducts();
+  if (currentProductCategory !== 'all') {
+    prods = prods.filter(p => p.category === currentProductCategory);
+  }
+  if (currentProductSearch.trim()) {
+    const q = currentProductSearch.toLowerCase().trim();
+    prods = prods.filter(p => (p.name && p.name.toLowerCase().includes(q)) || (p.slug && p.slug.toLowerCase().includes(q)));
+  }
+
+  const visibleProds = prods.slice(0, currentProductsLimit);
+  
+  if (visibleProds.length === 0) {
+    container.innerHTML = `
+      <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #64748b;">
+        <div style="font-size: 40px; margin-bottom: 8px;">🔍</div>
+        <p style="font-weight: 600; font-size: 16px;">Không tìm thấy sản phẩm phù hợp</p>
+        <p style="font-size: 13px;">Vui lòng thử với từ khóa khác hoặc bấm chọn "Tất cả sản phẩm".</p>
+      </div>
+    `;
+    const loadMoreBtn = document.getElementById("loadMoreProductsContainer");
+    if (loadMoreBtn) loadMoreBtn.style.display = "none";
+    return;
+  }
+
+  container.innerHTML = visibleProds.map(p => `
+    <div class="product-item-card" style="display: flex; flex-direction: column;">
+      <div class="product-card-img" style="background: #ffffff; height: 180px; display: flex; align-items: center; justify-content: center; position: relative; border-radius: 8px; overflow: hidden; padding: 12px; border: 1px solid #f1f5f9;">
+        <span class="badge-tag badge-popular" style="position: absolute; top: 8px; left: 8px; font-size: 11px;">
+          ${p.category === 'may-scan' ? 'Máy Scan' : (p.category === 'may-in-kyocera' ? 'Máy In' : 'Photocopy')}
+        </span>
+        <img src="${p.image || 'favicon.svg'}" alt="${p.name}" style="max-height: 140px; max-width: 100%; object-fit: contain;" onerror="this.src='favicon.svg'">
+      </div>
+      <h4 style="font-size: 15px; font-weight: 700; margin: 12px 0 4px; line-height: 1.3; min-height: 38px;">${p.name}</h4>
+      <span style="font-size: 12.5px; color: #b45309; font-weight: 700; margin-bottom: 6px; display: block;">${p.price && p.price !== '0' ? p.price : 'Liên hệ báo giá'}</span>
+      <p style="font-size: 12px; color: #64748b; margin-bottom: 14px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 34px;">
+        ${p.excerpt || 'Sản phẩm chính hãng phân phối bởi Công ty TNHH Công nghệ Thuận Phát.'}
+      </p>
+      <button class="btn-primary-gold" style="padding: 8px 12px; font-size: 12.5px; justify-content: center; margin-top: auto; cursor: pointer;" onclick="openConsultForProduct('${(p.name || '').replace(/'/g, "\\\'")} - ${p.price || ''}')">
+        Nhận báo giá
+      </button>
+    </div>
+  `).join("");
+
+  const loadMoreBtn = document.getElementById("loadMoreProductsContainer");
+  if (loadMoreBtn) {
+    loadMoreBtn.style.display = currentProductsLimit >= prods.length ? "none" : "block";
+  }
+}
+
+function filterProducts(cat, btn) {
+  currentProductCategory = cat;
+  currentProductsLimit = 12;
+  document.querySelectorAll('.filter-tab-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderDynamicProducts();
+}
+
+function handleProductSearch(val) {
+  currentProductSearch = val;
+  currentProductsLimit = 12;
+  renderDynamicProducts();
+}
+
+function loadMoreProducts() {
+  currentProductsLimit += 12;
+  renderDynamicProducts();
+}
+
+function openConsultForProduct(productName) {
+  openModal('quickConsultModal');
+  const noteField = document.querySelector('#quickConsultModalForm textarea[name="notes"]') ||
+                    document.querySelector('#quickConsultModalForm input[name="product"]') ||
+                    document.querySelector('#quickConsultModalForm input[name="fullname"]');
+  if (noteField && noteField.tagName === 'TEXTAREA') {
+    noteField.value = "Tôi quan tâm đến: " + productName;
+  }
+}
