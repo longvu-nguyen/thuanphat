@@ -1,0 +1,107 @@
+[
+  {
+    "id": "sol-1",
+    "title": "Số hoá tài liệu hành chính công",
+    "tag": "Phổ biến",
+    "tagClass": "badge-popular",
+    "icon": "folder",
+    "screenTarget": "screen2",
+    "description": "Giải pháp scan và số hoá hồ sơ lưu trữ, cán bộ, đất đai, tư pháp đạt chuẩn Cục Văn thư & Lưu trữ Nhà nước và Thông tư 02/2019/TT-BNV.",
+    "features": [
+      "Nhận dạng OCR tiếng Việt độ chính xác 99%",
+      "Bảo mật mã hoá phân quyền đa cấp AES-256",
+      "Trang bị máy quét ADF chuyên dụng Ricoh fi series"
+    ],
+    "actionText": "Khám phá giải pháp số hoá →"
+  },
+  {
+    "id": "sol-2",
+    "title": "Đánh giá mức độ chuyển đổi số (DTI)",
+    "tag": "Miễn phí",
+    "tagClass": "badge-free",
+    "icon": "bar-chart",
+    "screenTarget": "screen3",
+    "description": "Bộ công cụ trực quan hoá chấm điểm năng lực số doanh nghiệp dựa trên 15 chỉ tiêu theo Quyết định 1726/QĐ-BTTTT của Bộ Thông tin & Truyền thông.",
+    "features": [
+      "Đánh giá 5 nhóm năng lực cốt lõi trực quan",
+      "Biểu đồ Radar đa giác tự động vẽ Real-time",
+      "Xuất báo cáo PDF và checklist khuyến nghị"
+    ],
+    "actionText": "Bắt đầu bài kiểm tra DTI →"
+  },
+  {
+    "id": "sol-3",
+    "title": "Chuyển đổi số theo ngành",
+    "tag": "Chuyên sâu",
+    "tagClass": "badge-new",
+    "icon": "factory",
+    "screenTarget": "quickConsultModal",
+    "description": "Giải pháp chuyên biệt cho Doanh nghiệp sản xuất, Bệnh viện - cơ sở y tế và Giáo dục nhằm tự động hoá vận hành, giảm 60% thời gian thủ công.",
+    "features": [
+      "Case study tối ưu kho bãi & vận hành nhà máy",
+      "Liên thông dữ liệu bệnh án điện tử HIS/EMR",
+      "Hệ thống báo cáo chỉ số quản trị điều hành tức thì"
+    ],
+    "actionText": "Xem Case Study thực tế →"
+  },
+  {
+    "id": "sol-4",
+    "title": "Chuyển đổi số cho SME",
+    "tag": "Tối ưu chi phí",
+    "tagClass": "badge-free",
+    "icon": "rocket",
+    "screenTarget": "quickConsultModal",
+    "description": "Doanh nghiệp vừa và nhỏ nên bắt đầu từ đâu? Lộ trình chuyển đổi số tinh gọn, đầu tư theo giai đoạn, mang lại hiệu quả rõ rệt ngay từ tháng đầu.",
+    "features": [
+      "Chi phí đầu tư linh hoạt theo quy mô nhân sự",
+      "Số hoá văn phòng không giấy e-Office tinh gọn",
+      "Đồng hành đào tạo chuyển giao kỹ thuật tận tay"
+    ],
+    "actionText": "Tư vấn lộ trình SME →"
+  },
+  {
+    "id": "sol-5",
+    "title": "Hạ tầng CNTT & Data Center mini",
+    "tag": "Hạ tầng nền tảng",
+    "tagClass": "badge-popular",
+    "icon": "server",
+    "screenTarget": "quickConsultModal",
+    "description": "Cung cấp máy chủ HP Enterprise, thiết bị mạng Cisco/Aruba, lưu trữ NAS/SAN và giải pháp an ninh mạng bảo vệ toàn diện dữ liệu cơ quan tổ chức.",
+    "features": [
+      "Máy chủ HP ProLiant thế hệ mới nhất",
+      "Tường lửa thế hệ mới (Next-Gen Firewall)",
+      "Chiến lược sao lưu 3-2-1 chống Ransomware"
+    ],
+    "actionText": "Xem giải pháp hạ tầng →"
+  },
+  {
+    "id": "sol-6",
+    "title": "CĐS Logistics & Chuỗi cung ứng",
+    "tag": "Mới ra mắt",
+    "tagClass": "badge-popular",
+    "icon": "truck",
+    "screenTarget": "quickConsultModal",
+    "description": "Giải pháp số hóa toàn diện vận đơn, chứng từ xuất nhập khẩu và kiểm soát luồng hàng Real-time cho các công ty giao vận, kho bãi và logistics.",
+    "features": [
+      "Quét tự động Barcode/QR code chứng từ vận chuyển",
+      "Giảm 75% thời gian xử lý thủ tục đối soát hóa đơn",
+      "Đồng bộ trực tiếp hệ thống quản trị kho WMS & ERP"
+    ],
+    "actionText": "Khám phá giải pháp Logistics →"
+  },
+  {
+    "id": "sol-7",
+    "title": "Văn phòng số e-Office & Chữ ký số",
+    "tag": "Đột phá",
+    "tagClass": "badge-new",
+    "icon": "edit",
+    "screenTarget": "quickConsultModal",
+    "description": "Chuyển giao mô hình cơ quan - doanh nghiệp không giấy tờ với hệ thống trình ký điện tử, tích hợp chứng thư số từ xa HSM và luân chuyển văn bản số.",
+    "features": [
+      "Ký duyệt mọi lúc mọi nơi trên điện thoại & máy tính",
+      "Tuân thủ Nghị định 130/2018/NĐ-CP về chữ ký số",
+      "Tiết kiệm 90% chi phí mực in, chuyển phát và lưu kho"
+    ],
+    "actionText": "Triển khai Văn phòng số →"
+  }
+]

@@ -5,18 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Thuận Phát Technology | Đại Lý Chính Hãng Ricoh, HP, Kyocera & Giải Pháp Chuyển Đổi Số</title>
   <meta name="description" content="Thuận Phát Technology - Đại lý ủy quyền chính hãng máy scan Ricoh, máy chủ HP, thiết bị in ấn Kyocera và giải pháp số hoá tài liệu lưu trữ, chuyển đổi số DTI toàn diện.">
-  <link rel="canonical" href="https://thuanphat8.vn/">
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" href="assets/logo.png">
 
   <!-- Schema.org BreadcrumbList for SEO -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "Công ty TNHH Công nghệ Thuận Phát",
+    "name": "Công ty TNHH Thương Mại Đầu Tư và Sản Xuất Thuận Phát",
     "alternateName": "Thuận Phát Technology",
     "url": "https://thuanphat8.vn/",
-    "logo": "https://thuanphat8.vn/favicon.svg",
+    "logo": "https://thuanphat8.vn/uploads/2026/04/Logo_WF-01.png",
     "contactPoint": {
       "@type": "ContactPoint",
       "telephone": "+84-28-1234-5678",
@@ -43,44 +42,60 @@
   <header class="site-header">
     <div class="header-container">
       
-      <!-- Brand Logo -->
-      <a href="#trang-chu" class="brand-logo" onclick="switchScreen('screen-home'); return false;" title="Thuận Phát Technology">
-        <div class="logo-icon">
-          <div class="logo-square"></div>
-          <div class="logo-square"></div>
-          <div class="logo-square"></div>
-          <div class="logo-square"></div>
-        </div>
-        <div class="brand-text">
-          <span class="brand-name">THUẬN PHÁT</span>
-          <span class="brand-tagline">TECHNOLOGY</span>
-        </div>
+      <!-- Brand Logo (Real Company Logo) -->
+      <a href="#trang-chu" class="brand-logo" onclick="switchScreen('screen-home'); return false;" title="Thuận Phát Technology" style="display: flex; align-items: center;">
+        <img src="assets/logo.png" alt="Thuận Phát Technology" class="brand-real-logo" style="height: 48px; max-width: 170px; object-fit: contain;">
       </a>
 
-      <!-- Desktop Navigation Links (All 6 Primary Sections) -->
+      <!-- Desktop Navigation Links (All Primary Sections) -->
       <nav class="main-nav" id="mainNav">
         <a href="#trang-chu" class="nav-link active-pill" id="nav-home" onclick="switchScreen('screen-home'); return false;">Trang chủ</a>
         <a href="#san-pham" class="nav-link" id="nav-products" onclick="switchScreen('screen-home'); setTimeout(() => { const el = document.getElementById('san-pham-section'); if (el) el.scrollIntoView({behavior: 'smooth'}); }, 100); return false;">Sản phẩm</a>
-        <a href="#may-scan" class="nav-link" id="nav-scan" onclick="switchScreen('screen-may-scan'); return false;">Máy scan</a>
+        <a href="#may-scan" class="nav-link" id="nav-scan" onclick="switchScreen('screen-may-scan'); return false;">Máy scan Ricoh</a>
         <a href="#ha-tang-cntt" class="nav-link" id="nav-infra" onclick="switchScreen('screen-ha-tang'); return false;">Hạ tầng CNTT</a>
-        <a href="#giai-phap-chuyen-doi-so" class="nav-link" id="nav-cds" onclick="switchScreen('screen1'); return false;">Giải pháp chuyển đổi số</a>
+        <a href="#giai-phap-chuyen-doi-so" class="nav-link" id="nav-cds" onclick="switchScreen('screen1'); return false;">Giải pháp số</a>
+        
+        <!-- News & Services Dropdown matching original website -->
+        <div class="nav-dropdown">
+          <a href="#tin-tuc" class="nav-link" id="nav-news" onclick="switchScreen('screen-tin-tuc'); return false;" style="display: inline-flex; align-items: center; gap: 4px;">
+            <span>Tin tức</span>
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </a>
+          <div class="nav-dropdown-menu">
+            <a href="#tin-tuc" class="nav-dropdown-item" onclick="switchScreen('screen-tin-tuc'); filterNewsCategory('thiet-bi-in-an'); return false;">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+              <span>Thiết Bị In Ấn</span>
+            </a>
+            <a href="#tin-tuc" class="nav-dropdown-item" onclick="switchScreen('screen-tin-tuc'); filterNewsCategory('dich-vu-ky-thuat'); return false;">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+              <span>Dịch Vụ Kỹ Thuật</span>
+            </a>
+          </div>
+        </div>
+
         <a href="#gioi-thieu" class="nav-link" id="nav-about" onclick="switchScreen('screen-gioi-thieu'); return false;">Giới thiệu</a>
         <a href="#lien-he" class="nav-link" id="nav-contact" onclick="switchScreen('screen-lien-he'); return false;">Liên hệ</a>
       </nav>
 
-      <!-- Header Contact Hotline & Admin Quick Access -->
-      <div style="display: flex; align-items: center; gap: 14px;">
-        <a href="tel:02812345678" class="header-contact" title="Gọi hotline Thuận Phát">
+      <!-- Header Contact Hotline, CMS Link & CTA -->
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <a href="tel:0903726554" class="header-contact" title="Gọi hotline Thuận Phát">
           <svg class="phone-icon-svg" viewBox="0 0 24 24">
             <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
           </svg>
-          <span class="contact-hotline-val">028 1234 5678</span>
+          <span class="contact-hotline-val">0903 726 554</span>
+        </a>
+
+        <!-- Header Admin CMS Button -->
+        <a href="admin.html" class="btn-cms-link" title="Quản trị nội dung & dữ liệu website" style="background: rgba(15, 23, 42, 0.05); color: #1e293b; padding: 7px 13px; border-radius: 999px; font-size: 12.5px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(15, 23, 42, 0.12); transition: all 0.2s;">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+          <span>Admin CMS</span>
         </a>
 
         <!-- Header CTA Button -->
-        <a href="#lien-he" class="btn-cta-header" onclick="switchScreen('screen-lien-he'); return false;" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #ffffff; padding: 7px 16px; border-radius: 999px; font-size: 13px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3); transition: all 0.2s;">
-          <span>⚡</span>
-          <span>Nhận Tư Vấn</span>
+        <a href="#lien-he" class="btn-cta-header" onclick="switchScreen('screen-lien-he'); return false;" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #ffffff; padding: 8px 16px; border-radius: 999px; font-size: 13px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3); transition: all 0.2s;">
+          <span>Nhận Báo Giá</span>
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
         </a>
       </div>
 
@@ -168,7 +183,9 @@
       <div class="pillars-3col-grid">
         <!-- Pillar 1: Máy scan Ricoh -->
         <div class="pillar-feature-card" onclick="switchScreen('screen-may-scan');">
-          <div class="pillar-card-icon">🖨️</div>
+          <div class="pillar-card-icon">
+            <svg class="clean-svg-icon" viewBox="0 0 24 24" width="24" height="24" style="color: var(--primary-gold);"><path d="M6 9V2h12v7"></path><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+          </div>
           <h3 class="card-title">Máy Scan Chuyên Dụng Ricoh</h3>
           <p class="card-description">Đại lý ủy quyền chính thức Ricoh Việt Nam. Đầy đủ các dòng máy scan văn phòng, công nghiệp tốc độ cao ADF và mặt kính phẳng Flatbed.</p>
           <div class="card-features-list">
@@ -183,7 +200,9 @@
 
         <!-- Pillar 2: Hạ tầng CNTT HP -->
         <div class="pillar-feature-card" onclick="switchScreen('screen-ha-tang');">
-          <div class="pillar-card-icon">🖥️</div>
+          <div class="pillar-card-icon">
+            <svg class="clean-svg-icon" viewBox="0 0 24 24" width="24" height="24" style="color: var(--primary-gold);"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+          </div>
           <h3 class="card-title">Hạ Tầng CNTT &amp; Data Center</h3>
           <p class="card-description">Tư vấn, cung cấp và triển khai máy chủ HPE ProLiant, thiết bị lưu trữ NAS/SAN, hệ thống mạng an ninh nội bộ và giải pháp phòng chống Ransomware.</p>
           <div class="card-features-list">
@@ -198,7 +217,9 @@
 
         <!-- Pillar 3: Chuyển đổi số & Số hóa -->
         <div class="pillar-feature-card" onclick="switchScreen('screen1');">
-          <div class="pillar-card-icon">⚡</div>
+          <div class="pillar-card-icon">
+            <svg class="clean-svg-icon" viewBox="0 0 24 24" width="24" height="24" style="color: var(--primary-gold);"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+          </div>
           <h3 class="card-title">Giải Pháp Chuyển Đổi Số Toàn Diện</h3>
           <p class="card-description">Dịch vụ số hoá tài liệu lưu trữ chuẩn Thông tư 02/2019/TT-BNV, đánh giá chỉ số DTI theo QĐ 1726 và tư vấn lộ trình văn phòng không giấy e-Office.</p>
           <div class="card-features-list">
@@ -226,7 +247,9 @@
             <input type="text" id="productSearchInput" placeholder="Tìm theo tên máy, mã model..." 
                    style="padding: 9px 14px 9px 36px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 13.5px; width: 250px; outline: none;"
                    oninput="handleProductSearch(this.value)">
-            <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 14px;">🔍</span>
+            <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8; display: flex; align-items: center;">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </span>
           </div>
         </div>
       </div>
@@ -343,7 +366,7 @@
         </h1>
 
         <p class="hero-description">
-          Thuận Phát phân phối chính hãng 100% dòng máy quét Ricoh fi Series và ScanSnap. Giải pháp scan tự động 2 mặt ADF, nhận dạng OCR tiếng Việt, chống nạp giấy đúp bằng sóng siêu âm.
+          Thuận Phát phân phối chính hãng 100% đầy đủ 34 dòng máy quét Ricoh fi Series và ScanSnap. Giải pháp scan tự động 2 mặt ADF, nhận dạng OCR tiếng Việt, chống nạp giấy đúp bằng sóng siêu âm, bảo hành chính hãng tận nơi 12-24 tháng.
         </p>
 
         <div class="hero-actions">
@@ -351,24 +374,72 @@
             <span>Nhận báo giá dự án</span>
             <span>→</span>
           </button>
-          <button class="btn-secondary-dark" onclick="openArticleModal('post-1')">
-            <span>Đọc cẩm nang chọn mua (Pillar P1)</span>
+          <button class="btn-secondary-dark" onclick="const sc = document.getElementById('scannerCatalogSection'); if(sc) sc.scrollIntoView({behavior:'smooth'});">
+            <span>Xem 34 model máy scan ↓</span>
           </button>
         </div>
       </div>
     </section>
 
-    <!-- Comparison Section (Pillar P2) -->
-    <section class="categories-section">
-      <div class="section-header">
+    <!-- Scan Products Catalog Section (34 Models) -->
+    <section class="categories-section" id="scannerCatalogSection" style="padding-top: 50px; padding-bottom: 50px;">
+      <div class="section-header" style="margin-bottom: 28px;">
         <div>
-          <div class="section-pretitle">So Sánh Dòng Máy (Pillar P2)</div>
-          <h2 class="section-title">So Sánh Ricoh fi-7000 Series vs fi-8000 Series</h2>
-          <p class="section-subtitle">Dòng fi-8000 thế hệ mới mang lại bước nhảy vọt về tốc độ, chất lượng hình ảnh và độ bền nạp giấy.</p>
+          <div class="section-pretitle">DANH MỤC THIẾT BỊ SỐ HÓA RICOH</div>
+          <h2 class="section-title">Danh Mục Máy Scan Ricoh Chính Hãng</h2>
+          <p class="section-subtitle">Đầy đủ các dòng máy scan tự động 2 mặt ADF, máy scan để bàn ScanSnap và máy scan phẳng Flatbed công nghiệp.</p>
         </div>
       </div>
 
-      <div class="comparison-table-wrap">
+      <!-- Controls: Category Filter Tabs & Instant Search -->
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 30px;">
+        <div class="filter-tabs-container" style="margin-bottom: 0;">
+          <button class="filter-tab-btn active" id="tab-scan-all" onclick="filterScanCategory('all', this)">
+            Tất cả máy scan (<span id="count-scan-all">34</span>)
+          </button>
+          <button class="filter-tab-btn" id="tab-scan-fi" onclick="filterScanCategory('fi-series', this)">
+            Dòng Văn Phòng fi Series (<span id="count-scan-fi">18</span>)
+          </button>
+          <button class="filter-tab-btn" id="tab-scan-scansnap" onclick="filterScanCategory('scansnap', this)">
+            Dòng Để Bàn ScanSnap (<span id="count-scan-scansnap">8</span>)
+          </button>
+          <button class="filter-tab-btn" id="tab-scan-industrial" onclick="filterScanCategory('industrial', this)">
+            Dòng Công Nghiệp &amp; Flatbed (<span id="count-scan-ind">8</span>)
+          </button>
+        </div>
+
+        <!-- Search Bar -->
+        <div style="position: relative; min-width: 280px;">
+          <input type="text" id="scanSearchInput" placeholder="Tìm theo tên máy (vd: fi-8170, iX1600...)" oninput="handleScanSearch(this.value)" style="width: 100%; padding: 10px 14px 10px 38px; border: 1px solid #cbd5e1; border-radius: 999px; font-size: 13.5px; outline: none; transition: border-color 0.2s;" onfocus="this.style.borderColor='#c59b27'" onblur="this.style.borderColor='#cbd5e1'">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); pointer-events: none;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </div>
+      </div>
+
+      <!-- Scanners Grid -->
+      <div id="scannerProductsGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 24px;">
+        <!-- Dynamically rendered via JS -->
+      </div>
+
+      <!-- Load More Button -->
+      <div id="loadMoreScannersContainer" style="text-align: center; margin-top: 36px; display: none;">
+        <button class="btn-secondary-dark" onclick="loadMoreScanners()" style="margin: 0 auto; padding: 10px 28px; font-size: 14px;">
+          <span>Xem thêm máy scan khác</span>
+          <span>↓</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Comparison Section (Pillar P2) - Placed below product catalog as Expert Guide -->
+    <section class="categories-section" style="background: #fafaf9; border-top: 1px solid #e7e5e4; border-bottom: 1px solid #e7e5e4; padding: 50px 0;">
+      <div class="section-header">
+        <div>
+          <div class="section-pretitle">CẨM NANG CHUYÊN GIA (PILLAR P2)</div>
+          <h2 class="section-title">So Sánh Công Nghệ Ricoh fi-7000 Series vs fi-8000 Series</h2>
+          <p class="section-subtitle">Dòng fi-8000 thế hệ mới mang lại bước nhảy vọt về tốc độ, chất lượng hình ảnh và độ bền nạp giấy so với thế hệ tiền nhiệm.</p>
+        </div>
+      </div>
+
+      <div class="comparison-table-wrap" style="box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
         <table class="comparison-table">
           <thead>
             <tr>
@@ -405,6 +476,83 @@
             </tr>
           </tbody>
         </table>
+      </div>
+
+      <!-- Expert Callout Box -->
+      <div style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border-radius: 16px; padding: 32px 36px; margin-top: 40px; color: #ffffff; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px;">
+        <div style="max-width: 680px;">
+          <h4 style="font-size: 20px; font-weight: 700; color: #fbbf24; margin-bottom: 8px;">Cần tư vấn lựa chọn dòng máy scan phù hợp với dự án?</h4>
+          <p style="font-size: 14px; color: #cbd5e1; line-height: 1.6; margin: 0;">Thuận Phát hỗ trợ khảo sát thực tế, demo chạy thử máy scan tận nơi và cung cấp giải pháp OCR trích xuất dữ liệu tự động cho cơ quan, doanh nghiệp trên toàn quốc.</p>
+        </div>
+        <div style="display: flex; gap: 12px;">
+          <button class="btn-primary-gold" onclick="openModal('quickConsultModal')">
+            <span>Yêu cầu demo / Báo giá</span>
+            <span>→</span>
+          </button>
+          <a href="tel:0903726554" style="background: rgba(255,255,255,0.12); color: #ffffff; padding: 10px 20px; border-radius: 8px; font-size: 13.5px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; border: 1px solid rgba(255,255,255,0.2);">
+            <span>Hotline: 0903 726 554</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- ============================================================
+       SCREEN: TIN TỨC & DỊCH VỤ KỸ THUẬT (/tin-tuc/)
+  ============================================================ -->
+  <div id="screen-tin-tuc" class="screen-container">
+    
+    <!-- Hero Section for News -->
+    <section class="hero-dark-section" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);">
+      <div class="hero-content">
+        <div class="breadcrumb-nav">
+          <a href="#trang-chu" onclick="switchScreen('screen-home'); return false;">Trang chủ</a>
+          <span class="breadcrumb-separator">›</span>
+          <span class="breadcrumb-current" id="newsBreadcrumb">Dịch Vụ Kỹ Thuật &amp; Thiết Bị In Ấn</span>
+        </div>
+
+        <div class="partner-badge">
+          <span class="badge-dot"></span>
+          <span>TRUNG TÂM TIN TỨC &amp; DỊCH VỤ THUẬN PHÁT</span>
+        </div>
+
+        <h1 class="hero-title" id="newsScreenTitle">
+          Dịch Vụ Kỹ Thuật &amp; Thiết Bị In Ấn
+        </h1>
+
+        <p class="hero-description" id="newsScreenDesc">
+          Tổng hợp kiến thức kỹ thuật thực tế từ chuyên gia: Cẩm nang chọn mua máy scan, kỹ năng bảo dưỡng máy in - máy scan, giải pháp xử lý sự cố in ấn DIY và xu hướng công nghệ in văn phòng hiện đại.
+        </p>
+      </div>
+    </section>
+
+    <!-- News Content Section -->
+    <section class="categories-section" style="padding-top: 40px; padding-bottom: 70px;">
+      <!-- Controls: Category Filter Tabs & Instant Search -->
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 32px;">
+        <div class="filter-tabs-container" style="margin-bottom: 0;">
+          <button class="filter-tab-btn active" id="tab-news-all" onclick="filterNewsCategory('all', this)">
+            Tất cả bài viết (<span id="count-news-all">12</span>)
+          </button>
+          <button class="filter-tab-btn" id="tab-news-dvkt" onclick="filterNewsCategory('dich-vu-ky-thuat', this)">
+            Dịch Vụ Kỹ Thuật (<span id="count-news-dvkt">7</span>)
+          </button>
+          <button class="filter-tab-btn" id="tab-news-tbia" onclick="filterNewsCategory('thiet-bi-in-an', this)">
+            Thiết Bị In Ấn (<span id="count-news-tbia">5</span>)
+          </button>
+        </div>
+
+        <!-- Search Bar -->
+        <div style="position: relative; min-width: 280px;">
+          <input type="text" id="newsSearchInput" placeholder="Tìm kiếm bài viết..." oninput="handleNewsSearch(this.value)" style="width: 100%; padding: 10px 14px 10px 38px; border: 1px solid #cbd5e1; border-radius: 999px; font-size: 13.5px; outline: none; transition: border-color 0.2s;" onfocus="this.style.borderColor='#c59b27'" onblur="this.style.borderColor='#cbd5e1'">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); pointer-events: none;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </div>
+      </div>
+
+      <!-- News Posts Grid -->
+      <div id="newsPostsGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 28px;">
+        <!-- Dynamically rendered via JS -->
       </div>
     </section>
 
@@ -589,7 +737,7 @@
         </div>
         <div>
           <button class="table-btn table-btn-edit" onclick="openModal('quickConsultModal')" style="padding: 8px 14px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; border: 1px solid #cbd5e1; background: #ffffff;">
-            <span>📋</span>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
             <span>Yêu cầu tư vấn giải pháp</span>
           </button>
         </div>
@@ -604,14 +752,14 @@
     <section class="related-solutions-section" style="background-color: #fbfbf9;">
       <div class="section-header">
         <div>
-          <div class="section-pretitle">Kiến thức &amp; Cẩm nang chuyên sâu</div>
-          <h2 class="section-title">Bài viết &amp; Hướng dẫn chuyển đổi số</h2>
-          <p class="section-subtitle">Các bài viết chuẩn SEO được biên soạn theo kế hoạch Content 6 tháng (Pillar P1 - P7 &amp; Cluster C1 - C17).</p>
+          <div class="section-pretitle">Kiến thức &amp; Cẩm nang kỹ thuật</div>
+          <h2 class="section-title">Tin Tức &amp; Dịch Vụ Kỹ Thuật Chuyên Sâu</h2>
+          <p class="section-subtitle">Tổng hợp hướng dẫn chọn mua máy scan, bảo dưỡng máy in và các giải pháp in ấn, số hóa tài liệu cho doanh nghiệp.</p>
         </div>
         <div>
-          <button class="table-btn table-btn-edit" onclick="document.getElementById('dynamicArticlesGrid').scrollIntoView({ behavior: 'smooth' })" style="padding: 8px 14px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; border: 1px solid #cbd5e1; background: #ffffff;">
-            <span>📚</span>
-            <span>Tất cả bài viết</span>
+          <button class="table-btn table-btn-edit" onclick="switchScreen('screen-tin-tuc'); return false;" style="padding: 8px 16px; display: inline-flex; align-items: center; gap: 8px; cursor: pointer; border: 1px solid #cbd5e1; background: #ffffff; border-radius: 8px; font-weight: 600; color: #b45309;">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+            <span>Xem tất cả 12 bài viết →</span>
           </button>
         </div>
       </div>
@@ -647,28 +795,36 @@
     <section class="benefit-chips-bar">
       <div class="chips-grid">
         <div class="chip-item">
-          <div class="chip-icon">⚡</div>
+          <div class="chip-icon">
+            <svg class="clean-svg-icon" viewBox="0 0 24 24" width="20" height="20" style="color: var(--primary-gold);"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          </div>
           <div>
             <div class="chip-text-title">Tra cứu 3 giây</div>
             <div class="chip-text-desc">Tìm kiếm tức thì theo từ khoá OCR &amp; metadata</div>
           </div>
         </div>
         <div class="chip-item">
-          <div class="chip-icon">🔒</div>
+          <div class="chip-icon">
+            <svg class="clean-svg-icon" viewBox="0 0 24 24" width="20" height="20" style="color: var(--primary-gold);"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          </div>
           <div>
             <div class="chip-text-title">Bảo mật phân quyền</div>
             <div class="chip-text-desc">Mã hoá đa cấp AES-256 theo chức vụ &amp; vai trò</div>
           </div>
         </div>
         <div class="chip-item">
-          <div class="chip-icon">📜</div>
+          <div class="chip-icon">
+            <svg class="clean-svg-icon" viewBox="0 0 24 24" width="20" height="20" style="color: var(--primary-gold);"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+          </div>
           <div>
             <div class="chip-text-title">Chuẩn pháp lý</div>
             <div class="chip-text-desc">Chuẩn TT 02/2019/TT-BNV &amp; ISO 15489</div>
           </div>
         </div>
         <div class="chip-item">
-          <div class="chip-icon">📦</div>
+          <div class="chip-icon">
+            <svg class="clean-svg-icon" viewBox="0 0 24 24" width="20" height="20" style="color: var(--primary-gold);"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg>
+          </div>
           <div>
             <div class="chip-text-title">Giảm 80% kho lưu</div>
             <div class="chip-text-desc">Tiết kiệm diện tích kho, chống ẩm mốc mối mọt</div>
@@ -967,28 +1123,36 @@
 
       <div class="partner-certs-grid">
         <div class="partner-cert-card">
-          <div class="cert-logo-box">🖨️</div>
+          <div class="cert-logo-box">
+            <svg class="clean-svg-icon" viewBox="0 0 24 24" width="28" height="28" style="margin: 0 auto; color: var(--primary-gold);"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+          </div>
           <h4 style="font-size: 15px; font-weight: 700; margin-bottom: 4px;">RICOH VIETNAM</h4>
           <span style="font-size: 12px; color: var(--primary-gold); font-weight: 600;">Authorized Partner</span>
           <p style="font-size: 12px; color: #777; margin-top: 6px;">Phân phối máy scan fi-series, ScanSnap và máy photocopy Ricoh.</p>
         </div>
 
         <div class="partner-cert-card">
-          <div class="cert-logo-box">🖥️</div>
+          <div class="cert-logo-box">
+            <svg class="clean-svg-icon" viewBox="0 0 24 24" width="28" height="28" style="margin: 0 auto; color: var(--primary-gold);"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+          </div>
           <h4 style="font-size: 15px; font-weight: 700; margin-bottom: 4px;">HP ENTERPRISE</h4>
           <span style="font-size: 12px; color: var(--primary-gold); font-weight: 600;">HPE Partner</span>
           <p style="font-size: 12px; color: #777; margin-top: 6px;">Cung cấp máy chủ HPE ProLiant Gen11 và giải pháp lưu trữ SAN/NAS.</p>
         </div>
 
         <div class="partner-cert-card">
-          <div class="cert-logo-box">📠</div>
+          <div class="cert-logo-box">
+            <svg class="clean-svg-icon" viewBox="0 0 24 24" width="28" height="28" style="margin: 0 auto; color: var(--primary-gold);"><path d="M6 9V2h12v7"></path><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+          </div>
           <h4 style="font-size: 15px; font-weight: 700; margin-bottom: 4px;">KYOCERA</h4>
           <span style="font-size: 12px; color: var(--primary-gold); font-weight: 600;">Document Solutions</span>
           <p style="font-size: 12px; color: #777; margin-top: 6px;">Giải pháp thiết bị in ấn văn phòng siêu tiết kiệm mực in.</p>
         </div>
 
         <div class="partner-cert-card">
-          <div class="cert-logo-box">💻</div>
+          <div class="cert-logo-box">
+            <svg class="clean-svg-icon" viewBox="0 0 24 24" width="28" height="28" style="margin: 0 auto; color: var(--primary-gold);"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+          </div>
           <h4 style="font-size: 15px; font-weight: 700; margin-bottom: 4px;">MSI COMMERCIAL</h4>
           <span style="font-size: 12px; color: var(--primary-gold); font-weight: 600;">Authorized Reseller</span>
           <p style="font-size: 12px; color: #777; margin-top: 6px;">Máy tính để bàn doanh nghiệp, máy trạm và màn hình đồ họa chuyên dụng.</p>
@@ -1033,7 +1197,9 @@
         <!-- Left: Address & Hotline -->
         <div class="contact-info-cards">
           <div class="contact-info-card">
-            <div class="contact-card-icon">🏢</div>
+            <div class="contact-card-icon">
+              <svg class="clean-svg-icon" viewBox="0 0 24 24" width="20" height="20" style="color: var(--primary-gold);"><path d="M3 21h18"></path><path d="M5 21V7l8-4v18"></path><path d="M19 21V11l-6-3"></path><line x1="9" y1="9" x2="9" y2="9.01"></line><line x1="9" y1="13" x2="9" y2="13.01"></line><line x1="9" y1="17" x2="9" y2="17.01"></line></svg>
+            </div>
             <div>
               <strong style="font-size: 15px; color: #1a1918; display: block; margin-bottom: 4px;">Trụ sở chính thức</strong>
               <p style="font-size: 13.5px; color: #555;">Số 8, Đường Công Nghệ, Phường 15, Quận Tân Bình, TP. Hồ Chí Minh</p>
@@ -1041,7 +1207,9 @@
           </div>
 
           <div class="contact-info-card">
-            <div class="contact-card-icon">📞</div>
+            <div class="contact-card-icon">
+              <svg class="clean-svg-icon" viewBox="0 0 24 24" width="20" height="20" style="color: var(--primary-gold);"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            </div>
             <div>
               <strong style="font-size: 15px; color: #1a1918; display: block; margin-bottom: 4px;">Tổng đài hỗ trợ 24/7</strong>
               <p style="font-size: 14.5px; color: var(--primary-gold); font-weight: 700;">028 1234 5678</p>
@@ -1050,7 +1218,9 @@
           </div>
 
           <div class="contact-info-card">
-            <div class="contact-card-icon">✉️</div>
+            <div class="contact-card-icon">
+              <svg class="clean-svg-icon" viewBox="0 0 24 24" width="20" height="20" style="color: var(--primary-gold);"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            </div>
             <div>
               <strong style="font-size: 15px; color: #1a1918; display: block; margin-bottom: 4px;">Hộp thư điện tử</strong>
               <p style="font-size: 13.5px; color: #555;">contact@thuanphat8.vn · kinhdoanh@thuanphat8.vn</p>
@@ -1059,7 +1229,9 @@
 
           <!-- Map Box Placeholder -->
           <div class="contact-map-box">
-            <div style="font-size: 32px; margin-bottom: 8px;">🗺️</div>
+            <div style="margin-bottom: 10px; color: var(--primary-gold);">
+              <svg class="clean-svg-icon" viewBox="0 0 24 24" width="32" height="32" style="margin: 0 auto;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            </div>
             <strong>Bản Đồ Trụ Sở Thuận Phát Technology</strong>
             <span>Khu vực Tân Bình - Sân Bay Tân Sơn Nhất, TP.HCM</span>
           </div>
@@ -1133,22 +1305,27 @@
   <div class="modal-backdrop" id="articleReaderModal">
     <div class="article-modal-window">
       <button class="modal-close-btn" onclick="closeArticleModal()">✕</button>
-      <div style="margin-bottom: 12px;">
-        <span id="modalArticlePillar" style="font-size: 11.5px; font-weight: 700; color: var(--primary-gold); background: var(--gold-tint); padding: 4px 10px; border-radius: 4px; text-transform: uppercase;"></span>
+      <div style="margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
+        <span id="modalArticlePillar" style="font-size: 11.5px; font-weight: 700; color: #b45309; background: #fef3c7; padding: 4px 10px; border-radius: 6px; text-transform: uppercase;"></span>
+        <span id="modalArticleDate" style="font-size: 12.5px; color: #64748b;"></span>
       </div>
-      <h2 id="modalArticleTitle" style="font-size: 26px; font-weight: 800; color: #1a1918; margin-bottom: 12px; line-height: 1.3;"></h2>
-      <div class="article-meta-row">
-        <span id="modalArticleDate"></span>
-        <span>•</span>
-        <span id="modalArticleAuthor"></span>
+      <h2 id="modalArticleTitle" style="font-size: 24px; font-weight: 800; color: #0f172a; margin-bottom: 14px; line-height: 1.35;"></h2>
+      <div class="article-meta-row" style="margin-bottom: 18px; color: #64748b; font-size: 13px;">
+        <span id="modalArticleAuthor">Tác giả: Thuận Phát Technology</span>
       </div>
-      <div id="modalArticleBody" class="article-content-body">
+
+      <!-- Featured Cover Image -->
+      <div id="modalArticleCoverWrap" style="margin-bottom: 24px; border-radius: 12px; overflow: hidden; max-height: 380px; background: #f8fafc; border: 1px solid #e2e8f0; display: none;">
+        <img id="modalArticleCover" src="" alt="Cover" style="width: 100%; height: auto; max-height: 380px; object-fit: cover; display: block;">
+      </div>
+
+      <div id="modalArticleBody" class="article-content-body" style="font-size: 15px; line-height: 1.7; color: #334155;">
         <!-- Rendered via JS -->
       </div>
-      <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
-        <span style="font-size: 13px; color: #777;">Thuận Phát Technology — Đồng hành chuyển đổi số</span>
+      <div style="margin-top: 32px; padding-top: 20px; border-top: 1px solid #e2e8f0; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 14px;">
+        <span style="font-size: 13px; color: #64748b;">Cần hỗ trợ kỹ thuật hoặc báo giá thiết bị? Hotline: <strong style="color: #b45309;">0903 726 554</strong></span>
         <button class="btn-primary-gold" onclick="closeArticleModal(); openModal('quickConsultModal');">
-          Đăng ký tư vấn giải pháp này →
+          Nhận tư vấn kỹ thuật ngay →
         </button>
       </div>
     </div>
@@ -1240,42 +1417,42 @@
 
       <div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px;">
         <button class="btn-secondary-dark" style="text-align: left; justify-content: space-between;" onclick="closeModal('quickHelpModal'); switchScreen('screen-home');">
-          <span>🏠 Trang chủ chính thức</span>
+          <span>Trang chủ chính thức</span>
           <span>→</span>
         </button>
         <button class="btn-secondary-dark" style="text-align: left; justify-content: space-between;" onclick="closeModal('quickHelpModal'); switchScreen('screen-may-scan');">
-          <span>🖨️ Danh mục Máy scan Ricoh (P1, P2)</span>
+          <span>Danh mục Máy scan Ricoh (P1, P2)</span>
           <span>→</span>
         </button>
         <button class="btn-secondary-dark" style="text-align: left; justify-content: space-between;" onclick="closeModal('quickHelpModal'); switchScreen('screen-ha-tang');">
-          <span>🖥️ Danh mục Hạ tầng CNTT HP (P4, P5)</span>
+          <span>Danh mục Hạ tầng CNTT HP (P4, P5)</span>
           <span>→</span>
         </button>
         <button class="btn-secondary-dark" style="text-align: left; justify-content: space-between;" onclick="closeModal('quickHelpModal'); switchScreen('screen1');">
-          <span>⚡ Danh mục Chuyển đổi số (Pillar P6)</span>
+          <span>Danh mục Chuyển đổi số (Pillar P6)</span>
           <span>→</span>
         </button>
         <button class="btn-secondary-dark" style="text-align: left; justify-content: space-between;" onclick="closeModal('quickHelpModal'); switchScreen('screen2');">
-          <span>📂 Số hoá hồ sơ hành chính công (Pillar P7)</span>
+          <span>Số hoá hồ sơ hành chính công (Pillar P7)</span>
           <span>→</span>
         </button>
         <button class="btn-secondary-dark" style="text-align: left; justify-content: space-between;" onclick="closeModal('quickHelpModal'); switchScreen('screen3');">
-          <span>📊 Bộ công cụ đánh giá DTI (QĐ 1726)</span>
+          <span>Bộ công cụ đánh giá DTI (QĐ 1726)</span>
           <span>→</span>
         </button>
         <button class="btn-secondary-dark" style="text-align: left; justify-content: space-between;" onclick="closeModal('quickHelpModal'); switchScreen('screen-gioi-thieu');">
-          <span>🏢 Giới thiệu năng lực Thuận Phát</span>
+          <span>Giới thiệu năng lực Thuận Phát</span>
           <span>→</span>
         </button>
         <button class="btn-secondary-dark" style="text-align: left; justify-content: space-between;" onclick="closeModal('quickHelpModal'); switchScreen('screen-lien-he');">
-          <span>📞 Liên hệ &amp; Bản đồ trụ sở</span>
+          <span>Liên hệ &amp; Bản đồ trụ sở</span>
           <span>→</span>
         </button>
       </div>
 
       <div style="background-color: #f7f6f2; padding: 14px; border-radius: 8px; font-size: 13px; color: #555;">
-        📞 Hotline kỹ thuật: <strong>028 1234 5678</strong> (Hỗ trợ 24/7)<br>
-        📍 Trụ sở: TP. Hồ Chí Minh · Đại lý uỷ quyền Ricoh, HP, Kyocera, MSI.
+        Hotline kỹ thuật: <strong>028 1234 5678</strong> (Hỗ trợ 24/7)<br>
+        Trụ sở: TP. Hồ Chí Minh · Đại lý uỷ quyền Ricoh, HP, Kyocera, MSI.
       </div>
     </div>
   </div>
@@ -1288,16 +1465,7 @@
       
       <div class="footer-col">
         <div class="brand-logo" style="margin-bottom: 14px;">
-          <div class="logo-icon">
-            <div class="logo-square"></div>
-            <div class="logo-square"></div>
-            <div class="logo-square"></div>
-            <div class="logo-square"></div>
-          </div>
-          <div class="brand-text">
-            <span class="brand-name" style="color: #ffffff;">THUẬN PHÁT</span>
-            <span class="brand-tagline">TECHNOLOGY</span>
-          </div>
+          <img src="assets/logo-footer.png" alt="Thuận Phát Technology" class="footer-real-logo" style="height: 54px; max-width: 200px; object-fit: contain; filter: brightness(1.15);">
         </div>
         <p style="font-size: 13.5px; line-height: 1.6; max-width: 320px; color: #a19d95;">
           Đơn vị tiên phong cung cấp giải pháp máy scan chuyên dụng, số hoá tài liệu lưu trữ chuẩn quốc gia và hạ tầng CNTT toàn diện cho cơ quan nhà nước &amp; doanh nghiệp.
@@ -1316,12 +1484,13 @@
       </div>
 
       <div class="footer-col">
-        <h4>Sản phẩm &amp; Cẩm nang</h4>
+        <h4>Sản phẩm &amp; Dịch vụ</h4>
         <ul>
-          <li><a href="#may-scan" onclick="switchScreen('screen-may-scan'); return false;">Máy scan Ricoh fi-8170</a></li>
-          <li><a href="#may-scan" onclick="switchScreen('screen-may-scan'); return false;">Máy scan Ricoh fi-8290</a></li>
-          <li><a href="#may-scan" onclick="switchScreen('screen-may-scan'); return false;">So sánh fi-7000 vs fi-8000 (P2)</a></li>
-          <li><a href="#ha-tang-cntt" onclick="switchScreen('screen-ha-tang'); return false;">Hạ tầng máy chủ HP (P4/P5)</a></li>
+          <li><a href="#may-scan" onclick="switchScreen('screen-may-scan'); return false;">34 Model Máy Scan Ricoh</a></li>
+          <li><a href="#tin-tuc" onclick="switchScreen('screen-tin-tuc'); filterNewsCategory('dich-vu-ky-thuat'); return false;">Dịch Vụ Kỹ Thuật &amp; Sửa Chữa</a></li>
+          <li><a href="#tin-tuc" onclick="switchScreen('screen-tin-tuc'); filterNewsCategory('thiet-bi-in-an'); return false;">Cẩm Nang Thiết Bị In Ấn</a></li>
+          <li><a href="#may-scan" onclick="switchScreen('screen-may-scan'); return false;">So sánh fi-7000 vs fi-8000</a></li>
+          <li><a href="#ha-tang-cntt" onclick="switchScreen('screen-ha-tang'); return false;">Hạ tầng máy chủ HPE</a></li>
         </ul>
       </div>
 

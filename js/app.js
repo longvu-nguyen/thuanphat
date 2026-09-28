@@ -311,17 +311,17 @@ function renderDynamicArticles() {
 
   const posts = DataStore.getPosts().filter(p => p.status === "published");
   container.innerHTML = posts.slice(0, 3).map(post => `
-    <article class="card-category" onclick="openArticleModal('${post.id}')" style="cursor: pointer;">
-      <div style="height: 140px; border-radius: 8px; overflow: hidden; margin-bottom: 16px; background: #eee;">
-        <img src="${post.thumbnail || 'https://images.unsplash.com/photo-1450133064473-71024230f91b?w=600'}" alt="${post.title}" style="width: 100%; height: 100%; object-fit: cover;">
+    <article class="card-category" onclick="openArticleModal('${post.id}')" style="cursor: pointer; display: flex; flex-direction: column;">
+      <div style="height: 160px; border-radius: 8px; overflow: hidden; margin-bottom: 16px; background: #f1f5f9;">
+        <img src="${post.thumbnail || post.image || 'https://thuanphat8.vn/thumbnails/posts/medium/uploads/pexels-photo-9301887.jpeg'}" alt="${post.title}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.src='https://thuanphat8.vn/thumbnails/posts/medium/uploads/pexels-photo-9301887.jpeg'">
       </div>
-      <div style="display: flex; gap: 8px; margin-bottom: 8px; align-items: center;">
-        <span style="font-size: 11px; font-weight: 700; color: var(--primary-gold); background: var(--gold-tint); padding: 2px 8px; border-radius: 4px;">${post.pillar || 'Bài viết'}</span>
-        <span style="font-size: 12px; color: #888;">${post.date}</span>
+      <div style="display: flex; gap: 8px; margin-bottom: 8px; align-items: center; justify-content: space-between;">
+        <span style="font-size: 11px; font-weight: 700; color: #b45309; background: #fef3c7; padding: 3px 8px; border-radius: 4px;">${post.categoryName || post.pillar || 'Tin tức'}</span>
+        <span style="font-size: 12px; color: #64748b;">${post.date}</span>
       </div>
-      <h3 class="card-title" style="font-size: 17px; line-height: 1.35; margin-bottom: 8px;">${post.title}</h3>
-      <p class="card-description" style="font-size: 13.5px; -webkit-line-clamp: 2; display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden;">${post.excerpt}</p>
-      <div class="card-action-link" style="margin-top: auto;">
+      <h3 class="card-title" style="font-size: 16px; line-height: 1.35; margin-bottom: 8px;">${post.title}</h3>
+      <p class="card-description" style="font-size: 13px; -webkit-line-clamp: 2; display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; color: #475569; margin-bottom: 14px;">${post.excerpt}</p>
+      <div class="card-action-link" style="margin-top: auto; color: #b45309; font-weight: 600; font-size: 13px;">
         <span>Đọc bài viết chi tiết →</span>
       </div>
     </article>
@@ -337,9 +337,22 @@ function openArticleModal(postId) {
   if (!modal) return;
 
   document.getElementById("modalArticleTitle").textContent = post.title;
-  document.getElementById("modalArticlePillar").textContent = post.pillar || "Bài viết chuyên sâu";
+  document.getElementById("modalArticlePillar").textContent = post.categoryName || post.pillar || "Dịch Vụ Kỹ Thuật";
   document.getElementById("modalArticleDate").textContent = `Ngày đăng: ${post.date}`;
   document.getElementById("modalArticleAuthor").textContent = `Tác giả: ${post.author || 'Thuận Phát Technology'}`;
+  
+  const coverWrap = document.getElementById("modalArticleCoverWrap");
+  const coverImg = document.getElementById("modalArticleCover");
+  if (coverWrap && coverImg) {
+    const imgSrc = post.image || post.thumbnail;
+    if (imgSrc) {
+      coverImg.src = imgSrc;
+      coverWrap.style.display = "block";
+    } else {
+      coverWrap.style.display = "none";
+    }
+  }
+
   document.getElementById("modalArticleBody").innerHTML = post.content || `<p>${post.excerpt}</p>`;
 
   modal.classList.add("open");
@@ -355,7 +368,7 @@ function closeArticleModal() {
 }
 
 // ============================================================
-// 4. ROUTER / SCREEN SWITCHER (ALL 7 SITEMAP SCREENS)
+// 4. ROUTER / SCREEN SWITCHER (ALL SITEMAP SCREENS)
 // ============================================================
 function switchScreen(screenId, updateHash = true) {
   const validScreens = [
@@ -366,7 +379,8 @@ function switchScreen(screenId, updateHash = true) {
     "screen2",
     "screen3",
     "screen-gioi-thieu",
-    "screen-lien-he"
+    "screen-lien-he",
+    "screen-tin-tuc"
   ];
   if (!validScreens.includes(screenId)) {
     screenId = "screen-home";
@@ -382,7 +396,8 @@ function switchScreen(screenId, updateHash = true) {
       "screen2": "#so-hoa-tai-lieu",
       "screen3": "#danh-gia-dti",
       "screen-gioi-thieu": "#gioi-thieu",
-      "screen-lien-he": "#lien-he"
+      "screen-lien-he": "#lien-he",
+      "screen-tin-tuc": "#tin-tuc"
     };
     if (screenToHash[screenId]) {
       history.replaceState(null, null, screenToHash[screenId]);
@@ -415,7 +430,8 @@ function switchScreen(screenId, updateHash = true) {
     "screen2": "nav-cds",
     "screen3": "nav-cds",
     "screen-gioi-thieu": "nav-about",
-    "screen-lien-he": "nav-contact"
+    "screen-lien-he": "nav-contact",
+    "screen-tin-tuc": "nav-news"
   };
 
   const activeLinkId = navMap[screenId];
@@ -424,18 +440,26 @@ function switchScreen(screenId, updateHash = true) {
     if (activeLink) activeLink.classList.add("active-pill");
   }
 
+  // Lifecycle hooks for specific screens
+  if (screenId === "screen-tin-tuc") {
+    renderNewsPosts();
+  } else if (screenId === "screen-may-scan") {
+    renderScanProducts();
+  }
+
   // Update hero breadcrumbs if visible
   const breadcrumbCurrent = document.getElementById("heroBreadcrumbCurrent");
   if (breadcrumbCurrent) {
     const titleMap = {
       "screen-home": "Trang chủ",
-      "screen-may-scan": "Máy scan chuyên dụng",
+      "screen-may-scan": "Máy scan chuyên dụng Ricoh",
       "screen-ha-tang": "Hạ tầng CNTT doanh nghiệp",
       "screen1": "Giải pháp chuyển đổi số",
       "screen2": "Số hoá tài liệu hành chính công",
       "screen3": "Đánh giá mức độ chuyển đổi số (DTI)",
       "screen-gioi-thieu": "Giới thiệu Thuận Phát",
-      "screen-lien-he": "Liên hệ"
+      "screen-lien-he": "Liên hệ",
+      "screen-tin-tuc": "Dịch vụ kỹ thuật & Thiết bị in ấn"
     };
     breadcrumbCurrent.textContent = titleMap[screenId] || "Trang chủ";
   }
@@ -449,7 +473,8 @@ function switchScreen(screenId, updateHash = true) {
     "screen2": "so-hoa-tai-lieu",
     "screen3": "dti",
     "screen-gioi-thieu": "gioi-thieu",
-    "screen-lien-he": "lien-he"
+    "screen-lien-he": "lien-he",
+    "screen-tin-tuc": "tin-tuc"
   };
   const builderLinkEl = document.getElementById("headerBuilderLink");
   if (builderLinkEl) {
@@ -469,7 +494,8 @@ function switchScreen(screenId, updateHash = true) {
     "screen2": "#so-hoa-tai-lieu",
     "screen3": "#danh-gia-dti",
     "screen-gioi-thieu": "#gioi-thieu",
-    "screen-lien-he": "#lien-he"
+    "screen-lien-he": "#lien-he",
+    "screen-tin-tuc": "#tin-tuc"
   };
   if (history.pushState) {
     history.pushState(null, null, hashMapping[screenId] || "#trang-chu");
@@ -492,6 +518,13 @@ function handleInitialRoute() {
     switchScreen("screen3", false);
   } else if (hash === "#giai-phap-chuyen-doi-so" || hash.includes("chuyen-doi-so")) {
     switchScreen("screen1", false);
+  } else if (hash === "#tin-tuc" || hash.includes("tin-tuc") || hash.includes("dich-vu-ky-thuat") || hash.includes("thiet-bi-in-an")) {
+    switchScreen("screen-tin-tuc", false);
+    if (hash.includes("dich-vu-ky-thuat")) {
+      setTimeout(() => filterNewsCategory("dich-vu-ky-thuat"), 50);
+    } else if (hash.includes("thiet-bi-in-an")) {
+      setTimeout(() => filterNewsCategory("thiet-bi-in-an"), 50);
+    }
   } else if (hash === "#gioi-thieu" || hash.includes("gioi-thieu")) {
     switchScreen("screen-gioi-thieu", false);
   } else if (hash === "#lien-he" || hash.includes("lien-he")) {
@@ -833,6 +866,14 @@ function handleFormSubmit(formEl, successBoxId, inputsAreaId) {
 
   if (hasError) return;
 
+  // Button loading animation effect
+  const submitBtn = formEl.querySelector("button[type='submit']");
+  const originalBtnContent = submitBtn ? submitBtn.innerHTML : "";
+  if (submitBtn) {
+    submitBtn.classList.add("is-loading");
+    submitBtn.innerHTML = '<span class="form-spinner"></span> Đang gửi yêu cầu...';
+  }
+
   // Persist Lead into DataStore (CRM)
   let savedLead = null;
   if (typeof DataStore !== "undefined") {
@@ -845,10 +886,6 @@ function handleFormSubmit(formEl, successBoxId, inputsAreaId) {
       notes: notes ? notes.value.trim() : "Gửi yêu cầu từ website"
     });
   }
-
-  // Show Success Box
-  const inputsArea = document.getElementById(inputsAreaId);
-  const successBox = document.getElementById(successBoxId);
 
   // 1. Send Instant Email Notification via FormSubmit.co
   const targetEmail = "contact@thuanphat8.vn";
@@ -872,31 +909,46 @@ function handleFormSubmit(formEl, successBoxId, inputsAreaId) {
     }).catch(err => console.log("Email dispatch:", err));
   } catch (e) {}
 
-  // 2. Show Success Box with instant Zalo & Call buttons
-  if (inputsArea) inputsArea.style.display = "none";
-  if (successBox) {
-    successBox.classList.add("visible");
-    const codeSpan = successBox.querySelector(".consult-ref-code");
-    if (codeSpan) {
-      codeSpan.textContent = savedLead ? savedLead.refCode : "TP-" + Math.floor(100000 + Math.random() * 900000);
+  // Smooth delay for micro-interaction feel
+  setTimeout(() => {
+    if (submitBtn) {
+      submitBtn.classList.remove("is-loading");
+      submitBtn.innerHTML = originalBtnContent;
     }
 
-    // Append direct support buttons if not present
-    if (!successBox.querySelector(".success-direct-actions")) {
-      const actionsDiv = document.createElement("div");
-      actionsDiv.className = "success-direct-actions";
-      actionsDiv.style.cssText = "margin-top: 18px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;";
-      actionsDiv.innerHTML = `
-        <a href="https://zalo.me/0903233085" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; background: #0068ff; color: #fff; border-radius: 8px; font-weight: 600; font-size: 13px; text-decoration: none;">
-          <span>💬 Nhắn Zalo ngay (090 323 3085)</span>
-        </a>
-        <a href="tel:0903233085" style="display: inline-flex; align-items: center; gap: 6px; padding: 9px 18px; background: #1b8046; color: #fff; border-radius: 8px; font-weight: 600; font-size: 13px; text-decoration: none;">
-          <span>📞 Gọi hotline trực tiếp</span>
-        </a>
-      `;
-      successBox.appendChild(actionsDiv);
+    const inputsArea = document.getElementById(inputsAreaId);
+    const successBox = document.getElementById(successBoxId);
+
+    if (inputsArea) inputsArea.style.display = "none";
+    if (successBox) {
+      successBox.classList.add("visible");
+      const codeSpan = successBox.querySelector(".consult-ref-code");
+      if (codeSpan) {
+        codeSpan.textContent = savedLead ? savedLead.refCode : "TP-" + Math.floor(100000 + Math.random() * 900000);
+      }
+
+      // Append direct support buttons if not present
+      if (!successBox.querySelector(".success-direct-actions")) {
+        const actionsDiv = document.createElement("div");
+        actionsDiv.className = "success-direct-actions";
+        actionsDiv.style.cssText = "margin-top: 18px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;";
+        actionsDiv.innerHTML = `
+          <a href="https://zalo.me/0903233085" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 7px; padding: 10px 20px; background: #0068ff; color: #fff; border-radius: 8px; font-weight: 600; font-size: 13.5px; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            <span>Nhắn Zalo hỗ trợ (090 323 3085)</span>
+          </a>
+          <a href="tel:0903233085" style="display: inline-flex; align-items: center; gap: 7px; padding: 10px 20px; background: #1b8046; color: #fff; border-radius: 8px; font-weight: 600; font-size: 13.5px; text-decoration: none; transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            <span>Gọi hotline trực tiếp</span>
+          </a>
+        `;
+        successBox.appendChild(actionsDiv);
+      }
     }
-  }
+
+    // Reset form
+    formEl.reset();
+  }, 450);
 }
 
 function showInputError(inputEl, msg) {
@@ -1016,6 +1068,23 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
+
+  // Scroll Reveal Animations
+  if ("IntersectionObserver" in window) {
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("revealed");
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll(".pillar-feature-card, .infra-package-card, .contact-info-card, .form-wrapper, .testimonial-card, .stat-item").forEach(el => {
+      el.classList.add("tp-reveal");
+      revealObserver.observe(el);
+    });
+  }
 });
 
 // ============================================================
@@ -1044,7 +1113,9 @@ function renderDynamicProducts() {
   if (visibleProds.length === 0) {
     container.innerHTML = `
       <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #64748b;">
-        <div style="font-size: 40px; margin-bottom: 8px;">🔍</div>
+        <div style="margin-bottom: 12px; color: #94a3b8;">
+          <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </div>
         <p style="font-weight: 600; font-size: 16px;">Không tìm thấy sản phẩm phù hợp</p>
         <p style="font-size: 13px;">Vui lòng thử với từ khóa khác hoặc bấm chọn "Tất cả sản phẩm".</p>
       </div>
@@ -1108,4 +1179,260 @@ function openConsultForProduct(productName) {
   }
 }
 
+// ============================================================
+// NEWS & TECHNICAL SERVICES SECTION (CRAWLED POSTS)
+// ============================================================
+let currentNewsCategory = 'all';
+let currentNewsSearch = '';
+
+function renderNewsPosts() {
+  if (typeof DataStore === "undefined") return;
+  const container = document.getElementById("newsPostsGrid");
+  if (!container) return;
+
+  const allPosts = DataStore.getPosts().filter(p => p.status === "published");
+  
+  // Update counts on filter tabs
+  const countAll = document.getElementById("count-news-all");
+  const countDvkt = document.getElementById("count-news-dvkt");
+  const countTbia = document.getElementById("count-news-tbia");
+  if (countAll) countAll.textContent = allPosts.length;
+  if (countDvkt) countDvkt.textContent = allPosts.filter(p => p.category === "dich-vu-ky-thuat").length;
+  if (countTbia) countTbia.textContent = allPosts.filter(p => p.category === "thiet-bi-in-an").length;
+
+  let filtered = allPosts;
+  if (currentNewsCategory !== 'all') {
+    filtered = filtered.filter(p => p.category === currentNewsCategory);
+  }
+  if (currentNewsSearch.trim()) {
+    const q = currentNewsSearch.toLowerCase().trim();
+    filtered = filtered.filter(p => 
+      (p.title && p.title.toLowerCase().includes(q)) || 
+      (p.excerpt && p.excerpt.toLowerCase().includes(q))
+    );
+  }
+
+  // Update hero header according to selected category
+  const titleEl = document.getElementById("newsScreenTitle");
+  const descEl = document.getElementById("newsScreenDesc");
+  const breadcrumbEl = document.getElementById("newsBreadcrumb");
+  if (titleEl && descEl && breadcrumbEl) {
+    if (currentNewsCategory === 'dich-vu-ky-thuat') {
+      titleEl.textContent = "Dịch Vụ Kỹ Thuật";
+      descEl.textContent = "Hướng dẫn sửa chữa, bảo dưỡng máy in và máy scan, mẹo xử lý lỗi in ấn DIY và tối ưu hóa chi phí in ấn vận hành.";
+      breadcrumbEl.textContent = "Dịch Vụ Kỹ Thuật";
+    } else if (currentNewsCategory === 'thiet-bi-in-an') {
+      titleEl.textContent = "Thiết Bị In Ấn & Số Hóa";
+      descEl.textContent = "Cẩm nang chọn mua máy scan, đánh giá top máy in văn phòng, thương hiệu uy tín và xu hướng công nghệ in mới nhất.";
+      breadcrumbEl.textContent = "Thiết Bị In Ấn";
+    } else {
+      titleEl.textContent = "Dịch Vụ Kỹ Thuật & Thiết Bị In Ấn";
+      descEl.textContent = "Tổng hợp kiến thức chuyên môn, hướng dẫn vận hành, cài đặt và bảo dưỡng máy in, máy scan chuyên dụng cùng cẩm nang tối ưu hóa chi phí in ấn cho doanh nghiệp.";
+      breadcrumbEl.textContent = "Tin Tức & Dịch Vụ";
+    }
+  }
+
+  if (filtered.length === 0) {
+    container.innerHTML = `
+      <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: #64748b;">
+        <svg viewBox="0 0 24 24" width="42" height="42" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 12px; color: #94a3b8;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <p style="font-weight: 700; font-size: 17px; color: #1e293b; margin-bottom: 6px;">Không tìm thấy bài viết phù hợp</p>
+        <p style="font-size: 14px;">Vui lòng thử tìm kiếm với từ khóa khác hoặc bấm chọn "Tất cả bài viết".</p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = filtered.map(post => `
+    <article class="post-item-card" onclick="openArticleModal('${post.id}')">
+      <div class="post-item-thumb-box">
+        <span class="post-item-category-tag">
+          ${post.categoryName || (post.category === 'dich-vu-ky-thuat' ? 'Dịch Vụ Kỹ Thuật' : 'Thiết Bị In Ấn')}
+        </span>
+        <img src="${post.thumbnail || post.image || 'https://thuanphat8.vn/thumbnails/posts/medium/uploads/pexels-photo-9301887.jpeg'}" alt="${post.title}" loading="lazy" onerror="this.src='https://thuanphat8.vn/thumbnails/posts/medium/uploads/pexels-photo-9301887.jpeg'">
+      </div>
+      <div class="post-item-body">
+        <div class="post-item-meta">
+          <span>${post.date || '18/07/2025'}</span>
+          <span>•</span>
+          <span>${post.author || 'Thuận Phát'}</span>
+        </div>
+        <h3 class="post-item-title">${post.title}</h3>
+        <p class="post-item-excerpt">${post.excerpt || ''}</p>
+        <div class="post-item-footer">
+          <span>Xem chi tiết bài viết →</span>
+        </div>
+      </div>
+    </article>
+  `).join("");
+}
+
+function filterNewsCategory(cat, btn) {
+  currentNewsCategory = cat;
+  document.querySelectorAll('#screen-tin-tuc .filter-tab-btn').forEach(b => b.classList.remove('active'));
+  if (btn) {
+    btn.classList.add('active');
+  } else {
+    const tabMap = {
+      'all': 'tab-news-all',
+      'dich-vu-ky-thuat': 'tab-news-dvkt',
+      'thiet-bi-in-an': 'tab-news-tbia'
+    };
+    const targetTab = document.getElementById(tabMap[cat]);
+    if (targetTab) targetTab.classList.add('active');
+  }
+  renderNewsPosts();
+}
+
+function handleNewsSearch(val) {
+  currentNewsSearch = val || '';
+  renderNewsPosts();
+}
+
+// ============================================================
+// SCANNER PRODUCTS CATALOG (34 RICOH SCANNER MODELS)
+// ============================================================
+let currentScanCategory = 'all';
+let currentScanSearch = '';
+let currentScanLimit = 12;
+
+function renderScanProducts() {
+  if (typeof DataStore === "undefined") return;
+  const container = document.getElementById("scannerProductsGrid");
+  if (!container) return;
+
+  const allProds = DataStore.getProducts();
+  const allScans = allProds.filter(p => p.category === 'may-scan');
+
+  // Count by categories
+  const countAll = document.getElementById("count-scan-all");
+  const countFi = document.getElementById("count-scan-fi");
+  const countScansnap = document.getElementById("count-scan-scansnap");
+  const countInd = document.getElementById("count-scan-ind");
+
+  const fiList = allScans.filter(p => {
+    const n = (p.name || '').toLowerCase();
+    return n.includes('fi-8') || n.includes('fi-7') || n.includes('fi-6');
+  });
+  const ssList = allScans.filter(p => {
+    const n = (p.name || '').toLowerCase();
+    return n.includes('scansnap') || n.includes('ix') || n.includes('sv600');
+  });
+  const indList = allScans.filter(p => {
+    const n = (p.name || '').toLowerCase();
+    return n.includes('7900') || n.includes('7800') || n.includes('7700') || n.includes('8950') || n.includes('8930') || n.includes('8820');
+  });
+
+  if (countAll) countAll.textContent = allScans.length;
+  if (countFi) countFi.textContent = fiList.length;
+  if (countScansnap) countScansnap.textContent = ssList.length;
+  if (countInd) countInd.textContent = indList.length;
+
+  let filtered = allScans;
+  if (currentScanCategory === 'fi-series') {
+    filtered = fiList;
+  } else if (currentScanCategory === 'scansnap') {
+    filtered = ssList;
+  } else if (currentScanCategory === 'industrial') {
+    filtered = indList;
+  }
+
+  if (currentScanSearch.trim()) {
+    const q = currentScanSearch.toLowerCase().trim();
+    filtered = filtered.filter(p => 
+      (p.name && p.name.toLowerCase().includes(q)) || 
+      (p.slug && p.slug.toLowerCase().includes(q)) ||
+      (p.excerpt && p.excerpt.toLowerCase().includes(q))
+    );
+  }
+
+  const visibleScans = filtered.slice(0, currentScanLimit);
+
+  if (visibleScans.length === 0) {
+    container.innerHTML = `
+      <div style="grid-column: 1 / -1; text-align: center; padding: 50px 20px; color: #64748b;">
+        <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 12px; color: #94a3b8;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <p style="font-weight: 700; font-size: 16px; color: #1e293b; margin-bottom: 6px;">Không tìm thấy máy scan theo yêu cầu</p>
+        <p style="font-size: 13.5px;">Vui lòng thử tìm kiếm mã model khác (vd: fi-8170, iX1600...) hoặc chọn "Tất cả máy scan".</p>
+      </div>
+    `;
+    const loadMoreBtn = document.getElementById("loadMoreScannersContainer");
+    if (loadMoreBtn) loadMoreBtn.style.display = "none";
+    return;
+  }
+
+  container.innerHTML = visibleScans.map(p => {
+    const isScanSnap = (p.name || '').toLowerCase().includes('scansnap');
+    const isIndustrial = (p.name || '').toLowerCase().includes('7900') || (p.name || '').toLowerCase().includes('7800') || (p.name || '').toLowerCase().includes('8950');
+    const badgeText = isIndustrial ? 'Công Nghiệp' : (isScanSnap ? 'Để Bàn' : 'ADF Tốc Độ Cao');
+
+    return `
+      <div class="product-item-card" style="display: flex; flex-direction: column; background: #ffffff; border-radius: 12px; padding: 16px; border: 1px solid #e2e8f0; box-shadow: 0 2px 10px rgba(0,0,0,0.03); transition: all 0.25s ease;">
+        <div style="background: #ffffff; height: 180px; display: flex; align-items: center; justify-content: center; position: relative; border-radius: 8px; overflow: hidden; padding: 10px; margin-bottom: 12px; border: 1px solid #f8fafc;">
+          <span style="position: absolute; top: 8px; left: 8px; font-size: 10.5px; font-weight: 700; background: #fef3c7; color: #b45309; padding: 3px 8px; border-radius: 4px; text-transform: uppercase;">
+            ${badgeText}
+          </span>
+          <img src="${p.image || 'favicon.svg'}" alt="${p.name}" style="max-height: 140px; max-width: 100%; object-fit: contain;" onerror="this.src='favicon.svg'">
+        </div>
+        <h4 style="font-size: 15.5px; font-weight: 700; color: #0f172a; margin-bottom: 6px; line-height: 1.35; min-height: 42px;">${p.name}</h4>
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+          <span style="font-size: 12.5px; color: #b45309; font-weight: 700;">${p.price && p.price !== '0' ? p.price : 'Liên hệ báo giá'}</span>
+          <span style="font-size: 11px; color: #16a34a; background: #dcfce7; font-weight: 600; padding: 2px 6px; border-radius: 4px;">Mới 100% chính hãng</span>
+        </div>
+        <p style="font-size: 12px; color: #64748b; margin-bottom: 14px; line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 35px;">
+          ${p.excerpt || 'Máy scan chuyên dụng thương hiệu Ricoh chính hãng, phân phối và bảo hành tận nơi bởi Thuận Phát.'}
+        </p>
+        <div style="margin-top: auto; display: flex; gap: 8px;">
+          <button class="btn-primary-gold" style="flex: 1; padding: 9px 12px; font-size: 12.5px; justify-content: center; cursor: pointer;" onclick="openConsultForProduct('${(p.name || '').replace(/'/g, "\\\'")}')">
+            Nhận báo giá
+          </button>
+          <a href="tel:0903726554" style="background: #f1f5f9; color: #334155; padding: 9px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; justify-content: center;" title="Gọi tư vấn">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          </a>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  const loadMoreBtn = document.getElementById("loadMoreScannersContainer");
+  if (loadMoreBtn) {
+    loadMoreBtn.style.display = currentScanLimit >= filtered.length ? "none" : "block";
+  }
+}
+
+function filterScanCategory(cat, btn) {
+  currentScanCategory = cat;
+  currentScanLimit = 12;
+  document.querySelectorAll('#scannerCatalogSection .filter-tab-btn').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderScanProducts();
+}
+
+function handleScanSearch(val) {
+  currentScanSearch = val || '';
+  currentScanLimit = 12;
+  renderScanProducts();
+}
+
+function loadMoreScanners() {
+  currentScanLimit += 12;
+  renderScanProducts();
+}
+
+// Initial renders on page load
+document.addEventListener("DOMContentLoaded", () => {
+  renderScanProducts();
+  renderNewsPosts();
+});
+
+// Realtime sync from Admin CMS changes
+window.addEventListener("tp:datasync", () => {
+  if (typeof renderScanProducts === "function") renderScanProducts();
+  if (typeof renderNewsPosts === "function") renderNewsPosts();
+  if (typeof renderDynamicProducts === "function") renderDynamicProducts();
+  if (typeof renderDynamicArticles === "function") renderDynamicArticles();
+});
+
 window.addEventListener("hashchange", handleInitialRoute);
+
+
