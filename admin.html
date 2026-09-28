@@ -430,11 +430,32 @@
               </div>
 
               <div class="form-group">
-                <label class="form-label">Đường Dẫn Ảnh Nền Banner (URL)</label>
-                <input type="url" id="bannerBgInput" class="form-control" placeholder="Dán link ảnh (https://...) hoặc chọn mẫu gợi ý bên dưới" oninput="updateLiveBannerPreview()">
+                <label class="form-label">Ảnh Nền Banner (URL Hoặc Tải Lên Từ Máy Tính)</label>
+                <div style="display: flex; gap: 8px;">
+                  <input type="text" id="bannerBgInput" class="form-control" placeholder="Dán link ảnh (https://...) hoặc bấm tải ảnh bên phải" oninput="updateLiveBannerPreview()">
+                  <label class="btn-secondary" style="cursor: pointer; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; padding: 0 14px; font-size: 13px; font-weight: 600;" title="Chọn ảnh từ máy tính để tải lên">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                    <span>Tải Ảnh Từ Máy</span>
+                    <input type="file" id="bannerFileInput" accept="image/*" style="display: none;" onchange="handleBannerFileUpload(event)">
+                  </label>
+                  <button type="button" class="btn-secondary" onclick="addCurrentBannerToGallery()" style="white-space: nowrap; font-size: 13px; font-weight: 600;" title="Lưu ảnh này vào bộ sưu tập nhiều banner của trang">
+                    <span>+ Thêm Bộ Sưu Tập</span>
+                  </button>
+                </div>
                 
+                <!-- Multi-Banner Gallery Row -->
+                <div class="banner-gallery-box" id="bannerGalleryBox" style="margin-top: 10px;">
+                  <span class="sample-title" style="display: flex; justify-content: space-between; align-items: center;">
+                    <span>Bộ Sưu Tập Nhiều Ảnh Banner Của Trang Này (<span id="bannerGalleryCount">0</span> ảnh):</span>
+                    <span style="font-weight: 400; color: #64748b; font-size: 11px;">Bấm ảnh để chọn làm banner chính</span>
+                  </span>
+                  <div class="banner-thumbnails-grid" id="bannerThumbnailsGrid">
+                    <!-- Populated dynamically -->
+                  </div>
+                </div>
+
                 <!-- Quick Image Suggestions -->
-                <div class="sample-images-bar">
+                <div class="sample-images-bar" style="margin-top: 10px;">
                   <span class="sample-title">Gợi ý ảnh mẫu chất lượng cao (Unsplash):</span>
                   <div class="sample-chips-row">
                     <button type="button" class="sample-chip" onclick="applySampleImage('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80')">🖨️ Máy Scan &amp; Số Hóa</button>
@@ -607,6 +628,36 @@
 
           </div>
         </div>
+
+        <!-- ==========================================
+             DANH SÁCH QUẢN TRỊ VIÊN & 2 CẤP QUYỀN
+        ========================================== -->
+        <div class="cms-card-section admin-users-card" id="adminUsersManagementSection" style="margin-top: 24px;">
+          <div class="section-title-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <div>
+              <h3 class="section-heading">Quản Lý Danh Sách Quản Trị Viên &amp; Phân Quyền</h3>
+              <p style="font-size: 13px; color: #64748b; margin-top: 4px;">Phân định rõ 2 cấp quyền: <strong>Super Admin</strong> (toàn quyền hệ thống, cấu hình) và <strong>Editor</strong> (chuyên trách Content, Sản phẩm &amp; CRM).</p>
+            </div>
+            <span class="role-badge role-super-admin">🔒 Dành Riêng Cho Super Admin</span>
+          </div>
+
+          <div class="table-responsive">
+            <table class="cms-table">
+              <thead>
+                <tr>
+                  <th>Họ và Tên</th>
+                  <th>Tên Đăng Nhập</th>
+                  <th>Phân Quyền</th>
+                  <th>Thời Điểm Tạo</th>
+                  <th style="text-align: right;">Thao Tác</th>
+                </tr>
+              </thead>
+              <tbody id="adminUsersTableBody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
       </section>
 
     </main>
@@ -686,6 +737,72 @@
         <div class="cms-modal-body">
           <input type="hidden" id="postEditId">
 
+          <!-- AI SEO WRITING ASSISTANT -->
+          <div class="ai-writer-card" style="margin-bottom: 20px; background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%); border: 1.5px solid #c7d2fe; border-radius: 12px; padding: 14px 16px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="toggleAiWriterPanel()">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 20px; background: #6366f1; color: #ffffff; width: 34px; height: 34px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(99, 102, 241, 0.3);">✨</span>
+                <div>
+                  <strong style="color: #4338ca; font-size: 14px; display: block;">Trợ Lý AI Soạn Thảo Chuẩn SEO (Topic Cluster &amp; Pillar)</strong>
+                  <span style="font-size: 12px; color: #64748b;">Tự động tạo tiêu đề H1, thẻ Sapo, dàn ý H2/H3, bảng so sánh và CTA 1 chạm</span>
+                </div>
+              </div>
+              <button type="button" class="btn-secondary" id="btnToggleAiPanel" style="padding: 4px 10px; font-size: 12px; font-weight: 700; background: #ffffff; border-color: #c7d2fe; color: #4f46e5;">
+                Mở AI Assistant ▾
+              </button>
+            </div>
+
+            <div id="aiWriterPanel" style="display: none; margin-top: 14px; padding-top: 14px; border-top: 1px dashed #c7d2fe;">
+              <div class="form-group" style="margin-bottom: 12px;">
+                <label class="form-label" style="font-size: 12px; font-weight: 700; color: #3730a3;">Từ Khóa / Chủ Đề Muốn Viết *</label>
+                <div style="display: flex; gap: 8px;">
+                  <input type="text" id="aiTopicInput" class="form-control" placeholder="vd: Cẩm nang chọn mua máy scan văn phòng hoặc dán từ khóa bất kỳ..." style="background: #ffffff;">
+                  <select id="aiPresetTopic" class="form-control" style="max-width: 250px; background: #ffffff;" onchange="applyAiPresetTopic(this.value)">
+                    <option value="">-- Mẫu theo Sitemap SEO --</option>
+                    <option value="may-scan-tai-lieu-la-gi-cam-nang-chon-mua-may-scan-cho-van-phong-doanh-nghiep">Pillar P1: Cẩm nang chọn mua máy scan</option>
+                    <option value="so-sanh-may-scan-ricoh-fi-7000-vs-fi-8000-series">Pillar P2: So sánh Ricoh fi-7000 vs fi-8000</option>
+                    <option value="giai-phap-may-scan-toc-do-cao-2-mat-tu-dong-adf">Pillar P3: Máy scan 2 mặt tự động ADF</option>
+                    <option value="giai-phap-ha-tang-cntt-tron-goi-cho-doanh-nghiep">Pillar P4: Hạ tầng CNTT trọn gói</option>
+                    <option value="ha-tang-cntt-cho-hanh-chinh-cong-va-co-so-y-te">Pillar P5: Hạ tầng CNTT cơ sở y tế &amp; CQNN</option>
+                    <option value="so-hoa-tai-lieu-hanh-chinh-cong">Pillar P7: Số hoá hồ sơ theo Thông tư 02</option>
+                    <option value="bo-chi-so-danh-gia-muc-do-chuyen-doi-so-doanh-nghiep-dti">Cluster: Bộ chỉ số DTI Bộ TT&amp;TT</option>
+                    <option value="may-chu-hp-cho-doanh-nghiep-vua-va-nho">Cluster: Máy chủ HPE ProLiant SME</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row-2" style="margin-bottom: 12px;">
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label class="form-label" style="font-size: 11.5px; color: #4338ca;">Loại Cấu Trúc SEO</label>
+                  <select id="aiContentType" class="form-control" style="background: #ffffff;">
+                    <option value="pillar">Pillar Page (Cẩm nang toàn diện 2000+ từ)</option>
+                    <option value="comparison">So sánh &amp; Đánh giá chuyên sâu (Review)</option>
+                    <option value="solution">Giải pháp B2B &amp; Số hóa tài liệu</option>
+                    <option value="tutorial">Hướng dẫn kỹ thuật &amp; Bảo dưỡng</option>
+                  </select>
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                  <label class="form-label" style="font-size: 11.5px; color: #4338ca;">Phong Cách Viết</label>
+                  <select id="aiTone" class="form-control" style="background: #ffffff;">
+                    <option value="expert">Chuyên gia kỹ thuật Thuận Phát (Uy tín, kỹ thuật)</option>
+                    <option value="consultant">Tư vấn B2B doanh nghiệp (Thuyết phục cao)</option>
+                    <option value="practical">Cẩm nang hướng dẫn dễ hiểu</option>
+                  </select>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px;">
+                <span id="aiGeneratingStatus" style="font-size: 12.5px; color: #4f46e5; font-weight: 700; display: none;">
+                  ⏳ Đang phân tích từ khóa và tạo bài viết...
+                </span>
+                <button type="button" class="btn-primary" onclick="generateAiPostContent()" style="background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); margin-left: auto; padding: 9px 18px; font-weight: 700; font-size: 13px; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                  <span>AI Soạn Thảo &amp; Điền Form Ngay</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
           <div class="form-group">
             <label class="form-label">Tiêu Đề Bài Viết *</label>
             <input type="text" id="postTitle" class="form-control" placeholder="vd: Hướng dẫn chọn mua máy scan phù hợp cho văn phòng" required>
@@ -693,8 +810,11 @@
 
           <div class="form-row-2">
             <div class="form-group">
-              <label class="form-label">Chuyên Mục *</label>
+              <label class="form-label">Chuyên Mục (Theo Sitemap) *</label>
               <select id="postCategory" class="form-control" required>
+                <option value="giai-phap-chuyen-doi-so">Giải Pháp Chuyển Đổi Số (Trọng tâm P6, P7)</option>
+                <option value="may-scan">Máy Scan Ricoh (Pillar P1, P2, P3)</option>
+                <option value="ha-tang-cntt">Hạ Tầng CNTT &amp; Server (Pillar P4, P5)</option>
                 <option value="dich-vu-ky-thuat">Dịch Vụ Kỹ Thuật</option>
                 <option value="thiet-bi-in-an">Thiết Bị In Ấn</option>
               </select>
@@ -792,6 +912,14 @@
         <div class="form-group">
           <label class="form-label">Xác Nhận Lại Mật Khẩu *</label>
           <input type="password" id="authRegPassConfirm" class="form-control" placeholder="••••••••" required autocomplete="new-password">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Phân Cấp Quyền Hạn *</label>
+          <select id="authRegRole" class="form-control" required style="font-weight: 600;">
+            <option value="editor">Biên Tập Viên Content / SEO (Quản lý Bài viết, Sản phẩm, CRM)</option>
+            <option value="super_admin">Super Admin (Toàn quyền hệ thống &amp; Cài đặt sao lưu)</option>
+          </select>
         </div>
 
         <button type="submit" class="btn-primary auth-submit-btn">

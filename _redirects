@@ -1,10 +1,13 @@
-﻿/gioi-thieu       /index.html#gioi-thieu   301
-/san-pham         /index.html#san-pham     301
-/giai-phap        /index.html#giai-phap    301
-/trang-chinh      /index.html#trang-chu    301
-/may-scan         /index.html#san-pham     301
-/may-photocopy-kyocera /index.html#san-pham 301
-/may-in-kyocera   /index.html#san-pham     301
-/may-photocopy-ricoh /index.html#san-pham  301
-/may-scan-va-giai-phap-scan-ricoh /index.html#san-pham 301
-/*                /index.html              200
+# ============================================================
+# THUẬN PHÁT TECHNOLOGY — NETLIFY / CLOUDFLARE 301 REDIRECTS
+# Theo sitemap kế hoạch content 6 tháng của Quyên (SEO Specialist)
+# ============================================================
+
+/may-scan-ricoh-fi-7160    /cam-nang-chon-mua-may-scan-van-phong    301!
+/may-scan-ricoh-fi-8170    /cam-nang-chon-mua-may-scan-van-phong    301!
+/gioi-thieu                /index.html#gioi-thieu                   301
+/lien-he                   /index.html#lien-he                      301
+/giai-phap-chuyen-doi-so   /index.html#giai-phap-so                 301
+/ha-tang-cntt              /index.html#ha-tang                      301
+/may-scan                  /index.html#may-scan                     301
+/tin-tuc                   /index.html#tin-tuc                      301

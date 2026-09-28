@@ -71,8 +71,27 @@ const DataStore = {
           id: "admin-1",
           username: "admin",
           password: "admin123",
-          fullname: "Quản Trị Viên Thuận Phát",
-          role: "Super Admin",
+          fullname: "Quản Trị Viên Tối Cao",
+          role: "super_admin",
+          roleLabel: "Super Admin (Toàn quyền)",
+          createdAt: new Date().toISOString()
+        },
+        {
+          id: "admin-2",
+          username: "editor",
+          password: "editor123",
+          fullname: "Biên Tập Viên Content",
+          role: "editor",
+          roleLabel: "Biên Tập Viên (Content / SEO)",
+          createdAt: new Date().toISOString()
+        },
+        {
+          id: "admin-3",
+          username: "quyen_seo",
+          password: "seo123",
+          fullname: "Quyên (SEO Specialist)",
+          role: "editor",
+          roleLabel: "Biên Tập Viên (Content / SEO)",
           createdAt: new Date().toISOString()
         }
       ]));
@@ -259,12 +278,84 @@ const DataStore = {
   getSettings() {
     try {
       const raw = localStorage.getItem(TP_STORAGE.SETTINGS);
-      return raw ? JSON.parse(raw) : {
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && parsed.pages) return parsed;
+      }
+      const defaultSettings = {
         companyName: "CÔNG TY TNHH THƯƠNG MẠI ĐẦU TƯ VÀ SẢN XUẤT THUẬN PHÁT",
+        brandName: "THUẬN PHÁT TECHNOLOGY",
         hotline: "0903 726 554",
         email: "contact@thuanphat8.vn",
-        logoUrl: "assets/logo.png"
+        logoUrl: "assets/logo.png",
+        pages: {
+          "home": {
+            name: "Trang Chủ",
+            badge: "ĐẠI LÝ CHÍNH HÃNG RICOH • HP • KYOCERA",
+            title: "Nhà Cung Cấp Thiết Bị & Giải Pháp Công Nghệ Toàn Diện Cho Doanh Nghiệp",
+            subtitle: "Chuyên sâu máy scan Ricoh, hạ tầng máy chủ HPE, máy in Kyocera và giải pháp số hoá tài liệu lưu trữ, chuyển đổi số DTI toàn diện.",
+            bgImage: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1600&q=80",
+            banners: ["https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1600&q=80"],
+            ctaText: "Khám Phá Sản Phẩm"
+          },
+          "may-scan": {
+            name: "Máy Scan Ricoh",
+            badge: "RICOH AUTHORIZED PARTNER VIETNAM",
+            title: "Máy Scan Tài Liệu Ricoh Chuyên Dụng Tốc Độ Cao Cho Văn Phòng & Dự Án",
+            subtitle: "Thuận Phát phân phối chính hãng 100% đầy đủ 34 dòng máy quét Ricoh fi Series và ScanSnap. Giải pháp scan tự động 2 mặt ADF, nhận dạng OCR tiếng Việt, chống nạp giấy đúp bằng sóng siêu âm, bảo hành chính hãng tận nơi 12-24 tháng.",
+            bgImage: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80",
+            banners: ["https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80"],
+            ctaText: "Nhận báo giá dự án"
+          },
+          "ha-tang": {
+            name: "Hạ Tầng CNTT",
+            badge: "HPE AUTHORIZED PARTNER VIETNAM",
+            title: "Hạ Tầng CNTT & Giải Pháp Máy Chủ HPE ProLiant Gen11",
+            subtitle: "Cung cấp máy chủ HPE Gen11, giải pháp lưu trữ SAN/NAS, thiết bị mạng Cisco/Aruba và chiến lược an toàn dữ liệu 3-2-1 chống Ransomware 24/7.",
+            bgImage: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1600&q=80",
+            banners: ["https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1600&q=80"],
+            ctaText: "Tư vấn hạ tầng server"
+          },
+          "giai-phap-so": {
+            name: "Giải Pháp Số & DTI",
+            badge: "HỆ THỐNG CHUYỂN ĐỔI SỐ TOÀN DIỆN",
+            title: "Hệ Thống Giải Pháp Số Hoá & Đánh Giá Năng Lực Số Doanh Nghiệp DTI",
+            subtitle: "Cấu hình linh hoạt theo mô hình 3 cấp kết nối phần cứng máy scan Ricoh, máy chủ HP và giải pháp số hoá hồ sơ theo Thông tư 02/2019/TT-BNV.",
+            bgImage: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1600&q=80",
+            banners: ["https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1600&q=80"],
+            ctaText: "Đăng ký tư vấn lộ trình"
+          },
+          "tin-tuc": {
+            name: "Tin Tức & Dịch Vụ",
+            badge: "TRUNG TÂM KIẾN THỨC & DỊCH VỤ KỸ THUẬT",
+            title: "Tin Tức, Cẩm Nang In Ấn & Dịch Vụ Kỹ Thuật Chuyên Sâu",
+            subtitle: "Tổng hợp hướng dẫn lựa chọn máy scan, bảo trì bảo dưỡng máy in và giải pháp công nghệ văn phòng chuẩn hãng.",
+            bgImage: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1600&q=80",
+            banners: ["https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1600&q=80"],
+            ctaText: "Khám phá bài viết"
+          },
+          "gioi-thieu": {
+            name: "Giới Thiệu",
+            badge: "VỀ THUẬN PHÁT TECHNOLOGY",
+            title: "Đồng Hành Cùng Doanh Nghiệp & Khối Cơ Quan Trong Kỷ Nguyên Số",
+            subtitle: "Hơn 10 năm kinh nghiệm trong lĩnh vực cung cấp thiết bị máy scan chuyên dụng, máy in và tích hợp giải pháp chuyển đổi số toàn diện tại Việt Nam.",
+            bgImage: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1600&q=80",
+            banners: ["https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1600&q=80"],
+            ctaText: "Liên hệ hợp tác"
+          },
+          "lien-he": {
+            name: "Liên Hệ",
+            badge: "HỖ TRỢ TƯ VẤN TRỰC TIẾP",
+            title: "Liên Hệ Với Đội Ngũ Chuyên Gia Thuận Phát Technology",
+            subtitle: "Chúng tôi sẵn sàng khảo sát hiện trạng, tư vấn cấu hình thiết bị và gửi bảng báo giá dự án cạnh tranh nhất trong vòng 15 phút.",
+            bgImage: "https://images.unsplash.com/photo-1423666639041-f56000c27a9a?auto=format&fit=crop&w=1600&q=80",
+            banners: ["https://images.unsplash.com/photo-1423666639041-f56000c27a9a?auto=format&fit=crop&w=1600&q=80"],
+            ctaText: "Gửi yêu cầu tư vấn"
+          }
+        }
       };
+      this.saveSettings(defaultSettings);
+      return defaultSettings;
     } catch (e) {
       return {};
     }
@@ -283,23 +374,61 @@ const DataStore = {
 
   getPage(pageKey) {
     const pages = this.getPages();
-    return pages[pageKey] || null;
+    const p = pages[pageKey];
+    if (p) {
+      if (!Array.isArray(p.banners)) {
+        p.banners = p.bgImage ? [p.bgImage] : [];
+      }
+    }
+    return p || null;
   },
 
   updatePage(pageKey, pageData) {
     const s = this.getSettings();
     if (!s.pages) s.pages = {};
+    const existing = s.pages[pageKey] || {};
+    
+    // Maintain banners array
+    let banners = Array.isArray(pageData.banners) ? pageData.banners : (Array.isArray(existing.banners) ? existing.banners : []);
+    if (pageData.bgImage && !banners.includes(pageData.bgImage)) {
+      banners.unshift(pageData.bgImage);
+    }
+
     s.pages[pageKey] = {
-      ...(s.pages[pageKey] || {}),
-      ...pageData
+      ...existing,
+      ...pageData,
+      banners
     };
     this.saveSettings(s);
     this.broadcast("PAGE_UPDATED", { pageKey, pageData: s.pages[pageKey] });
     return s.pages[pageKey];
   },
 
+  addPageBanner(pageKey, imageUrl) {
+    if (!imageUrl) return null;
+    const p = this.getPage(pageKey);
+    if (!p) return null;
+    const banners = Array.isArray(p.banners) ? [...p.banners] : [];
+    if (!banners.includes(imageUrl)) {
+      banners.unshift(imageUrl);
+    }
+    return this.updatePage(pageKey, { bgImage: imageUrl, banners });
+  },
+
+  setPageActiveBanner(pageKey, imageUrl) {
+    return this.updatePage(pageKey, { bgImage: imageUrl });
+  },
+
+  removePageBanner(pageKey, imageUrl) {
+    const p = this.getPage(pageKey);
+    if (!p) return null;
+    let banners = (p.banners || []).filter(u => u !== imageUrl);
+    let bgImage = p.bgImage === imageUrl ? (banners[0] || "") : p.bgImage;
+    return this.updatePage(pageKey, { bgImage, banners });
+  },
+
   // ==========================================
-  // ADMIN AUTHENTICATION
+  // ADMIN AUTHENTICATION & ROLES
   // ==========================================
   getAdmins() {
     try {
@@ -308,24 +437,48 @@ const DataStore = {
       if (Array.isArray(list) && list.length > 0) {
         return list;
       }
-      const defaultAdmin = [{
-        id: "admin-1",
-        username: "admin",
-        password: "admin123",
-        fullname: "Quản Trị Viên Thuận Phát",
-        role: "Super Admin",
-        createdAt: "2026-01-01T00:00:00.000Z"
-      }];
-      this.saveAdmins(defaultAdmin);
-      return defaultAdmin;
+      const defaultAdmins = [
+        {
+          id: "admin-1",
+          username: "admin",
+          password: "admin123",
+          fullname: "Quản Trị Viên Tối Cao",
+          role: "super_admin",
+          roleLabel: "Super Admin (Toàn quyền)",
+          createdAt: "2026-01-01T00:00:00.000Z"
+        },
+        {
+          id: "admin-2",
+          username: "editor",
+          password: "editor123",
+          fullname: "Biên Tập Viên Content",
+          role: "editor",
+          roleLabel: "Biên Tập Viên (Content / SEO)",
+          createdAt: "2026-01-01T00:00:00.000Z"
+        },
+        {
+          id: "admin-3",
+          username: "quyen_seo",
+          password: "seo123",
+          fullname: "Quyên (SEO Specialist)",
+          role: "editor",
+          roleLabel: "Biên Tập Viên (Content / SEO)",
+          createdAt: "2026-01-01T00:00:00.000Z"
+        }
+      ];
+      this.saveAdmins(defaultAdmins);
+      return defaultAdmins;
     } catch (e) {
-      return [{
-        id: "admin-1",
-        username: "admin",
-        password: "admin123",
-        fullname: "Quản Trị Viên Thuận Phát",
-        role: "Super Admin"
-      }];
+      return [
+        {
+          id: "admin-1",
+          username: "admin",
+          password: "admin123",
+          fullname: "Quản Trị Viên Tối Cao",
+          role: "super_admin",
+          roleLabel: "Super Admin (Toàn quyền)"
+        }
+      ];
     }
   },
 
@@ -339,11 +492,13 @@ const DataStore = {
     const admins = this.getAdmins();
     const found = admins.find(a => a.username.toLowerCase() === cleanUser && a.password === cleanPass);
     if (found) {
+      const role = found.role || "super_admin";
       const sessionUser = {
         id: found.id,
         username: found.username,
         fullname: found.fullname || "Quản Trị Viên",
-        role: found.role || "Admin",
+        role: role,
+        roleLabel: found.roleLabel || (role === "editor" ? "Biên Tập Viên (Content / SEO)" : "Super Admin (Toàn quyền)"),
         loginAt: new Date().toISOString()
       };
       sessionStorage.setItem(TP_STORAGE.CURRENT_ADMIN, JSON.stringify(sessionUser));
@@ -353,10 +508,12 @@ const DataStore = {
     return { success: false, message: "Tên đăng nhập hoặc mật khẩu không chính xác!" };
   },
 
-  registerAdmin({ username, password, fullname }) {
+  registerAdmin({ username, password, fullname, role }) {
     const cleanUser = (username || "").trim().toLowerCase();
     const cleanPass = (password || "").trim();
     const cleanName = (fullname || "").trim();
+    const userRole = role === "super_admin" ? "super_admin" : "editor";
+    const userRoleLabel = userRole === "super_admin" ? "Super Admin (Toàn quyền)" : "Biên Tập Viên (Content / SEO)";
 
     if (!cleanUser || !cleanPass) {
       return { success: false, message: "Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu!" };
@@ -375,12 +532,27 @@ const DataStore = {
       username: cleanUser,
       password: cleanPass,
       fullname: cleanName || cleanUser,
-      role: "Quản Trị Viên",
+      role: userRole,
+      roleLabel: userRoleLabel,
       createdAt: new Date().toISOString()
     };
     admins.push(newAdmin);
     this.saveAdmins(admins);
     return { success: true, user: newAdmin };
+  },
+
+  deleteAdmin(id) {
+    const current = this.getCurrentAdmin();
+    if (!current || current.role !== "super_admin") {
+      return { success: false, message: "Chỉ Super Admin mới có quyền xóa tài khoản quản trị!" };
+    }
+    if (current.id === id) {
+      return { success: false, message: "Không thể tự xóa tài khoản đang đăng nhập!" };
+    }
+    let admins = this.getAdmins();
+    admins = admins.filter(a => a.id !== id);
+    this.saveAdmins(admins);
+    return { success: true };
   },
 
   getCurrentAdmin() {

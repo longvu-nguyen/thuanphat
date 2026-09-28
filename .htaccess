@@ -1,0 +1,21 @@
+# ============================================================
+# THUẬN PHÁT TECHNOLOGY — 301 REDIRECTS CONFIGURATION
+# Chuyển hướng SEO theo kế hoạch Sitemap chuyển giao từ Quyên (SEO Specialist)
+# ============================================================
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Chuyển hướng 301 từ 2 URL cũ tập trung sức mạnh về Pillar P1
+  Redirect 301 /may-scan-ricoh-fi-7160 /cam-nang-chon-mua-may-scan-van-phong
+  Redirect 301 /may-scan-ricoh-fi-8170 /cam-nang-chon-mua-may-scan-van-phong
+
+  # Các URL rút gọn thân thiện SEO
+  RewriteRule ^gioi-thieu/?$ index.html#gioi-thieu [R=301,L,NE]
+  RewriteRule ^lien-he/?$ index.html#lien-he [R=301,L,NE]
+  RewriteRule ^giai-phap-chuyen-doi-so/?$ index.html#giai-phap-so [R=301,L,NE]
+  RewriteRule ^ha-tang-cntt/?$ index.html#ha-tang [R=301,L,NE]
+  RewriteRule ^may-scan/?$ index.html#may-scan [R=301,L,NE]
+  RewriteRule ^tin-tuc/?$ index.html#tin-tuc [R=301,L,NE]
+</IfModule>

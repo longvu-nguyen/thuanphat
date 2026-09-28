@@ -1482,8 +1482,13 @@ function loadMoreScanners() {
 
 // Initial renders on page load
 document.addEventListener("DOMContentLoaded", () => {
+  if (typeof applySiteSettings === "function") applySiteSettings();
+  if (typeof applyPageBanners === "function") applyPageBanners();
   renderScanProducts();
   renderNewsPosts();
+  if (typeof renderDynamicProducts === "function") renderDynamicProducts();
+  if (typeof renderDynamicArticles === "function") renderDynamicArticles();
+  if (typeof renderDynamicSolutions === "function") renderDynamicSolutions();
 });
 
 // Realtime sync from Admin CMS changes

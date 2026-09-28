@@ -49,6 +49,15 @@ function refreshAllViews() {
 // TAB NAVIGATION
 // ============================================================
 function switchAdminTab(tabId) {
+  // Quyền hạn: Editor không thể truy cập Cài đặt hệ thống
+  if (tabId === 'tab-settings') {
+    const current = DataStore.getCurrentAdmin();
+    if (!current || current.role !== 'super_admin') {
+      showToast("Chỉ Super Admin mới có quyền truy cập Cấu Hình & Sao Lưu!");
+      return;
+    }
+  }
+
   currentAdminTab = tabId;
   document.querySelectorAll(".cms-tab-panel").forEach(p => p.classList.remove("active"));
   document.querySelectorAll(".cms-nav-item").forEach(b => b.classList.remove("active"));
@@ -65,7 +74,10 @@ function switchAdminTab(tabId) {
   if (tabId === 'tab-posts') renderAdminPosts();
   if (tabId === 'tab-banners') renderBannerEditor();
   if (tabId === 'tab-leads') renderAdminLeads();
-  if (tabId === 'tab-settings') loadSettingsForm();
+  if (tabId === 'tab-settings') {
+    loadSettingsForm();
+    renderAdminUsersTable();
+  }
 }
 
 // ============================================================
@@ -345,9 +357,18 @@ function renderAdminPosts() {
   }
 
   container.innerHTML = filtered.map(post => {
-    const catBadge = post.category === 'dich-vu-ky-thuat' 
-      ? '<span class="tag-badge tag-dvkt">Dịch Vụ Kỹ Thuật</span>' 
-      : '<span class="tag-badge tag-tbia">Thiết Bị In Ấn</span>';
+    let catBadge = '';
+    if (post.category === 'dich-vu-ky-thuat') {
+      catBadge = '<span class="tag-badge tag-dvkt">Dịch Vụ Kỹ Thuật</span>';
+    } else if (post.category === 'may-scan') {
+      catBadge = '<span class="tag-badge" style="background:#fef3c7; color:#b45309; border:1px solid #fde68a;">Máy Scan Ricoh</span>';
+    } else if (post.category === 'giai-phap-chuyen-doi-so') {
+      catBadge = '<span class="tag-badge" style="background:#ede9fe; color:#6d28d9; border:1px solid #ddd6fe;">Chuyển Đổi Số</span>';
+    } else if (post.category === 'ha-tang-cntt') {
+      catBadge = '<span class="tag-badge" style="background:#e0e7ff; color:#3730a3; border:1px solid #c7d2fe;">Hạ Tầng CNTT</span>';
+    } else {
+      catBadge = '<span class="tag-badge tag-tbia">Thiết Bị In Ấn</span>';
+    }
 
     return `
       <tr>
@@ -391,6 +412,12 @@ function openPostModal(postId = null) {
   const form = document.getElementById("postForm");
   form.reset();
 
+  // Reset AI Assistant Panel
+  const aiPanel = document.getElementById("aiWriterPanel");
+  const btnToggle = document.getElementById("btnToggleAiPanel");
+  if (aiPanel) aiPanel.style.display = "none";
+  if (btnToggle) btnToggle.textContent = "Mở AI Assistant ▾";
+
   if (postId) {
     title.textContent = "Chỉnh Sửa Bài Viết";
     const post = DataStore.getPostById(postId);
@@ -416,12 +443,230 @@ function closePostModal() {
   document.getElementById("postModal").classList.remove("open");
 }
 
+// ============================================================
+// AI SEO WRITING ASSISTANT CONTROLLER
+// ============================================================
+function toggleAiWriterPanel() {
+  const panel = document.getElementById("aiWriterPanel");
+  const btn = document.getElementById("btnToggleAiPanel");
+  if (!panel) return;
+  const isHidden = panel.style.display === "none" || !panel.style.display;
+  panel.style.display = isHidden ? "block" : "none";
+  if (btn) btn.textContent = isHidden ? "Đóng AI Assistant ▴" : "Mở AI Assistant ▾";
+}
+
+const AI_PRESET_MAP = {
+  'may-scan-tai-lieu-la-gi-cam-nang-chon-mua-may-scan-cho-van-phong-doanh-nghiep': {
+    topic: "Cẩm nang chọn mua máy scan văn phòng và doanh nghiệp toàn diện 2026",
+    category: "may-scan",
+    type: "pillar"
+  },
+  'so-sanh-may-scan-ricoh-fi-7000-vs-fi-8000-series': {
+    topic: "So sánh chi tiết máy scan Ricoh fi-7000 Series vs fi-8000 Series: Nâng cấp nào đáng giá?",
+    category: "may-scan",
+    type: "comparison"
+  },
+  'giai-phap-may-scan-toc-do-cao-2-mat-tu-dong-adf': {
+    topic: "Giải pháp máy scan tài liệu 2 mặt tự động ADF tốc độ cao cho văn phòng bận rộn",
+    category: "may-scan",
+    type: "solution"
+  },
+  'giai-phap-ha-tang-cntt-tron-goi-cho-doanh-nghiep': {
+    topic: "Giải pháp hạ tầng CNTT trọn gói cho doanh nghiệp vừa và nhỏ (SME)",
+    category: "ha-tang-cntt",
+    type: "solution"
+  },
+  'ha-tang-cntt-cho-hanh-chinh-cong-va-co-so-y-te': {
+    topic: "Mô hình hạ tầng CNTT & máy chủ chuyên dụng cho cơ sở y tế và khối cơ quan nhà nước",
+    category: "ha-tang-cntt",
+    type: "pillar"
+  },
+  'so-hoa-tai-lieu-hanh-chinh-cong': {
+    topic: "Giải pháp số hóa hồ sơ tài liệu hành chính công theo Thông tư 02/2019/TT-BNV",
+    category: "giai-phap-chuyen-doi-so",
+    type: "solution"
+  },
+  'bo-chi-so-danh-gia-muc-do-chuyen-doi-so-doanh-nghiep-dti': {
+    topic: "Hướng dẫn tự đánh giá mức độ chuyển đổi số doanh nghiệp theo Bộ chỉ số DTI Bộ TT&TT",
+    category: "giai-phap-chuyen-doi-so",
+    type: "pillar"
+  },
+  'may-chu-hp-cho-doanh-nghiep-vua-va-nho': {
+    topic: "Tư vấn chọn mua máy chủ HPE ProLiant Gen11 tối ưu chi phí cho doanh nghiệp SME",
+    category: "ha-tang-cntt",
+    type: "comparison"
+  }
+};
+
+function applyAiPresetTopic(val) {
+  if (!val || !AI_PRESET_MAP[val]) return;
+  const item = AI_PRESET_MAP[val];
+  const topicInp = document.getElementById("aiTopicInput");
+  const catInp = document.getElementById("postCategory");
+  const typeInp = document.getElementById("aiContentType");
+
+  if (topicInp) topicInp.value = item.topic;
+  if (catInp) catInp.value = item.category;
+  if (typeInp) typeInp.value = item.type;
+}
+
+function generateAiPostContent() {
+  const topic = (document.getElementById("aiTopicInput")?.value || "").trim();
+  const contentType = document.getElementById("aiContentType")?.value || "pillar";
+  const tone = document.getElementById("aiTone")?.value || "expert";
+  const statusEl = document.getElementById("aiGeneratingStatus");
+
+  if (!topic) {
+    alert("Vui lòng nhập từ khóa hoặc chọn chủ đề mẫu từ Sitemap trước khi tạo!");
+    return;
+  }
+
+  if (statusEl) statusEl.style.display = "inline-block";
+
+  setTimeout(() => {
+    // Generate SEO Title
+    let title = "";
+    let excerpt = "";
+    let category = "may-scan";
+    let imageUrl = "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80";
+
+    const isScanner = topic.toLowerCase().includes("scan") || topic.toLowerCase().includes("ricoh");
+    const isServer = topic.toLowerCase().includes("hạ tầng") || topic.toLowerCase().includes("máy chủ") || topic.toLowerCase().includes("hp");
+    const isDigital = topic.toLowerCase().includes("số hóa") || topic.toLowerCase().includes("chuyển đổi số") || topic.toLowerCase().includes("dti");
+
+    if (isScanner) {
+      category = "may-scan";
+      imageUrl = "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80";
+    } else if (isServer) {
+      category = "ha-tang-cntt";
+      imageUrl = "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1200&q=80";
+    } else if (isDigital) {
+      category = "giai-phap-chuyen-doi-so";
+      imageUrl = "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80";
+    }
+
+    if (contentType === "comparison") {
+      title = `${topic} — Phân Tích Kỹ Thuật & Tư Vấn Chi Tiết`;
+      excerpt = `So sánh chi tiết hiệu năng, công nghệ chống kẹt giấy, cảm biến quét ảnh và chi phí đầu tư nhằm giúp doanh nghiệp lựa chọn thiết bị phù hợp ngân sách.`;
+    } else if (contentType === "solution") {
+      title = `${topic}: Mô Hình Tối Ưu Hiệu Quả & Chi Phí Cho Doanh Nghiệp`;
+      excerpt = `Giải pháp công nghệ chuyên sâu từ Thuận Phát Technology, giúp tự động hóa quy trình lưu trữ, nâng cao năng suất và bảo mật thông tin toàn diện.`;
+    } else {
+      title = `${topic} (Cập Nhật Chuẩn Hãng Mới Nhất)`;
+      excerpt = `Cẩm nang toàn diện tổng hợp các tiêu chí cốt lõi, so sánh cấu hình kỹ thuật và hướng dẫn chọn mua thiết bị công nghệ chính hãng từ chuyên gia Thuận Phát.`;
+    }
+
+    // Generate Rich HTML Content
+    const htmlContent = `
+<p><strong>${excerpt}</strong> Trong bối cảnh chuyển đổi số đang diễn ra mạnh mẽ tại các cơ quan ban ngành và doanh nghiệp Việt Nam, việc trang bị hệ sinh thái thiết bị chuyên dụng đóng vai trò quyết định đến năng suất vận hành và an toàn dữ liệu số.</p>
+
+<div class="toc-box" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin: 20px 0;">
+  <strong style="color: #0f172a; font-size: 14px; display: block; margin-bottom: 8px;">Nội dung chính trong bài viết:</strong>
+  <ul style="margin: 0; padding-left: 20px; font-size: 13.5px; color: #475569; line-height: 1.8;">
+    <li>1. Tổng quan thị trường &amp; Bối cảnh ứng dụng thực tế</li>
+    <li>2. Các tiêu chí kỹ thuật cốt lõi doanh nghiệp cần lưu ý</li>
+    <li>3. Bảng so sánh thông số &amp; Đánh giá chuyên sâu</li>
+    <li>4. Lời khuyên từ chuyên gia công nghệ Thuận Phát</li>
+    <li>5. Chính sách phân phối, bảo hành chính hãng và hỗ trợ dự án</li>
+  </ul>
+</div>
+
+<h2>1. Tổng quan thị trường &amp; Bối cảnh ứng dụng thực tế</h2>
+<p>Khi dữ liệu trở thành tài sản trọng yếu của tổ chức, việc chuyển đổi từ tài liệu giấy sang định dạng số (PDF/A, TIFF độ phân giải cao) hoặc nâng cấp hạ tầng xử lý dữ liệu tập trung không còn là lựa chọn mà đã trở thành yêu cầu cấp thiết. Đối với các đơn vị xử lý hàng nghìn trang hồ sơ mỗi ngày, việc lựa chọn đúng thiết bị mang lại lợi ích kép: vừa cắt giảm 60% thời gian xử lý thủ công, vừa triệt tiêu rủi ro thất lạc chứng từ.</p>
+
+<h2>2. Các tiêu chí kỹ thuật cốt lõi doanh nghiệp cần quan tâm</h2>
+<p>Dựa trên kinh nghiệm hơn 10 năm tư vấn và triển khai cho các tập đoàn tài chính, bệnh viện và cơ quan hành chính công, đội ngũ chuyên gia Thuận Phát khuyến nghị đánh giá kỹ 4 yếu tố sau:</p>
+<ul>
+  <li><strong>Công suất thiết kế &amp; Tốc độ xử lý:</strong> Phải đáp ứng được chu kỳ tải cao điểm (Duty Cycle) mà không phát sinh hiện tượng quá nhiệt hay kẹt giấy cơ học.</li>
+  <li><strong>Công nghệ nhận dạng hình ảnh &amp; Cảm biến:</strong> Ứng dụng cảm biến Clear Image Capture (CIC) hoặc CIS đa điểm giúp văn bản sắc nét ngay cả khi quét tài liệu cũ, mờ, giấy mỏng.</li>
+  <li><strong>Khả năng chống nạp giấy đúp bằng sóng siêu âm:</strong> Tự động phát hiện 2 tờ giấy dính vào nhau và ngắt khay nạp để bảo vệ toàn vẹn tài liệu gốc.</li>
+  <li><strong>Khả năng tích hợp phần mềm số hóa (OCR &amp; DMS):</strong> Tương thích hoàn toàn với các phần mềm quản lý lưu trữ, hỗ trợ bóc tách dữ liệu tiếng Việt chính xác tới 99.8%.</li>
+</ul>
+
+<h2>3. Bảng so sánh thông số kỹ thuật chi tiết</h2>
+<div class="table-responsive" style="overflow-x: auto; margin: 20px 0;">
+  <table class="cms-table" style="width: 100%; border-collapse: collapse; font-size: 13.5px;">
+    <thead>
+      <tr style="background: #f1f5f9;">
+        <th style="padding: 10px; border: 1px solid #cbd5e1;">Tiêu Chí Kỹ Thuật</th>
+        <th style="padding: 10px; border: 1px solid #cbd5e1;">Dòng Tiêu Chuẩn / Văn Phòng SME</th>
+        <th style="padding: 10px; border: 1px solid #cbd5e1;">Dòng Chuyên Dụng / Dự Án Số Hóa Lớn</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding: 10px; border: 1px solid #cbd5e1; font-weight: 600;">Tốc độ quét (ADF 2 mặt)</td>
+        <td style="padding: 10px; border: 1px solid #cbd5e1;">40 - 50 trang/phút (80 - 100 ảnh/phút)</td>
+        <td style="padding: 10px; border: 1px solid #cbd5e1;">70 - 140 trang/phút (140 - 280 ảnh/phút)</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px; border: 1px solid #cbd5e1; font-weight: 600;">Dung lượng khay nạp ADF</td>
+        <td style="padding: 10px; border: 1px solid #cbd5e1;">50 - 80 tờ tự động</td>
+        <td style="padding: 10px; border: 1px solid #cbd5e1;">100 - 500 tờ liên tục</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px; border: 1px solid #cbd5e1; font-weight: 600;">Cảm biến chống nạp giấy đúp</td>
+        <td style="padding: 10px; border: 1px solid #cbd5e1;">Cảm biến quang học tiêu chuẩn</td>
+        <td style="padding: 10px; border: 1px solid #cbd5e1;">Cảm biến sóng siêu âm đa điểm chuyên dụng</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px; border: 1px solid #cbd5e1; font-weight: 600;">Kết nối &amp; Quản trị</td>
+        <td style="padding: 10px; border: 1px solid #cbd5e1;">USB 3.2 Gen 1</td>
+        <td style="padding: 10px; border: 1px solid #cbd5e1;">USB 3.2 + Gigabit Ethernet (LAN quét qua mạng)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="expert-callout" style="background: #eef2ff; border-left: 4px solid #6366f1; padding: 14px 18px; border-radius: 0 8px 8px 0; margin: 24px 0;">
+  <strong style="color: #3730a3; display: block; margin-bottom: 4px;">💡 Lời khuyên từ Chuyên Gia Thuận Phát Technology:</strong>
+  <span style="color: #4338ca; font-size: 13.5px; line-height: 1.6;">"Đừng chỉ nhìn vào tốc độ danh định trên catalogue. Đối với dự án số hóa thực tế, độ ổn định của hệ thống cuốn giấy cơ học và khả năng nhận diện tài liệu đa định dạng (từ giấy than mỏng đến thẻ căn cước gắn chip) mới là yếu tố quyết định tới chi phí vận hành lâu dài."</span>
+</div>
+
+<h2>4. Quy trình tư vấn &amp; Chính sách bảo hành chính hãng</h2>
+<p>Khi mua thiết bị hoặc hợp tác giải pháp cùng Thuận Phát Technology, khách hàng được bảo đảm quyền lợi tối đa:</p>
+<ul>
+  <li><strong>100% Sản phẩm chính hãng:</strong> Cung cấp đầy đủ giấy chứng nhận nguồn gốc xuất xứ (CO) và chứng nhận chất lượng (CQ).</li>
+  <li><strong>Khảo sát &amp; Trải nghiệm Demo tận nơi:</strong> Hỗ trợ mang thiết bị mẫu chạy thử trực tiếp trên mẫu hồ sơ thực tế của doanh nghiệp trước khi ký hợp đồng.</li>
+  <li><strong>Bảo hành chính hãng 12 - 24 tháng:</strong> Đội ngũ kỹ sư trực tiếp hỗ trợ kỹ thuật 24/7, cam kết đổi máy dự phòng trong trường hợp bảo trì dự án lớn.</li>
+</ul>
+
+<div class="cta-box" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: #ffffff; padding: 24px; border-radius: 12px; margin-top: 30px; text-align: center;">
+  <h3 style="color: #f59e0b; margin-bottom: 8px; font-size: 18px;">Bạn Cần Tư Vấn Thiết Bị &amp; Nhận Báo Giá Dự Án?</h3>
+  <p style="color: #cbd5e1; font-size: 13.5px; margin-bottom: 16px;">Liên hệ ngay với bộ phận kỹ thuật Thuận Phát để nhận tư vấn cấu hình tối ưu và chính sách giá đại lý tốt nhất.</p>
+  <a href="tel:0903726554" style="background: #f59e0b; color: #ffffff; padding: 10px 24px; border-radius: 999px; text-decoration: none; font-weight: 700; font-size: 14px; display: inline-block;">Hotline: 0903 726 554 (Tư vấn 24/7)</a>
+</div>
+`;
+
+    // Fill form
+    document.getElementById("postTitle").value = title;
+    document.getElementById("postCategory").value = category;
+    document.getElementById("postImage").value = imageUrl;
+    document.getElementById("postExcerpt").value = excerpt;
+    document.getElementById("postContent").value = htmlContent.trim();
+
+    if (statusEl) statusEl.style.display = "none";
+    showToast("✨ AI đã tạo bài viết chuẩn SEO thành công! Kiểm tra lại thông tin và bấm 'Xuất Bản'.");
+
+    // Smooth scroll down to preview
+    document.getElementById("postTitle")?.focus();
+  }, 450);
+}
+
 function handleSavePost(e) {
   e.preventDefault();
   const id = document.getElementById("postEditId").value;
   const title = document.getElementById("postTitle").value.trim();
   const category = document.getElementById("postCategory").value;
-  const categoryName = category === 'dich-vu-ky-thuat' ? 'Dịch Vụ Kỹ Thuật' : 'Thiết Bị In Ấn';
+  
+  const catNameMap = {
+    'dich-vu-ky-thuat': 'Dịch Vụ Kỹ Thuật',
+    'thiet-bi-in-an': 'Thiết Bị In Ấn',
+    'giai-phap-chuyen-doi-so': 'Giải Pháp Chuyển Đổi Số',
+    'may-scan': 'Máy Scan Ricoh',
+    'ha-tang-cntt': 'Hạ Tầng CNTT & Server'
+  };
+  const categoryName = catNameMap[category] || 'Tin Tức & Dịch Vụ';
   const author = document.getElementById("postAuthor").value.trim() || "Thuận Phát Technology";
   const image = document.getElementById("postImage").value.trim();
   const excerpt = document.getElementById("postExcerpt").value.trim();
@@ -636,7 +881,7 @@ function showToast(msg) {
 }
 
 // ============================================================
-// 6. ADMIN AUTHENTICATION CONTROLLER
+// 6. ADMIN AUTHENTICATION & ROLE MANAGEMENT CONTROLLER
 // ============================================================
 function checkAdminAuth() {
   const overlay = document.getElementById("adminAuthOverlay");
@@ -650,10 +895,33 @@ function checkAdminAuth() {
     const roleEl = document.getElementById("topbarUserRole");
     const avatarEl = document.getElementById("topbarUserAvatar");
     if (nameEl) nameEl.textContent = currentAdmin.fullname || currentAdmin.username;
-    if (roleEl) roleEl.textContent = currentAdmin.role || "Quản Trị Viên";
+    
+    const isSuper = currentAdmin.role === "super_admin";
+    if (roleEl) {
+      roleEl.innerHTML = isSuper 
+        ? `<span class="topbar-role-badge role-super-admin">Super Admin (Toàn quyền)</span>` 
+        : `<span class="topbar-role-badge role-editor">Biên Tập Viên (Content / SEO)</span>`;
+    }
     if (avatarEl) {
       const parts = (currentAdmin.fullname || currentAdmin.username).trim().split(" ");
       avatarEl.textContent = parts.length > 1 ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase() : parts[0].substring(0, 2).toUpperCase();
+    }
+
+    // Role-based visibility
+    const settingsNavBtn = document.querySelector(`.cms-nav-item[data-tab="tab-settings"]`);
+    const allSectionTitles = document.querySelectorAll(".nav-section-title");
+    const sysSectionTitle = allSectionTitles.length > 1 ? allSectionTitles[1] : null;
+
+    if (!isSuper) {
+      if (settingsNavBtn) settingsNavBtn.style.display = "none";
+      if (sysSectionTitle) sysSectionTitle.style.display = "none";
+      if (currentAdminTab === 'tab-settings') {
+        switchAdminTab('tab-dashboard');
+      }
+    } else {
+      if (settingsNavBtn) settingsNavBtn.style.display = "flex";
+      if (sysSectionTitle) sysSectionTitle.style.display = "block";
+      renderAdminUsersTable();
     }
   } else {
     if (overlay) overlay.classList.remove("hidden");
@@ -699,13 +967,14 @@ function handleAdminRegisterSubmit(e) {
   const username = document.getElementById("authRegUser").value;
   const password = document.getElementById("authRegPass").value;
   const confirmPass = document.getElementById("authRegPassConfirm").value;
+  const role = document.getElementById("authRegRole")?.value || "editor";
 
   if (password !== confirmPass) {
     alert("Mật khẩu xác nhận không khớp, vui lòng nhập lại!");
     return;
   }
 
-  const res = DataStore.registerAdmin({ username, password, fullname });
+  const res = DataStore.registerAdmin({ username, password, fullname, role });
   if (res.success) {
     showToast("Tạo tài khoản quản trị thành công! Đang tự động đăng nhập...");
     DataStore.loginAdmin(username, password);
@@ -723,8 +992,56 @@ function handleAdminLogout() {
   }
 }
 
+function renderAdminUsersTable() {
+  const tbody = document.getElementById("adminUsersTableBody");
+  if (!tbody) return;
+
+  const admins = DataStore.getAdmins();
+  const currentAdmin = DataStore.getCurrentAdmin();
+
+  tbody.innerHTML = admins.map(admin => {
+    const isCurrent = currentAdmin && currentAdmin.id === admin.id;
+    const isSuper = admin.role === "super_admin";
+    const roleBadge = isSuper
+      ? `<span class="role-badge role-super-admin">👑 Super Admin</span>`
+      : `<span class="role-badge role-editor">✍️ Biên Tập Viên (SEO)</span>`;
+
+    const createdDate = admin.createdAt ? new Date(admin.createdAt).toLocaleDateString("vi-VN") : "Hệ thống";
+
+    return `
+      <tr>
+        <td>
+          <strong style="color: #0f172a;">${admin.fullname || admin.username}</strong>
+          ${isCurrent ? '<span style="font-size: 11px; color: #047857; margin-left: 6px; font-weight: 700;">(Đang đăng nhập)</span>' : ''}
+        </td>
+        <td><code style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 12px; color: #475569;">${admin.username}</code></td>
+        <td>${roleBadge}</td>
+        <td style="color: #64748b; font-size: 12.5px;">${createdDate}</td>
+        <td style="text-align: right;">
+          ${isCurrent || admin.id === "admin-1"
+            ? '<span style="font-size: 11.5px; color: #94a3b8; font-style: italic;">Mặc định</span>'
+            : `<button class="btn-action-sm btn-action-delete" onclick="handleDeleteAdminUser('${admin.id}', '${admin.username}')">Xóa quyền</button>`
+          }
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+function handleDeleteAdminUser(id, username) {
+  if (confirm(`Bạn có chắc chắn muốn xóa tài khoản "${username}" không?`)) {
+    const res = DataStore.deleteAdmin(id);
+    if (res.success) {
+      renderAdminUsersTable();
+      showToast(`Đã xóa tài khoản "${username}" thành công!`);
+    } else {
+      alert(res.message);
+    }
+  }
+}
+
 // ============================================================
-// 7. BANNER & PAGES MANAGER CONTROLLER
+// 7. BANNER & MULTI-IMAGE GALLERY MANAGER CONTROLLER
 // ============================================================
 let currentBannerPage = 'may-scan';
 
@@ -793,6 +1110,7 @@ function renderBannerEditor() {
   if (ctaInp) ctaInp.value = pageData.ctaText || "";
 
   updateLiveBannerPreview();
+  renderBannerThumbnailsGrid();
 }
 
 function updateLiveBannerPreview() {
@@ -823,11 +1141,99 @@ function updateLiveBannerPreview() {
   }
 }
 
+// ----------------------------------------------------
+// MULTI-BANNER GALLERY & UPLOAD LOGIC
+// ----------------------------------------------------
+function handleBannerFileUpload(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  if (!file.type.startsWith("image/")) {
+    alert("Vui lòng chọn file hình ảnh hợp lệ (JPG, PNG, WebP)!");
+    return;
+  }
+
+  // Read as Data URL (Base64)
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const dataUrl = e.target.result;
+    const bgInp = document.getElementById("bannerBgInput");
+    if (bgInp) bgInp.value = dataUrl;
+
+    // Automatically add to page gallery
+    DataStore.addPageBanner(currentBannerPage, dataUrl);
+    updateLiveBannerPreview();
+    renderBannerThumbnailsGrid();
+    showToast("Đã tải ảnh lên thành công! Bấm 'Lưu' để cập nhật ra website.");
+  };
+  reader.readAsDataURL(file);
+}
+
+function addCurrentBannerToGallery() {
+  const bgInp = document.getElementById("bannerBgInput");
+  const url = bgInp ? bgInp.value.trim() : "";
+  if (!url) {
+    alert("Vui lòng nhập đường dẫn ảnh hoặc tải ảnh lên trước khi thêm vào bộ sưu tập!");
+    return;
+  }
+  DataStore.addPageBanner(currentBannerPage, url);
+  renderBannerThumbnailsGrid();
+  showToast("Đã lưu ảnh vào bộ sưu tập banner của trang này!");
+}
+
+function renderBannerThumbnailsGrid() {
+  const grid = document.getElementById("bannerThumbnailsGrid");
+  const countEl = document.getElementById("bannerGalleryCount");
+  if (!grid) return;
+
+  const pageData = DataStore.getPage(currentBannerPage);
+  const banners = (pageData && Array.isArray(pageData.banners)) ? pageData.banners : (pageData && pageData.bgImage ? [pageData.bgImage] : []);
+  const activeBanner = pageData ? pageData.bgImage : "";
+
+  if (countEl) countEl.textContent = banners.length;
+
+  if (banners.length === 0) {
+    grid.innerHTML = `<span style="font-size: 12px; color: #94a3b8; font-style: italic; grid-column: 1 / -1;">Chưa có ảnh nào trong bộ sưu tập. Hãy dán link hoặc bấm 'Tải Ảnh Từ Máy'.</span>`;
+    return;
+  }
+
+  grid.innerHTML = banners.map((url, idx) => {
+    const isActive = (url === activeBanner);
+    return `
+      <div class="banner-thumb-item ${isActive ? 'active' : ''}" style="background-image: url('${url}')" onclick="selectActiveBannerImage('${url}')" title="Bấm để chọn làm banner chính">
+        ${isActive ? '<span class="thumb-active-badge">Đang Dùng</span>' : ''}
+        <button type="button" class="thumb-delete-btn" onclick="event.stopPropagation(); removeBannerImage('${url}')" title="Xóa ảnh khỏi bộ sưu tập">✕</button>
+      </div>
+    `;
+  }).join("");
+}
+
+function selectActiveBannerImage(url) {
+  const bgInp = document.getElementById("bannerBgInput");
+  if (bgInp) bgInp.value = url;
+  DataStore.setPageActiveBanner(currentBannerPage, url);
+  updateLiveBannerPreview();
+  renderBannerThumbnailsGrid();
+  showToast("Đã chọn ảnh làm banner chính! Bấm 'Lưu' để cập nhật trang.");
+}
+
+function removeBannerImage(url) {
+  if (confirm("Bạn có chắc chắn muốn xóa ảnh này khỏi bộ sưu tập banner?")) {
+    DataStore.removePageBanner(currentBannerPage, url);
+    renderBannerEditor();
+    showToast("Đã xóa ảnh khỏi bộ sưu tập!");
+  }
+}
+
 function applySampleImage(url) {
   const bgInp = document.getElementById("bannerBgInput");
   if (bgInp) {
     bgInp.value = url;
+    if (url) {
+      DataStore.addPageBanner(currentBannerPage, url);
+    }
     updateLiveBannerPreview();
+    renderBannerThumbnailsGrid();
     if (url) {
       showToast("Đã chọn ảnh mẫu! Bấm 'Lưu & Cập Nhật' để áp dụng.");
     } else {
@@ -853,6 +1259,7 @@ function handleSaveCurrentBanner(e) {
   });
 
   if (updated) {
+    renderBannerThumbnailsGrid();
     showToast(`Đã lưu và cập nhật Banner ${PAGE_LABELS[currentBannerPage]} lên website!`);
   }
 }
