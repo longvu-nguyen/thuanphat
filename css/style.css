@@ -166,18 +166,7 @@ img {
   opacity: 0.9;
 }
 
-/* Header CMS Link Button */
-.btn-cms-link {
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
 
-.btn-cms-link:hover {
-  background: rgba(180, 83, 9, 0.1) !important;
-  color: #b45309 !important;
-  border-color: rgba(180, 83, 9, 0.3) !important;
-  transform: translateY(-1px);
-}
 
 /* Navigation Links */
 .main-nav {
