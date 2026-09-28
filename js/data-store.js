@@ -9,7 +9,9 @@ const TP_STORAGE = {
   POSTS: "thuanphat_posts_v2",
   SOLUTIONS: "thuanphat_solutions_v2",
   SETTINGS: "thuanphat_settings_v2",
-  LEADS: "thuanphat_leads_v2"
+  LEADS: "thuanphat_leads_v2",
+  ADMINS: "thuanphat_admins_v2",
+  CURRENT_ADMIN: "thuanphat_current_admin_v2"
 };
 
 const DataStore = {
@@ -59,8 +61,21 @@ const DataStore = {
     if (!localStorage.getItem(TP_STORAGE.SOLUTIONS)) {
       await this.loadDefaultFromJSON("solutions", "./data/solutions.json", TP_STORAGE.SOLUTIONS);
     }
-    if (!localStorage.getItem(TP_STORAGE.SETTINGS)) {
+    const currSettings = this.getSettings();
+    if (!currSettings || !currSettings.pages) {
       await this.loadDefaultFromJSON("settings", "./data/settings.json", TP_STORAGE.SETTINGS);
+    }
+    if (!localStorage.getItem(TP_STORAGE.ADMINS)) {
+      localStorage.setItem(TP_STORAGE.ADMINS, JSON.stringify([
+        {
+          id: "admin-1",
+          username: "admin",
+          password: "admin123",
+          fullname: "Quản Trị Viên Thuận Phát",
+          role: "Super Admin",
+          createdAt: new Date().toISOString()
+        }
+      ]));
     }
     if (!localStorage.getItem(TP_STORAGE.LEADS)) {
       localStorage.setItem(TP_STORAGE.LEADS, JSON.stringify([
@@ -258,6 +273,128 @@ const DataStore = {
   saveSettings(settings) {
     localStorage.setItem(TP_STORAGE.SETTINGS, JSON.stringify(settings));
     this.broadcast("SETTINGS_UPDATED", settings);
+  },
+
+  // Banner & Pages management
+  getPages() {
+    const s = this.getSettings();
+    return s.pages || {};
+  },
+
+  getPage(pageKey) {
+    const pages = this.getPages();
+    return pages[pageKey] || null;
+  },
+
+  updatePage(pageKey, pageData) {
+    const s = this.getSettings();
+    if (!s.pages) s.pages = {};
+    s.pages[pageKey] = {
+      ...(s.pages[pageKey] || {}),
+      ...pageData
+    };
+    this.saveSettings(s);
+    this.broadcast("PAGE_UPDATED", { pageKey, pageData: s.pages[pageKey] });
+    return s.pages[pageKey];
+  },
+
+  // ==========================================
+  // ADMIN AUTHENTICATION
+  // ==========================================
+  getAdmins() {
+    try {
+      const raw = localStorage.getItem(TP_STORAGE.ADMINS);
+      const list = raw ? JSON.parse(raw) : [];
+      if (Array.isArray(list) && list.length > 0) {
+        return list;
+      }
+      const defaultAdmin = [{
+        id: "admin-1",
+        username: "admin",
+        password: "admin123",
+        fullname: "Quản Trị Viên Thuận Phát",
+        role: "Super Admin",
+        createdAt: "2026-01-01T00:00:00.000Z"
+      }];
+      this.saveAdmins(defaultAdmin);
+      return defaultAdmin;
+    } catch (e) {
+      return [{
+        id: "admin-1",
+        username: "admin",
+        password: "admin123",
+        fullname: "Quản Trị Viên Thuận Phát",
+        role: "Super Admin"
+      }];
+    }
+  },
+
+  saveAdmins(admins) {
+    localStorage.setItem(TP_STORAGE.ADMINS, JSON.stringify(admins));
+  },
+
+  loginAdmin(username, password) {
+    const cleanUser = (username || "").trim().toLowerCase();
+    const cleanPass = (password || "").trim();
+    const admins = this.getAdmins();
+    const found = admins.find(a => a.username.toLowerCase() === cleanUser && a.password === cleanPass);
+    if (found) {
+      const sessionUser = {
+        id: found.id,
+        username: found.username,
+        fullname: found.fullname || "Quản Trị Viên",
+        role: found.role || "Admin",
+        loginAt: new Date().toISOString()
+      };
+      sessionStorage.setItem(TP_STORAGE.CURRENT_ADMIN, JSON.stringify(sessionUser));
+      localStorage.setItem(TP_STORAGE.CURRENT_ADMIN, JSON.stringify(sessionUser));
+      return { success: true, user: sessionUser };
+    }
+    return { success: false, message: "Tên đăng nhập hoặc mật khẩu không chính xác!" };
+  },
+
+  registerAdmin({ username, password, fullname }) {
+    const cleanUser = (username || "").trim().toLowerCase();
+    const cleanPass = (password || "").trim();
+    const cleanName = (fullname || "").trim();
+
+    if (!cleanUser || !cleanPass) {
+      return { success: false, message: "Vui lòng nhập đầy đủ tên đăng nhập và mật khẩu!" };
+    }
+    if (cleanPass.length < 6) {
+      return { success: false, message: "Mật khẩu phải từ 6 ký tự trở lên!" };
+    }
+
+    const admins = this.getAdmins();
+    if (admins.some(a => a.username.toLowerCase() === cleanUser)) {
+      return { success: false, message: "Tên đăng nhập này đã được sử dụng!" };
+    }
+
+    const newAdmin = {
+      id: "admin-" + Date.now(),
+      username: cleanUser,
+      password: cleanPass,
+      fullname: cleanName || cleanUser,
+      role: "Quản Trị Viên",
+      createdAt: new Date().toISOString()
+    };
+    admins.push(newAdmin);
+    this.saveAdmins(admins);
+    return { success: true, user: newAdmin };
+  },
+
+  getCurrentAdmin() {
+    try {
+      const raw = sessionStorage.getItem(TP_STORAGE.CURRENT_ADMIN) || localStorage.getItem(TP_STORAGE.CURRENT_ADMIN);
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) {
+      return null;
+    }
+  },
+
+  logoutAdmin() {
+    sessionStorage.removeItem(TP_STORAGE.CURRENT_ADMIN);
+    localStorage.removeItem(TP_STORAGE.CURRENT_ADMIN);
   },
 
   // ==========================================

@@ -28,9 +28,11 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function initAdmin() {
+  checkAdminAuth();
   renderDashboard();
   renderAdminProducts();
   renderAdminPosts();
+  renderBannerEditor();
   renderAdminLeads();
   loadSettingsForm();
 }
@@ -39,6 +41,7 @@ function refreshAllViews() {
   renderDashboard();
   renderAdminProducts();
   renderAdminPosts();
+  renderBannerEditor();
   renderAdminLeads();
 }
 
@@ -60,6 +63,7 @@ function switchAdminTab(tabId) {
   if (tabId === 'tab-dashboard') renderDashboard();
   if (tabId === 'tab-products') renderAdminProducts();
   if (tabId === 'tab-posts') renderAdminPosts();
+  if (tabId === 'tab-banners') renderBannerEditor();
   if (tabId === 'tab-leads') renderAdminLeads();
   if (tabId === 'tab-settings') loadSettingsForm();
 }
@@ -629,4 +633,287 @@ function showToast(msg) {
   setTimeout(() => {
     toast.classList.remove("show");
   }, 2800);
+}
+
+// ============================================================
+// 6. ADMIN AUTHENTICATION CONTROLLER
+// ============================================================
+function checkAdminAuth() {
+  const overlay = document.getElementById("adminAuthOverlay");
+  const currentAdmin = DataStore.getCurrentAdmin();
+
+  if (currentAdmin) {
+    if (overlay) overlay.classList.add("hidden");
+    
+    // Update topbar user
+    const nameEl = document.getElementById("topbarUserName");
+    const roleEl = document.getElementById("topbarUserRole");
+    const avatarEl = document.getElementById("topbarUserAvatar");
+    if (nameEl) nameEl.textContent = currentAdmin.fullname || currentAdmin.username;
+    if (roleEl) roleEl.textContent = currentAdmin.role || "Quản Trị Viên";
+    if (avatarEl) {
+      const parts = (currentAdmin.fullname || currentAdmin.username).trim().split(" ");
+      avatarEl.textContent = parts.length > 1 ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase() : parts[0].substring(0, 2).toUpperCase();
+    }
+  } else {
+    if (overlay) overlay.classList.remove("hidden");
+  }
+}
+
+function switchAuthMode(mode) {
+  const loginForm = document.getElementById("adminLoginForm");
+  const regForm = document.getElementById("adminRegisterForm");
+  const tabLogin = document.getElementById("tabBtnLogin");
+  const tabReg = document.getElementById("tabBtnRegister");
+
+  if (mode === 'login') {
+    if (loginForm) loginForm.style.display = "block";
+    if (regForm) regForm.style.display = "none";
+    if (tabLogin) tabLogin.classList.add("active");
+    if (tabReg) tabReg.classList.remove("active");
+  } else {
+    if (loginForm) loginForm.style.display = "none";
+    if (regForm) regForm.style.display = "block";
+    if (tabLogin) tabLogin.classList.remove("active");
+    if (tabReg) tabReg.classList.add("active");
+  }
+}
+
+function handleAdminLoginSubmit(e) {
+  e.preventDefault();
+  const username = document.getElementById("authLoginUser").value;
+  const password = document.getElementById("authLoginPass").value;
+
+  const res = DataStore.loginAdmin(username, password);
+  if (res.success) {
+    showToast(`Chào mừng ${res.user.fullname} đã đăng nhập!`);
+    checkAdminAuth();
+  } else {
+    alert(res.message);
+  }
+}
+
+function handleAdminRegisterSubmit(e) {
+  e.preventDefault();
+  const fullname = document.getElementById("authRegFullname").value;
+  const username = document.getElementById("authRegUser").value;
+  const password = document.getElementById("authRegPass").value;
+  const confirmPass = document.getElementById("authRegPassConfirm").value;
+
+  if (password !== confirmPass) {
+    alert("Mật khẩu xác nhận không khớp, vui lòng nhập lại!");
+    return;
+  }
+
+  const res = DataStore.registerAdmin({ username, password, fullname });
+  if (res.success) {
+    showToast("Tạo tài khoản quản trị thành công! Đang tự động đăng nhập...");
+    DataStore.loginAdmin(username, password);
+    checkAdminAuth();
+  } else {
+    alert(res.message);
+  }
+}
+
+function handleAdminLogout() {
+  if (confirm("Bạn có chắc chắn muốn đăng xuất khỏi hệ thống CMS?")) {
+    DataStore.logoutAdmin();
+    checkAdminAuth();
+    showToast("Đã đăng xuất tài khoản an toàn!");
+  }
+}
+
+// ============================================================
+// 7. BANNER & PAGES MANAGER CONTROLLER
+// ============================================================
+let currentBannerPage = 'may-scan';
+
+const PAGE_LABELS = {
+  'may-scan': 'Trang Máy Scan Ricoh',
+  'home': 'Trang Chủ',
+  'ha-tang': 'Hạ Tầng CNTT',
+  'giai-phap-so': 'Giải Pháp Số & DTI',
+  'tin-tuc': 'Tin Tức & Cẩm Nang',
+  'gioi-thieu': 'Giới Thiệu',
+  'lien-he': 'Liên Hệ'
+};
+
+const PAGE_PREVIEW_URLS = {
+  'may-scan': 'index.html#may-scan',
+  'home': 'index.html',
+  'ha-tang': 'index.html#ha-tang',
+  'giai-phap-so': 'index.html#giai-phap-so',
+  'tin-tuc': 'index.html#tin-tuc',
+  'gioi-thieu': 'index.html#gioi-thieu',
+  'lien-he': 'index.html#lien-he'
+};
+
+function selectBannerPage(pageKey, btnEl) {
+  currentBannerPage = pageKey;
+
+  // Update button active state
+  document.querySelectorAll(".banner-page-btn").forEach(btn => {
+    btn.classList.remove("active");
+  });
+  if (btnEl) {
+    btnEl.classList.add("active");
+  } else {
+    const matchingBtn = document.querySelector(`.banner-page-btn[data-page="${pageKey}"]`);
+    if (matchingBtn) matchingBtn.classList.add("active");
+  }
+
+  // Update public preview link
+  const previewLink = document.getElementById("btnPreviewPublicPage");
+  if (previewLink) {
+    previewLink.href = PAGE_PREVIEW_URLS[pageKey] || 'index.html';
+  }
+
+  renderBannerEditor();
+}
+
+function renderBannerEditor() {
+  const pageData = DataStore.getPage(currentBannerPage);
+  if (!pageData) return;
+
+  // Update indicator label
+  const indEl = document.getElementById("previewPageIndicator");
+  if (indEl) indEl.textContent = PAGE_LABELS[currentBannerPage] || pageData.name || currentBannerPage;
+
+  // Populate form fields
+  const badgeInp = document.getElementById("bannerBadgeInput");
+  const titleInp = document.getElementById("bannerTitleInput");
+  const subInp = document.getElementById("bannerSubtitleInput");
+  const bgInp = document.getElementById("bannerBgInput");
+  const ctaInp = document.getElementById("bannerCtaInput");
+
+  if (badgeInp) badgeInp.value = pageData.badge || "";
+  if (titleInp) titleInp.value = pageData.title || "";
+  if (subInp) subInp.value = pageData.subtitle || "";
+  if (bgInp) bgInp.value = pageData.bgImage || "";
+  if (ctaInp) ctaInp.value = pageData.ctaText || "";
+
+  updateLiveBannerPreview();
+}
+
+function updateLiveBannerPreview() {
+  const badgeVal = (document.getElementById("bannerBadgeInput")?.value || "").trim();
+  const titleVal = (document.getElementById("bannerTitleInput")?.value || "").trim();
+  const subVal = (document.getElementById("bannerSubtitleInput")?.value || "").trim();
+  const bgVal = (document.getElementById("bannerBgInput")?.value || "").trim();
+  const ctaVal = (document.getElementById("bannerCtaInput")?.value || "").trim();
+
+  // Preview elements
+  const prevBadge = document.getElementById("prevBadge");
+  const prevTitle = document.getElementById("prevTitle");
+  const prevSub = document.getElementById("prevSubtitle");
+  const prevCta = document.getElementById("prevCta");
+  const prevFrame = document.getElementById("bannerLivePreview");
+
+  if (prevBadge) prevBadge.textContent = badgeVal || "NHÃN NỔI BẬT";
+  if (prevTitle) prevTitle.innerHTML = (titleVal || "Tiêu Đề Banner Trang").replace(/\n/g, "<br>");
+  if (prevSub) prevSub.textContent = subVal || "Mô tả phụ cho trang...";
+  if (prevCta) prevCta.textContent = ctaVal || "Hành động →";
+
+  if (prevFrame) {
+    if (bgVal) {
+      prevFrame.style.backgroundImage = `url('${bgVal}')`;
+    } else {
+      prevFrame.style.backgroundImage = "none";
+    }
+  }
+}
+
+function applySampleImage(url) {
+  const bgInp = document.getElementById("bannerBgInput");
+  if (bgInp) {
+    bgInp.value = url;
+    updateLiveBannerPreview();
+    if (url) {
+      showToast("Đã chọn ảnh mẫu! Bấm 'Lưu & Cập Nhật' để áp dụng.");
+    } else {
+      showToast("Đã xóa ảnh banner (dùng nền tối mặc định). Bấm 'Lưu' để áp dụng.");
+    }
+  }
+}
+
+function handleSaveCurrentBanner(e) {
+  e.preventDefault();
+  const badge = document.getElementById("bannerBadgeInput")?.value || "";
+  const title = document.getElementById("bannerTitleInput")?.value || "";
+  const subtitle = document.getElementById("bannerSubtitleInput")?.value || "";
+  const bgImage = document.getElementById("bannerBgInput")?.value || "";
+  const ctaText = document.getElementById("bannerCtaInput")?.value || "";
+
+  const updated = DataStore.updatePage(currentBannerPage, {
+    badge,
+    title,
+    subtitle,
+    bgImage,
+    ctaText
+  });
+
+  if (updated) {
+    showToast(`Đã lưu và cập nhật Banner ${PAGE_LABELS[currentBannerPage]} lên website!`);
+  }
+}
+
+function resetCurrentBannerToDefault() {
+  const defaultPresets = {
+    'home': {
+      badge: "ĐẠI LÝ CHÍNH HÃNG RICOH • HP • KYOCERA",
+      title: "Nhà Cung Cấp Thiết Bị & Giải Pháp Công Nghệ Toàn Diện Cho Doanh Nghiệp",
+      subtitle: "Chuyên sâu máy scan Ricoh, hạ tầng máy chủ HPE, máy in Kyocera và giải pháp số hoá tài liệu lưu trữ, chuyển đổi số DTI toàn diện.",
+      bgImage: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1600&q=80",
+      ctaText: "Khám Phá Sản Phẩm"
+    },
+    'may-scan': {
+      badge: "RICOH AUTHORIZED PARTNER VIETNAM",
+      title: "Máy Scan Tài Liệu Ricoh Chuyên Dụng Tốc Độ Cao Cho Văn Phòng & Dự Án",
+      subtitle: "Thuận Phát phân phối chính hãng 100% đầy đủ 34 dòng máy quét Ricoh fi Series và ScanSnap. Giải pháp scan tự động 2 mặt ADF, nhận dạng OCR tiếng Việt, chống nạp giấy đúp bằng sóng siêu âm, bảo hành chính hãng tận nơi 12-24 tháng.",
+      bgImage: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80",
+      ctaText: "Nhận báo giá dự án"
+    },
+    'ha-tang': {
+      badge: "HPE AUTHORIZED PARTNER VIETNAM",
+      title: "Hạ Tầng CNTT & Giải Pháp Máy Chủ HPE ProLiant Gen11",
+      subtitle: "Cung cấp máy chủ HPE Gen11, giải pháp lưu trữ SAN/NAS, thiết bị mạng Cisco/Aruba và chiến lược an toàn dữ liệu 3-2-1 chống Ransomware 24/7.",
+      bgImage: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1600&q=80",
+      ctaText: "Tư vấn hạ tầng server"
+    },
+    'giai-phap-so': {
+      badge: "HỆ THỐNG CHUYỂN ĐỔI SỐ TOÀN DIỆN",
+      title: "Hệ Thống Giải Pháp Số Hoá & Đánh Giá Năng Lực Số Doanh Nghiệp DTI",
+      subtitle: "Cấu hình linh hoạt theo mô hình 3 cấp kết nối phần cứng máy scan Ricoh, máy chủ HP và giải pháp số hoá hồ sơ theo Thông tư 02/2019/TT-BNV.",
+      bgImage: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1600&q=80",
+      ctaText: "Đăng ký tư vấn lộ trình"
+    },
+    'tin-tuc': {
+      badge: "TRUNG TÂM KIẾN THỨC & DỊCH VỤ KỸ THUẬT",
+      title: "Tin Tức, Cẩm Nang In Ấn & Dịch Vụ Kỹ Thuật Chuyên Sâu",
+      subtitle: "Tổng hợp hướng dẫn lựa chọn máy scan, bảo trì bảo dưỡng máy in và giải pháp công nghệ văn phòng chuẩn hãng.",
+      bgImage: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1600&q=80",
+      ctaText: "Khám phá bài viết"
+    },
+    'gioi-thieu': {
+      badge: "VỀ THUẬN PHÁT TECHNOLOGY",
+      title: "Đồng Hành Cùng Doanh Nghiệp & Khối Cơ Quan Trong Kỷ Nguyên Số",
+      subtitle: "Hơn 10 năm kinh nghiệm trong lĩnh vực cung cấp thiết bị máy scan chuyên dụng, máy in và tích hợp giải pháp chuyển đổi số toàn diện tại Việt Nam.",
+      bgImage: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1600&q=80",
+      ctaText: "Liên hệ hợp tác"
+    },
+    'lien-he': {
+      badge: "HỖ TRỢ TƯ VẤN TRỰC TIẾP",
+      title: "Liên Hệ Với Đội Ngũ Chuyên Gia Thuận Phát Technology",
+      subtitle: "Chúng tôi sẵn sàng khảo sát hiện trạng, tư vấn cấu hình thiết bị và gửi bảng báo giá dự án cạnh tranh nhất trong vòng 15 phút.",
+      bgImage: "https://images.unsplash.com/photo-1423666639041-f56000c27a9a?auto=format&fit=crop&w=1600&q=80",
+      ctaText: "Gửi yêu cầu tư vấn"
+    }
+  };
+
+  const preset = defaultPresets[currentBannerPage];
+  if (preset && confirm(`Khôi phục nội dung mặc định của ${PAGE_LABELS[currentBannerPage]}?`)) {
+    DataStore.updatePage(currentBannerPage, preset);
+    renderBannerEditor();
+    showToast(`Đã khôi phục ${PAGE_LABELS[currentBannerPage]} về mặc định!`);
+  }
 }

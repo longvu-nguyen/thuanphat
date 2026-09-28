@@ -268,6 +268,67 @@ function applySiteSettings() {
       if (s.stats.support) statItems[3].querySelector(".stat-number").textContent = s.stats.support;
     }
   }
+
+  // Apply Banners & Titles across all pages
+  applyPageBanners();
+}
+
+function applyPageBanners() {
+  if (typeof DataStore === "undefined") return;
+  const pages = DataStore.getPages();
+  if (!pages || typeof pages !== "object") return;
+
+  document.querySelectorAll("[data-hero-page]").forEach(heroEl => {
+    const pageKey = heroEl.getAttribute("data-hero-page");
+    const pageData = pages[pageKey];
+    if (!pageData) return;
+
+    // Background Image
+    if (pageData.bgImage && pageData.bgImage.trim()) {
+      heroEl.style.backgroundImage = `url('${pageData.bgImage.trim()}')`;
+      heroEl.classList.add("has-bg-img");
+    } else {
+      heroEl.style.backgroundImage = "";
+      heroEl.classList.remove("has-bg-img");
+    }
+
+    // Badge
+    const badgeEl = heroEl.querySelector(".hero-badge-text");
+    if (badgeEl && pageData.badge) {
+      badgeEl.textContent = pageData.badge;
+    }
+
+    // Title
+    const titleEl = heroEl.querySelector(".hero-page-title");
+    if (titleEl && pageData.title) {
+      titleEl.innerHTML = pageData.title.replace(/\n/g, "<br>");
+    }
+
+    // Subtitle / Description
+    const descEl = heroEl.querySelector(".hero-page-desc");
+    if (descEl && pageData.subtitle) {
+      descEl.textContent = pageData.subtitle;
+    }
+
+    // CTA Text
+    const ctaTextEl = heroEl.querySelector(".hero-cta-btn span:first-child");
+    if (ctaTextEl && pageData.ctaText) {
+      ctaTextEl.textContent = pageData.ctaText;
+    }
+  });
+}
+
+function getSolutionIconSvg(iconKey) {
+  const icons = {
+    'folder': `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path><line x1="12" y1="11" x2="12" y2="17"></line><line x1="9" y1="14" x2="15" y2="14"></line></svg>`,
+    'bar-chart': `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line><line x1="2" y1="20" x2="22" y2="20"></line></svg>`,
+    'factory': `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H2v18z"></path><path d="M17 18h1"></path><path d="M12 18h1"></path><path d="M7 18h1"></path></svg>`,
+    'rocket': `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path></svg>`,
+    'server': `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>`,
+    'truck': `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>`,
+    'edit': `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>`
+  };
+  return icons[iconKey] || `<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 14 14"></polyline></svg>`;
 }
 
 function renderDynamicSolutions() {
@@ -279,7 +340,7 @@ function renderDynamicSolutions() {
   container.innerHTML = solutions.map(sol => `
     <article class="card-category ${sol.id === 'sol-1' ? 'featured' : ''}" onclick="handleSolutionCardClick('${sol.id}', '${sol.screenTarget || 'quickConsultModal'}')">
       <div class="card-header-row">
-        <div class="card-icon-box">${sol.icon || '💼'}</div>
+        <div class="card-icon-box">${getSolutionIconSvg(sol.icon)}</div>
         <span class="badge-tag ${sol.tagClass || 'badge-popular'}">${sol.tag || 'Nổi bật'}</span>
       </div>
       <h3 class="card-title">${sol.title}</h3>
@@ -1427,10 +1488,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Realtime sync from Admin CMS changes
 window.addEventListener("tp:datasync", () => {
+  if (typeof applySiteSettings === "function") applySiteSettings();
+  if (typeof applyPageBanners === "function") applyPageBanners();
   if (typeof renderScanProducts === "function") renderScanProducts();
   if (typeof renderNewsPosts === "function") renderNewsPosts();
   if (typeof renderDynamicProducts === "function") renderDynamicProducts();
   if (typeof renderDynamicArticles === "function") renderDynamicArticles();
+  if (typeof renderDynamicSolutions === "function") renderDynamicSolutions();
 });
 
 window.addEventListener("hashchange", handleInitialRoute);
